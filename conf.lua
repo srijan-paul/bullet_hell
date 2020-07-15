@@ -1,4 +1,4 @@
-Vector2 = require 'lib/vector2'
+Vec2 = require 'lib/vector2'
 Class = require 'lib/middleclass/middleclass'
 Timer = require 'lib/vrld/timer'
 
