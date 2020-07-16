@@ -143,25 +143,26 @@ function Grid:query(shape, pos, width, height)
     return grid_query[shape](self, pos, width)
 end
 
+function Grid:process_cell_collision(cell)
+    for k = 1, #cell do
+        for l = 1, #cell do
+            if k == l or not cell[k].collider or not cell[l].collider then
+                goto continue
+            end
+            if Collider.check_collision(cell[k].collider, cell[l].collider) then
+                self.world:resolve_collision(cell[k], cell[l],
+                                             Collider.AABB_dir(cell[k].collider,
+                                                               cell[l].collider))
+            end
+            ::continue::
+        end
+    end
+end
+
 function Grid:process_collisions()
     for i = 1, self.rows do
         for j = 1, self.cols do
-            local cell = self.cells[i][j]
-            for k = 1, #cell do
-                for l = 1, #cell do
-                    if k == l or not cell[k].collider or not cell[l].collider then
-                        goto continue
-                    end
-                    if Collider.check_collision(cell[k].collider,
-                                                cell[l].collider) then
-                        self.world:resolve_collision(cell[k], cell[l],
-                                                     Collider.AABB_dir(
-                                                         cell[k].collider,
-                                                         cell[l].collider))
-                    end
-                    ::continue::
-                end
-            end
+            self:process_cell_collision(self.cells[i][j])
         end
     end
 end
