@@ -64,6 +64,10 @@ function Vector2:new(_x, _y)
 end
 
 
+function Vector2.from_polar(r, theta)
+    return r * math.cos(theta), r * math.sin(theta)
+end
+
 function Vector2:mag() 
     return math.sqrt(self.x * self.x + self.y * self.y) 
 end
