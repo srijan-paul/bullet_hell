@@ -1,0 +1,8 @@
+{
+    "Lua.diagnostics.globals": [
+        "love",
+        "Vec2",
+        "Class",
+        "Timer"
+    ]
+}

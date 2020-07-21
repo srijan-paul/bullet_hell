@@ -121,14 +121,14 @@ end
 
 function Vector2:angle(vec) 
     if vec then 
-        return atan2(self.y, self.x) - atan2(vec.y, vec.x)
+        return math.atan2(self.y, self.x) - math.atan2(vec.y, vec.x)
     end
     return math.atan2(self.y, self.x) 
 end
 
 
 function Vector2:angle_to(vec)
-    return atan2(self.y, self.x) - atan2(vec.y, vec.x) 
+    return math.atan2(self.y, self.x) - math.atan2(vec.y, vec.x) 
 end
 
 
