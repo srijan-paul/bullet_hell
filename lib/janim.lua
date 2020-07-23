@@ -1,7 +1,7 @@
 local SpriteSheet = {}
 
 function SpriteSheet:new(imagePath, hFrames, vFrames)
-    newSheet = {
+    local newSheet = {
         _imageData = {source = nil, rows = 0, cols = 0},
         frameWidth = 0,
         frameHeight = 0
@@ -62,7 +62,7 @@ end
 local Animation = {}
 
 function Animation:new(spriteSheet, s, e, t, l, func)
-    newAnim = {
+    local newAnim = {
         sheet = spriteSheet,
         startIndex = s,
         endIndex = e,
