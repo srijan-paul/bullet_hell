@@ -4,7 +4,6 @@ Timer = require 'lib/vrld/timer'
 _G.Concord = require 'lib/concord'
 _G.Resource = require 'resource'
 
-
 function love.conf(t)
     t.console = true
     return t
