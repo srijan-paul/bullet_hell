@@ -49,7 +49,7 @@ end
 function SpriteSheet:showFrame(frameIndex, x, y, r, sx, sy)
 
     if frameIndex > table.getn(self._frames) or frameIndex <= 0 then
-        return nil
+        return
     end
 
     love.graphics.draw(self._imageData.source, self._frames[frameIndex], x, y,
@@ -67,7 +67,7 @@ function Animation:new(spriteSheet, s, e, t, l, func)
         startIndex = s,
         endIndex = e,
         duration = t,
-        loop = l,
+        loop = l or false,
         currentIndex = s,
         frameCount = e - s + 1,
         timeElapsed = 0,
@@ -102,7 +102,7 @@ function Animation:update(dt)
     end
 end
 
-function Animation:show(x, y, r, sx, sy)
+function Animation:draw(x, y, r, sx, sy)
     self.sheet:showFrame(self.currentIndex, x, y, r, sx, sy)
 end
 

@@ -1,73 +1,27 @@
-_G['graphics'] = love.graphics
+local Systems = require 'ecs/systems'
+local Components = require 'ecs/components'
 
--- Defining ComponentClasses
--- I use UpperCamelCase to indicate its a class
-local Position = Concord.component(function(c, x, y)
-    c.x = x or 0
-    c.y = y or 0
-end)
-
-local Velocity = Concord.component(function(c, x, y)
-    c.x = x or 0
-    c.y = y or 0
-end)
-
-local Drawable = Concord.component()
-
-
--- Defining Systems
-local MoveSystem = Concord.system({Position, Velocity})
-
-function MoveSystem:update(dt)
-    for _, e in ipairs(self.pool) do
-        -- I use lowerCamelCase to indicate its an instance
-        local position = e[Position]
-        local velocity = e[Velocity]
-
-        position.x = position.x + velocity.x * dt
-        position.y = position.y + velocity.y * dt
-    end
-end
-
-
-local DrawSystem = Concord.system({Position, Drawable})
-
-function DrawSystem:draw()
-    for _, e in ipairs(self.pool) do
-        local position = e[Position]
-
-        love.graphics.circle("fill", position.x, position.y, 5)
-    end
-end
-
-
--- Create the World
 local world = Concord.world()
+world:addSystems(Systems.AnimationSystem)
 
--- Add the Systems
-world:addSystems(MoveSystem, DrawSystem)
+function love.load()
+    love.graphics.setLineStyle('rough')
+    love.graphics.setDefaultFilter('nearest', 'nearest')
+    love.graphics.setBackgroundColor(0.96, 1, 0.95)
 
--- This Entity will be rendered on the screen, and move to the right at 100 pixels a second
-local entity_1 = Concord.entity(world)
-:give(Position, 100, 100)
-:give(Velocity, 100, 100)
-:give(Drawable)
+    Resource.load()
 
--- This Entity will be rendered on the screen, and stay at 50, 50
-local entity_2 = Concord.entity(world)
-:give(Position, 50, 50)
-:give(Drawable)
-
--- This Entity does exist in the World, but since it doesn't match any System's filters it won't do anything
-local entity_3 = Concord.entity(world)
-:give(Position, 120, 200)
-:give(Drawable)
-
--- Emit the events
-function love.update(dt)
-    world:emit('update', dt)
+    local player = Concord.entity(world)
+        :give(Components.Transform, 100, 100, 0, 4, 4)
+        :give(Components.AnimatedSprite, Resource.Sprite.Player,
+        {'idle', 1, 2, 0.2, true},
+        {'walk', 3, 7, 0.1, true})
 end
 
 function love.draw()
-    world:emit('draw')
-end  
+    world:emit("draw")
+end
+
+function love.update(dt)
+    world:emit("update", dt)
+end
