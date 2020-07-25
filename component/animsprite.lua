@@ -5,7 +5,6 @@ local AnimatedSprite = Class('AnimatedSprite')
 
 function AnimatedSprite:init(owner, spritesheet, anims)
     self.owner = owner
-    print(type(self.owner), self.owner[Transform], 'is the transform')
     self._spritesheet = spritesheet
     self.frame_width = self._spritesheet.frameWidth
     self.frame_height = self._spritesheet.frameHeight
@@ -30,9 +29,9 @@ function AnimatedSprite:play(key)
 end
 
 function AnimatedSprite:draw()
-    assert(self.owner[Transform],
+    assert(self.owner:has_component(Transform),
            'no transform component on animation component owner')
-    local t = self.owner[Transform]
+    local t = self.owner:get_component(Transform)
     local x = t.pos.x - self.frame_width / 2
     local y = t.pos.y - self.frame_height / 2
     self.current:draw(x, y, t.rotation, t.scale.x, t.scale.y)

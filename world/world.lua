@@ -19,7 +19,7 @@ end
 
 function World:update(dt)
     self.time_elapsed = self.time_elapsed + dt
-    for i = 1, #self.entities do 
+    for i = 1, #self.entities do
         self.entities[i]:update(dt)
     end
     while self.time_elapsed >= TIME_STEP do

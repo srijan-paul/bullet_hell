@@ -8,7 +8,8 @@ local ZOOM = 4
 function Room:init()
     self.world = World()
     self.player = Player(self.world, 100, 100)
-    -- camera:zoom(ZOOM)
+    self.world:add_ent(self.player)
+    camera:zoom(ZOOM)
 end
 
 
