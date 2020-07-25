@@ -2,15 +2,16 @@
 
 local Collider = Class('Collider')
 
-function Collider:init(entity, width, height)
+function Collider:init(entity, width, height, class)
     self.owner = entity
     self.width = width
     self.height = height
+    self.class = class or ''
 end
 
 
 function Collider:get_pos()
-    assert(self.owner.transform)
+    assert(self.owner.transform, 'no transform component on collider parent')
     return self.owner.transform.pos
 end
 

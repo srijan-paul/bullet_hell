@@ -1,12 +1,14 @@
 local camera = require 'camera'
 local World = require 'world/world'
+local Player = require 'prefabs/player'
 
 local Room = Class('Room')
 local ZOOM = 4
 
 function Room:init()
-    self.world = World:init()
-    camera:zoom(ZOOM)
+    self.world = World()
+    self.player = Player(self.world, 100, 100)
+    -- camera:zoom(ZOOM)
 end
 
 

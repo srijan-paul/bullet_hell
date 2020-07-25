@@ -1,4 +1,9 @@
-local camera = {}
+local camera = {
+    pos = Vec2.ZERO(),
+    scaleX = 1,
+    scaleY = 1,
+    offset = Vec2.ZERO()
+}
 
 function camera:reset()
     self.pos = Vec2.ZERO()
