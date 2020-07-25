@@ -37,7 +37,7 @@ util.stack = stack
 
 -- util
 
-function util.hex_to_color(hexcode)
+function util.rgb(hexcode)
     local start = 0
     if hexcode:sub(1, 1) == '#' then start = 1 end
     local r = util.parseHex(hexcode:sub(start + 1, start + 2)) / 255
@@ -88,7 +88,11 @@ end
 
 function util.pop() love.graphics.pop() end
 
-function util.foreach(arr, func) for i = 1, #arr do func(arr[i]) end end
+function util.foreach(arr, func) 
+    for i = 1, #arr do
+        func(arr[i], i)
+    end 
+end
 
 function util.sum(t)
     local sum = 0
@@ -123,7 +127,7 @@ end
 
 function util.contains(t, v)
     for i = 1, #t do 
-        if t[i] == v then return true end 
+        if t[i] == v then return true end
     end
     return false
 end
