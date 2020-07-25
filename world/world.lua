@@ -9,7 +9,9 @@ function World:init()
 end
 
 function World:draw()
-
+    for i = 1, #self.drawables do
+        self.drawables[i]:draw()
+    end
 end
 
 
@@ -18,11 +20,15 @@ function World:update(dt)
     for i = 1, #self.entities do 
         self.entities[i]:update(dt)
     end
+    while self.time_lag >= TIME_STEP do
+        self:_physics_process(dt)
+        self.time_lag = self.time_lag - TIME_STEP
+    end
 end
 
 
 function World:_physics_process(dt)
-    
+
 end
 
 return World

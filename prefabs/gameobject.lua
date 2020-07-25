@@ -1,7 +1,8 @@
 local GameObject = Class('GameObject')
 local Transform = require('component.transform')
 
-function GameObject:init(x, y, r, sx, sy)
+function GameObject:init(world, x, y, r, sx, sy)
+    self.world = world
     self[Transform] = Transform(x, y, r, sx, sy)
 end
 

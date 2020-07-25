@@ -40,4 +40,9 @@ function Collider.AABBdir(a, b)
     return 'up'
 end
 
+
+function Collider:update(dt)
+    -- body
+end
+
 return Collider
