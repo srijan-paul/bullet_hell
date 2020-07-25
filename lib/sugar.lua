@@ -1,4 +1,4 @@
-local util = {}
+local sugar = {}
 
 
 -- stack
@@ -33,20 +33,20 @@ function stack:peek()
     return self._values[#self._values] 
 end
 
-util.stack = stack
+sugar.stack = stack
 
--- util
+-- sugar
 
-function util.rgb(hexcode)
+function sugar.rgb(hexcode)
     local start = 0
     if hexcode:sub(1, 1) == '#' then start = 1 end
-    local r = util.parseHex(hexcode:sub(start + 1, start + 2)) / 255
-    local g = util.parseHex(hexcode:sub(start + 3, start + 4)) / 255
-    local b = util.parseHex(hexcode:sub(start + 5, start + 6)) / 255
+    local r = sugar.parseHex(hexcode:sub(start + 1, start + 2)) / 255
+    local g = sugar.parseHex(hexcode:sub(start + 3, start + 4)) / 255
+    local b = sugar.parseHex(hexcode:sub(start + 5, start + 6)) / 255
     return r, g, b
 end
 
-function util.parse_hex(hex)
+function sugar.parse_hex(hex)
     local decimal, k = 0, 1
     local stack = stack:new()
 
@@ -69,63 +69,63 @@ function util.parse_hex(hex)
     return decimal
 end
 
-function util.push_translate_rotate(x, y, r)
+function sugar.push_translate_rotate(x, y, r)
     love.graphics.push()
     love.graphics.translate(x, y)
     love.graphics.rotate(r)
     love.graphics.translate(-x, -y)
 end
 
-function util.push_rotate(r)
+function sugar.push_rotate(r)
     love.graphics.push()
     love.graphics.rotate(r)
 end
 
-function util.push_translate(x, y)
+function sugar.push_translate(x, y)
     love.graphics.push()
     love.graphics.translate(x, y)
 end
 
-function util.pop() love.graphics.pop() end
+function sugar.pop() love.graphics.pop() end
 
-function util.foreach(arr, func) 
+function sugar.foreach(arr, func) 
     for i = 1, #arr do
         func(arr[i], i)
     end 
 end
 
-function util.sum(t)
+function sugar.sum(t)
     local sum = 0
     for _, v in pairs(t) do sum = sum + v end
 
     return sum
 end
 
-function util.sign(num)
+function sugar.sign(num)
     if num > 0 then return 1 end
     if num < 0 then return -1 end
     return num
 end
 
-function util.lerp(a, b, x) return a + (b - a) * x end
+function sugar.lerp(a, b, x) return a + (b - a) * x end
 
-function util.index_of(t, v)
+function sugar.index_of(t, v)
     for i = 1, #t do if t[i] == v then return i end end
     return -1
 end
 
-function util.remove(t, v)
-    local index = util.index_of(t, v)
+function sugar.remove(t, v)
+    local index = sugar.index_of(t, v)
     table.remove(t, index)
 end
 
-function util.clamp(value, min, max)
+function sugar.clamp(value, min, max)
     if max and value > max then return max end
     if value < min then return min end
     return value
 end
 
-function util.contains(t, v)
+function sugar.contains(t, v)
     for i = 1, #t do 
         if t[i] == v then return true end
     end
@@ -133,19 +133,19 @@ function util.contains(t, v)
 end
 
 
-function util.is_digit(d)
+function sugar.is_digit(d)
     local ascii = string.byte(d)
     return ascii >= 48 and ascii <= 57
 end
 
-function util.is_alpha(char)
+function sugar.is_alpha(char)
     local ascii = string.byte(char)
     return (ascii >= 65 and ascii <= 90) or (ascii >= 97 and ascii <= 122)
 end
 
-function util.is_alnum(char)
-    return util.is_alpha(char) or util.is_digit(char)
+function sugar.is_alnum(char)
+    return sugar.is_alpha(char) or sugar.is_digit(char)
 end
 
 
-return util
+return sugar
