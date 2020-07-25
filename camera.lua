@@ -15,7 +15,9 @@ function camera:setPos(x, y)
     self.pos.y = y
 end
 
-function camera:update(dt) end
+function camera:update(dt) 
+
+end
 
 function camera:set()
     love.graphics.push()
