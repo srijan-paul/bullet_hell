@@ -16,8 +16,8 @@ function Room:init()
 end
 
 function Room:draw()
-    graphics.setColor(0.12549019607843, 0.15686274509804, 0.22352941176471)
-    graphics.rectangle('fill', 0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT)
+    -- graphics.setColor(0.12549019607843, 0.15686274509804, 0.22352941176471)
+    -- graphics.rectangle('fill', 0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT)
     graphics.setColor(1, 1, 1, 1)
     camera:set()
     self.world:draw()

@@ -1,8 +1,10 @@
-return love.graphics.newShader [[
+return love.graphics.newShader ([[
     // jangsy5 code
-    extern float crt_bend = 4.3;
-    extern float aberration_offset = 0.0025;
-
+    uniform float crt_bend = 4;
+    uniform float aberration_offset = 0.0022;
+    uniform float scanline_count = 200.0;
+    uniform float time;
+    uniform float scanline_speed = -10.0;
     // CRT screen coordinates
 
     vec2 crt_pos(vec2 uv) {
@@ -14,6 +16,10 @@ return love.graphics.newShader [[
 
     // Chromatic Aberration
 
+    float scanline(vec2 uv) {
+        return sin(uv.y * scanline_count + time * scanline_speed);
+    }
+
     vec4 aberration(Image tex, vec2 uv) {
         vec4 r_channel = Texel(tex, uv + aberration_offset);
         vec4 g_channel = Texel(tex, uv - aberration_offset);
@@ -24,12 +30,17 @@ return love.graphics.newShader [[
         return vec4(r_channel.r, g_channel.g, b_channel.b, alpha);
     }
 
-    vec4 effect(vec4 color, Image texture, vec2 uv, vec2 pc) {
+    vec4 effect(vec4 _ , Image texture, vec2 uv, vec2 pc) {
         // curvature
         uv = crt_pos(uv);
 
+        // aberration
+
         // fake chromatic aberration
-        vec4 final = aberration(texture, uv);
-        return final;
+        vec4 color = aberration(texture, uv);
+        float line = scanline(uv);
+        return mix(color, vec4(line), 0.08);
     }
-]]
+]])
+
+
