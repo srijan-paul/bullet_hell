@@ -1,6 +1,8 @@
 local camera = require 'camera'
 local World = require 'world/world'
 local Player = require 'prefabs/player'
+local Weapon = require 'prefabs/weapon'
+local WeaponType = require 'prefabs/weapontypes/weapontypes'
 
 local Room = Class('Room')
 local ZOOM = 4.8
@@ -8,7 +10,7 @@ local ZOOM = 4.8
 function Room:init()
     self.world = World()
     self.player = Player(self.world, 100, 100)
-    self.world:add_ent(self.player)
+    self.player.weapon = Weapon(self.player, WeaponType.HandGun)
     camera:zoom(ZOOM)
     camera:follow(self.player)
 end

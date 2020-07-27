@@ -3,11 +3,13 @@ local Transform = require 'component/transform'
 
 local Collider = Class('Collider')
 
-function Collider:init(entity, width, height, class)
+function Collider:init(entity, world, width, height, class)
     self.owner = entity
     self.width = width
     self.height = height
     self.class = class or ''
+    self.mask = {}
+    world:add_collider(self)
 end
 
 

@@ -6,6 +6,7 @@ function GameObject:init(world, x, y, r, sx, sy)
     self.world = world
     self._components = {}
     self._components[Transform] = Transform(self, x, y, r, sx, sy)
+    world:add_entity(self)
 end
 
 
@@ -36,6 +37,15 @@ end
 -- to be overidden
 function GameObject:_physics_process(dt)
     -- body
+end
+
+
+function GameObject:get_pos()
+    return self:get_component(Transform).pos
+end
+
+function GameObject:get_scale()
+    return self:get_component(Transform).scale
 end
 
 return GameObject

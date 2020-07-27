@@ -21,7 +21,7 @@ function Player:init(world, x, y)
                        {{'idle', 1, 5, 0.1, true}, {'run', 6, 10, 0.07, true},
                         {'hurt', 11, 12, 0.2, true}})
     self:add_component(InputComponent)
-    self:add_component(cmp.Collider, COLLIDER_WIDTH, COLLIDER_HEIGHT)
+    self:add_component(cmp.Collider, world, COLLIDER_WIDTH, COLLIDER_HEIGHT)
 
     self:get_component(cmp.AnimatedSprite):play('idle')
     self.face_dir = 1 -- 1 is right, -1 is left
@@ -32,6 +32,7 @@ end
 
 function Player:update(dt)
     GameObject.update(self, dt)
+    self.weapon:face(camera:toWorldPos(mousePos()))
     local movedir = self:get_component(InputComponent).movedir
 
     local t = self:get_component(cmp.Transform)
@@ -59,6 +60,15 @@ function Player:switch_state(state)
         self.state = state
         self:get_component(cmp.AnimatedSprite):play(state)
     end
+end
+
+
+function Player:get_weapon_pivot()
+    local t = self:get_component(cmp.Transform)
+    if t.scale.x == -1 then
+        return t.pos - Vec2(1, -3)
+    end
+    return t.pos + Vec2(8, 3)
 end
 
 function Player:_physics_process(dt)

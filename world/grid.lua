@@ -5,8 +5,8 @@ local DEFAULT_ROWS, DEFAULT_COLS = 10, 10
 
 function Grid:init(world, rows, cols)
     self.world = world
-    self.rows = DEFAULT_ROWS or rows
-    self.cols = DEFAULT_COLS or cols
+    self.rows = rows or DEFAULT_ROWS
+    self.cols = cols or DEFAULT_COLS
     self.cell_width = world.width / self.cols
     self.cell_height = world.height / self.rows
     self.cells = {}

@@ -6,7 +6,7 @@ _G.graphics = love.graphics
 _G.mouse = love.mouse
 
 local room
-local CURSOR_SCALE = 4
+local CURSOR_SCALE = 5
 local CURSOR_OFFSET = -4.5 * CURSOR_SCALE
 -- replacing the cursor with the crosshair sprite
 
@@ -83,12 +83,12 @@ function love.draw()
     love.graphics.setShader(shader)
     graphics.draw(main_canvas, SCREEN_OFFSET_X, 0, 0, scale, scale)
     love.graphics.setShader()
-    show_debug_stats()
+    -- show_debug_stats()
     -- *DEBUG CODE
 end
 
-function love.update(dt) 
-    room:update(dt) 
+function love.update(dt)
+    room:update(dt)
 end
 
 

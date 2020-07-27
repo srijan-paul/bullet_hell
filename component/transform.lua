@@ -5,7 +5,7 @@ local transform_meta = {
     end
 }
 
-function Transform(owner, x, y, r, sx, sy)
+local function Transform(owner, x, y, r, sx, sy)
     return setmetatable({
         owner = owner,
         pos = Vec2(x, y),

@@ -1,5 +1,5 @@
 local Grid = require 'world/grid'
-local Collider = require 'component/collider'
+local cmp = require 'component/common'
 local World = Class('World')
 
 local TIME_STEP = 0.016
@@ -8,26 +8,27 @@ function World:init(width, height)
     self.width = width or 400
     self.height = height or 400
     self.drawables = {}
+    self.colliders = {}
     self.entities = {}
     self.grid = Grid(self, 5, 5)
     self.time_elapsed = 0
 end
 
 function World:draw()
-    self.grid:draw()
+
     for i = 1, #self.drawables do
         self.drawables[i]:draw()
     end
 
 
     -- * DEBUG CODE
+    self.grid:draw()
+
     graphics.setColor(1, 0, 0, 1)
 
-    for i = 1, #self.entities do
-        if self.entities[i]:has_component(Collider) then
-            self.entities[i]:get_component(Collider):draw()
-        end
-    end
+    -- for i = 1, #self.colliders do
+    --     self.colliders[i]:draw()
+    -- end
 
     graphics.setColor(1, 1, 1, 1)
     love.graphics.rectangle('line', 0, 0, self.width, self.height)
@@ -48,9 +49,16 @@ end
 
 
 function World:_physics_process(dt)
+
+    self.grid:clear()
+
     for i = 1, #self.entities do 
         local e = self.entities[i]
         e:_physics_process(dt)
+    end
+
+    for i = 1, #self.colliders do
+        self.grid:insert(self.colliders[i])
     end
 end
 
@@ -61,7 +69,13 @@ function World:add_drawable(d)
     self.drawables[#self.drawables + 1] = d
 end
 
-function World:add_ent(e)
+
+function World:add_collider(c)
+    self.colliders[#self.colliders + 1] = c
+end
+
+function World:add_entity(e)
+    -- TODO: register and handle collision classes as well
     self.entities[#self.entities + 1] = e
 end
 
