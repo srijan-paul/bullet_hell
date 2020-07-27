@@ -1,14 +1,18 @@
+local Transform = require 'component/transform'
+
 local camera = {
     pos = Vec2.ZERO(),
     scaleX = 1,
     scaleY = 1,
-    offset = Vec2.ZERO()
+    offset = Vec2.ZERO(),
+    follow_target = nil
 }
 
 function camera:reset()
     self.pos = Vec2.ZERO()
     self.scaleX, self.scaleY = 1, 1
     self.offset = Vec2.ZERO()
+    self.follow_target = nil
 end
 
 function camera:setPos(x, y)
@@ -20,8 +24,13 @@ function camera:setPos(x, y)
     self.pos.y = y
 end
 
-function camera:update(dt) 
+function camera:follow(entity)
+    self.follow_target = entity:get_component(Transform)
+end
 
+function camera:update(dt)
+    self.pos.x = self.follow_target.pos.x - (NATIVE_WIDTH * self.scaleX) / 2
+    self.pos.y = self.follow_target.pos.y - (NATIVE_HEIGHT * self.scaleY) / 2
 end
 
 function camera:set()

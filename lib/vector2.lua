@@ -132,7 +132,7 @@ function Vector2:angle_to(vec)
 end
 
 
-function Vector2:copy(vec)
+function Vector2:clone(vec)
     return Vector2:new(vec.x, vec.y)
 end
 

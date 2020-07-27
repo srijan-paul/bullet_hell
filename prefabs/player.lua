@@ -9,7 +9,8 @@ local COLLIDER_WIDTH, COLLIDER_HEIGHT = 10, 10
 -- TODO: implement state pattern if need be
 local PlayerState = {
     IDLE = 'idle',
-    RUN = 'run'
+    RUN = 'run',
+    HURT = 'hurt'
 }
 
 local Player = Class('Player', GameObject)
@@ -30,7 +31,7 @@ end
 function Player:update(dt)
     GameObject.update(self, dt)
     local movedir = self:get_component(InputComponent).movedir
-    
+
     local t = self:get_component(cmp.Transform)
 
     local centerX = camera:toScreenX(t.pos.x + COLLIDER_WIDTH / 2)

@@ -1,7 +1,7 @@
 local shader = require 'shader'
 local Room = require 'world.room'
 
-_G.keyboard= love.keyboard
+_G.keyboard = love.keyboard
 _G.graphics = love.graphics
 _G.mouse = love.mouse
 
@@ -20,10 +20,9 @@ _G.mouseX = function()
     return love.mouse.getX()
 end
 
-_G.mousePos = function()
+_G.mousePos = function() 
     return Vec2(love.mouse.getX(), love.mouse.getY())
 end
-
 
 local function draw_cursor()
     local x = love.mouse.getX() + CURSOR_OFFSET
@@ -31,24 +30,51 @@ local function draw_cursor()
     graphics.draw(crosshair, x, y, 0, CURSOR_SCALE, CURSOR_SCALE)
 end
 
+
+local scale = 1
+local SCREEN_OFFSET_X = 0
+
 function love.load()
+
+    -- Record the screen dimensions
+    if settings.fullscreen then
+        love.window.setMode(0, 0)
+    end
+
+    _G.SC_WIDTH = love.graphics.getWidth()
+    _G.SC_HEIGHT = love.graphics.getHeight()
+
+    scale =  SC_HEIGHT / NATIVE_HEIGHT
+    SCREEN_OFFSET_X = (SC_WIDTH - NATIVE_WIDTH) / 4
+
+    _G.DISPLAY_WIDTH = SC_WIDTH * scale
+    _G.DISPLAY_HEIGHT = SC_HEIGHT * scale
+
+    love.window.setMode(SC_WIDTH, SC_HEIGHT, {fullscreen = settings.fullscreen})
+
     love.graphics.setLineStyle('rough')
     love.graphics.setDefaultFilter('nearest', 'nearest')
-    love.graphics.setBackgroundColor(sugar.rgb('19202f'))
+    love.graphics.setBackgroundColor(sugar.rgb('000000'))
     -- print(sugar.rgb('19202f'))
     Resource.load()
     crosshair = Resource.Image.Cursor
     room = Room()
-    love.graphics.setShader(shader)
     love.mouse.setVisible(false)
 end
 
+-- main canvas for shader effect
+
+local main_canvas = love.graphics.newCanvas()
 
 function love.draw()
-    room:draw()
-    draw_cursor()
+    main_canvas:renderTo(function()
+        graphics.clear()
+        room:draw()
+        draw_cursor()
+    end)
+    love.graphics.setShader(shader)
+    graphics.draw(main_canvas, SCREEN_OFFSET_X, 0, 0, scale, scale)
+    love.graphics.setShader()
 end
-
-
 
 function love.update(dt) room:update(dt) end

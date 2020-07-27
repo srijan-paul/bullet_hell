@@ -3,12 +3,12 @@
 
 return love.graphics.newShader [[
     // jangsy5 code
-    extern number distortion = 0.06;
-    extern number aberration = 2.5;
+    extern number distortion = 0.25;
+    extern number aberration = 1.8;
     vec4 effect(vec4 color, Image tx, vec2 tc, vec2 pc) {
         // curvature
         vec2 cc = tc - 0.5f;
-        float dist = dot(cc, cc)*distortion;
+        float dist = dot(cc , cc) * distortion;
         tc = (tc + cc * (1.0f + dist) * dist);
 
         // fake chromatic aberration
