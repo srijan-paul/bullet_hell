@@ -6,7 +6,7 @@ _G.graphics = love.graphics
 _G.mouse = love.mouse
 
 local room
-local CURSOR_SCALE = 5
+local CURSOR_SCALE = 4
 local CURSOR_OFFSET = -4.5 * CURSOR_SCALE
 -- replacing the cursor with the crosshair sprite
 
