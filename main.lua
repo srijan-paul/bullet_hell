@@ -1,31 +1,35 @@
-_G.keyboard= love.keyboard
-
+local shader = require 'shader'
 local Room = require 'world.room'
 
+_G.keyboard= love.keyboard
+_G.graphics = love.graphics
+_G.mouse = love.mouse
+
 local room
--- shader code taken from : https://love2d.org/forums/viewtopic.php?t=85736
--- credits to ivan from Love2d forums 
-local shader = love.graphics.newShader [[
-    // jangsy5 code
-    extern number distortion = 0.06;
-    extern number aberration = 2.5;
-    vec4 effect(vec4 color, Image tx, vec2 tc, vec2 pc) {
-        // curvature
-        vec2 cc = tc - 0.5f;
-        float dist = dot(cc, cc)*distortion;
-        tc = (tc + cc * (1.0f + dist) * dist);
+local CURSOR_SCALE = 5
+local CURSOR_OFFSET = -4.5 * CURSOR_SCALE
+-- replacing the cursor with the crosshair sprite
 
-        // fake chromatic aberration
-        float sx = aberration/love_ScreenSize.x;
-        float sy = aberration/love_ScreenSize.y;
-        vec4 r = Texel(tx, vec2(tc.x + sx, tc.y - sy));
-        vec4 g = Texel(tx, vec2(tc.x, tc.y + sy));
-        vec4 b = Texel(tx, vec2(tc.x - sx, tc.y - sy));
-        number a = (r.a + g.a + b.a)/3.0;
+local crosshair
 
-        return vec4(r.r, g.g, b.b, a);
-    }
-]]
+_G.mouseY = function()
+    return love.mouse.getY()
+end
+
+_G.mouseX = function()
+    return love.mouse.getX()
+end
+
+_G.mousePos = function()
+    return Vec2(love.mouse.getX(), love.mouse.getY())
+end
+
+
+local function draw_cursor()
+    local x = love.mouse.getX() + CURSOR_OFFSET
+    local y = love.mouse.getY() + CURSOR_OFFSET
+    graphics.draw(crosshair, x, y, 0, CURSOR_SCALE, CURSOR_SCALE)
+end
 
 function love.load()
     love.graphics.setLineStyle('rough')
@@ -33,15 +37,18 @@ function love.load()
     love.graphics.setBackgroundColor(sugar.rgb('19202f'))
     -- print(sugar.rgb('19202f'))
     Resource.load()
+    crosshair = Resource.Image.Cursor
     room = Room()
+    love.graphics.setShader(shader)
+    love.mouse.setVisible(false)
 end
 
+
 function love.draw()
-    love.graphics.setColor(1, 1, 1, 1);
-    love.graphics.setShader(shader)
     room:draw()
-    love.graphics.setLineWidth(2)
-    love.graphics.setShader()
+    draw_cursor()
 end
+
+
 
 function love.update(dt) room:update(dt) end

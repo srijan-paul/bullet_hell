@@ -1,7 +1,10 @@
 local cmp = require 'component.common'
 local InputComponent  = require 'component.playerinput'
 local GameObject = require 'prefabs.gameobject'
+local camera = require 'camera'
 
+
+local COLLIDER_WIDTH, COLLIDER_HEIGHT = 10, 10
 
 -- TODO: implement state pattern if need be
 local PlayerState = {
@@ -28,11 +31,16 @@ function Player:update(dt)
     GameObject.update(self, dt)
     local movedir = self:get_component(InputComponent).movedir
     
-    if movedir.x == -1 then
-        self:get_component(cmp.Transform).scale.x = -1
-        self.face_dir = -1
-    elseif movedir.x == 1 then
-        self:get_component(cmp.Transform).scale.x = 1
+    local t = self:get_component(cmp.Transform)
+
+    local centerX = camera:toScreenX(t.pos.x + COLLIDER_WIDTH / 2)
+    local centerY = camera:toScreenY(t.pos.y + COLLIDER_HEIGHT / 2)
+
+    if mouseX() >= centerX then
+        t.scale.x = 1
+        self.face_dir = 1
+    else
+        t.scale.x = -1
         self.face_dir = -1
     end
 
@@ -58,8 +66,5 @@ function Player:_physics_process(dt)
     t.pos = t.pos + velocity
 end
 
-function Player:movement_loop()
-    
-end
 
 return Player
