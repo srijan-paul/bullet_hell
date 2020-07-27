@@ -1,24 +1,35 @@
--- shader code taken from : https://love2d.org/forums/viewtopic.php?t=85736
--- credits to ivan from Love2d forums
-
 return love.graphics.newShader [[
     // jangsy5 code
-    extern number distortion = 0.18;
-    extern number aberration = 1.8;
-    vec4 effect(vec4 color, Image tx, vec2 tc, vec2 pc) {
+    extern float crt_bend = 4.3;
+    extern float aberration_offset = 0.0025;
+
+    // CRT screen coordinates
+
+    vec2 crt_pos(vec2 uv) {
+        uv = (uv - 0.5) * 2.0;
+        uv.x *= 1.0 + pow(abs(uv.y)/ crt_bend, 2.0);
+        uv.y *= 1.0 + pow(abs(uv.x)/ crt_bend, 2.0);
+        return uv / 2.0 + 0.5;
+    }
+
+    // Chromatic Aberration
+
+    vec4 aberration(Image tex, vec2 uv) {
+        vec4 r_channel = Texel(tex, uv + aberration_offset);
+        vec4 g_channel = Texel(tex, uv - aberration_offset);
+        vec4 b_channel = Texel(tex, uv);
+
+        float alpha = Texel(tex, uv).a;
+
+        return vec4(r_channel.r, g_channel.g, b_channel.b, alpha);
+    }
+
+    vec4 effect(vec4 color, Image texture, vec2 uv, vec2 pc) {
         // curvature
-        vec2 cc = tc - 0.5f;
-        float dist = dot(cc , cc) * distortion;
-        tc = (tc + cc * (1.0f + dist) * dist);
+        uv = crt_pos(uv);
 
         // fake chromatic aberration
-        float sx = aberration/love_ScreenSize.x;
-        float sy = aberration/love_ScreenSize.y;
-        vec4 r = Texel(tx, vec2(tc.x + sx, tc.y - sy));
-        vec4 g = Texel(tx, vec2(tc.x, tc.y + sy));
-        vec4 b = Texel(tx, vec2(tc.x - sx, tc.y - sy));
-        number a = (r.a + g.a + b.a)/3.0;
-
-        return vec4(r.r, g.g, b.b, a);
+        vec4 final = aberration(texture, uv);
+        return final;
     }
 ]]

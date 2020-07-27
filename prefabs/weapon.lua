@@ -9,7 +9,7 @@ function Weapon:init(owner, wtype)
     self.owner = owner
     local wpivot = self.owner:get_weapon_pivot()
     GameObject.init(self, self.owner.world, wpivot.x, wpivot.y)
-    self:add_component(Sprite, Resource.Image.Handgun)
+    self:add_component(Sprite, Resource.Image[wtype.sprite_path])
 end
 
 function Weapon:update(dt)

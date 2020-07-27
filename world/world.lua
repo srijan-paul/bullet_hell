@@ -5,8 +5,8 @@ local World = Class('World')
 local TIME_STEP = 0.016
 
 function World:init(width, height)
-    self.width = width or 400
-    self.height = height or 400
+    self.width = width or 200
+    self.height = height or 200
     self.drawables = {}
     self.colliders = {}
     self.entities = {}
@@ -22,9 +22,9 @@ function World:draw()
 
 
     -- * DEBUG CODE
-    self.grid:draw()
+    -- self.grid:draw()
 
-    graphics.setColor(1, 0, 0, 1)
+    -- graphics.setColor(1, 0, 0, 1)
 
     -- for i = 1, #self.colliders do
     --     self.colliders[i]:draw()

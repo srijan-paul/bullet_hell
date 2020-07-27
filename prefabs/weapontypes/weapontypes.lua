@@ -1,5 +1,8 @@
 return {
     HandGun = {
-        sprite = Resource.Image.Handgun
+        sprite_path = 'Handgun',
+        projectile = {
+          
+        }
     }
 }
