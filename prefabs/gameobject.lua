@@ -44,8 +44,17 @@ function GameObject:get_pos()
     return self:get_component(Transform).pos
 end
 
+
+function GameObject:set_pos(p)
+    self:get_component(Transform).pos = p
+end
+
 function GameObject:get_scale()
     return self:get_component(Transform).scale
+end
+
+function GameObject:set_scale(sx, sy)
+    self:get_component(Transform).scale = Vec2(sx, sy)
 end
 
 return GameObject

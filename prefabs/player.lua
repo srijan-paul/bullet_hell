@@ -25,7 +25,7 @@ function Player:init(world, x, y)
 
     self:get_component(cmp.AnimatedSprite):play('idle')
     self.face_dir = 1 -- 1 is right, -1 is left
-    self.speed = 1.5
+    self.speed = 50
     self.state = PlayerState.IDLE
 end
 
@@ -38,7 +38,7 @@ function Player:update(dt)
     local t = self:get_component(cmp.Transform)
 
     local centerX = camera:toScreenX(t.pos.x + COLLIDER_WIDTH / 2)
-    local centerY = camera:toScreenY(t.pos.y + COLLIDER_HEIGHT / 2)
+    -- local centerY = camera:toScreenY(t.pos.y + COLLIDER_HEIGHT / 2)
 
     if mouseX() >= centerX then
         t.scale.x = 1
@@ -71,12 +71,18 @@ function Player:get_weapon_pivot()
     return t.pos + Vec2(8, 3)
 end
 
+
 function Player:_physics_process(dt)
     local t = self:get_component(cmp.Transform)
     local movedir = self:get_component(InputComponent).movedir
     if movedir.x == 0 and movedir.y == 0 then return end
     local velocity = movedir:with_mag(self.speed)
-    t.pos = t.pos + velocity
+    t.pos = t.pos + velocity * dt
+end
+
+
+function Player:fire()
+    self.weapon:fire(camera:toWorldPos(mousePos()))
 end
 
 

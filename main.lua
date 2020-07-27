@@ -84,12 +84,17 @@ function love.draw()
     love.graphics.setShader(shader)
     graphics.draw(main_canvas, SCREEN_OFFSET_X, 0, 0, scale, scale)
     love.graphics.setShader()
-    -- show_debug_stats()
+    show_debug_stats()
     -- *DEBUG CODE
 end
 
 function love.update(dt)
     room:update(dt)
+    Timer.update(dt)
 end
 
+
+function love.mousepressed(x, y, button)
+    room:mousepressed(x, y, button)
+end
 

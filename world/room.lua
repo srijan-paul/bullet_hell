@@ -1,8 +1,8 @@
 local camera = require 'camera'
 local World = require 'world/world'
 local Player = require 'prefabs/player'
-local Weapon = require 'prefabs/weapon'
-local WeaponType = require 'prefabs/weapontypes/weapontypes'
+local Weapon = require 'prefabs/weapon/weapon'
+local WeaponType = require 'prefabs/weapon/weapontypes'
 
 local Room = Class('Room')
 local ZOOM = 4.8
@@ -27,6 +27,13 @@ end
 function Room:update(dt)
     self.world:update(dt)
     camera:update(dt)
+end
+
+
+function Room:mousepressed(x, y, btn)
+    if btn == 1 then
+        self.player:fire()
+    end
 end
 
 return Room
