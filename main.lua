@@ -55,11 +55,19 @@ function love.load()
     love.graphics.setLineStyle('rough')
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.graphics.setBackgroundColor(sugar.rgb('000000'))
-    -- print(sugar.rgb('19202f'))
+
     Resource.load()
     crosshair = Resource.Image.Cursor
     room = Room()
     love.mouse.setVisible(false)
+end
+
+
+local function show_debug_stats()
+    graphics.setColor(1, 1, 1, 1)
+    graphics.rectangle('fill', 0, 0, 200, 50)
+    graphics.setColor(0, 0, 0, 1)
+    graphics.print('FPS: ' .. love.timer.getFPS())
 end
 
 -- main canvas for shader effect
@@ -75,6 +83,12 @@ function love.draw()
     love.graphics.setShader(shader)
     graphics.draw(main_canvas, SCREEN_OFFSET_X, 0, 0, scale, scale)
     love.graphics.setShader()
+    show_debug_stats()
+    -- *DEBUG CODE
 end
 
-function love.update(dt) room:update(dt) end
+function love.update(dt) 
+    room:update(dt) 
+end
+
+

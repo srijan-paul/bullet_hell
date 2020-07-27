@@ -13,7 +13,8 @@ end
 
 function Collider:get_pos()
     assert(self.owner:has_component(Transform), 'no transform component on collider parent')
-    return self.owner:get_component(Transform).pos
+    -- transform is the center coordinate
+    return self.owner:get_component(Transform).pos - Vec2(self.width / 2, self.height / 2)
 end
 
 function Collider.checkAABB(r1, r2)
@@ -40,6 +41,11 @@ function Collider.AABBdir(a, b)
 
     if dist.y > 0 then return 'down' end
     return 'up'
+end
+
+function Collider:draw()
+    local pos = self:get_pos()
+    love.graphics.rectangle('line', pos.x, pos.y, self.width, self.height)
 end
 
 

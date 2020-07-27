@@ -61,4 +61,24 @@ function Grid:toRowCol(_x, _y)
     return row, col
 end
 
+
+function Grid:draw()
+    for i = 1, self.rows do
+        for j = 1, self.cols do
+            love.graphics.setColor(1, 1, 1, 0.1)
+            local x, y = (j - 1) * self.cell_height, (i - 1) * self.cell_height
+            local w, h = self.cell_width, self.cell_height
+            love.graphics.rectangle('line', x, y, w, h)
+            if #self.cells[i][j] > 0 then
+                love.graphics.setColor(1, 1, 1, 0.1 * #self.cells[i][j])
+                love.graphics.rectangle('fill', x, y, w, h)
+            end
+            local centerX = x + self.cell_width / 2 - 10
+            local centerY = y + self.cell_height / 2 - 10
+            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.print(#self.cells[i][j], centerX, centerY)
+        end
+    end
+end
+
 return Grid

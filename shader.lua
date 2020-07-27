@@ -3,7 +3,7 @@
 
 return love.graphics.newShader [[
     // jangsy5 code
-    extern number distortion = 0.25;
+    extern number distortion = 0.18;
     extern number aberration = 1.8;
     vec4 effect(vec4 color, Image tx, vec2 tc, vec2 pc) {
         // curvature

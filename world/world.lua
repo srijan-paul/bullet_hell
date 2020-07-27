@@ -1,20 +1,37 @@
+local Grid = require 'world/grid'
+local Collider = require 'component/collider'
 local World = Class('World')
 
 local TIME_STEP = 0.016
 
 function World:init(width, height)
-    self.width = width or 200
-    self.height = height or 200
+    self.width = width or 400
+    self.height = height or 400
     self.drawables = {}
     self.entities = {}
+    self.grid = Grid(self, 5, 5)
     self.time_elapsed = 0
 end
 
 function World:draw()
+    self.grid:draw()
     for i = 1, #self.drawables do
         self.drawables[i]:draw()
     end
+
+
+    -- * DEBUG CODE
+    graphics.setColor(1, 0, 0, 1)
+
+    for i = 1, #self.entities do
+        if self.entities[i]:has_component(Collider) then
+            self.entities[i]:get_component(Collider):draw()
+        end
+    end
+
+    graphics.setColor(1, 1, 1, 1)
     love.graphics.rectangle('line', 0, 0, self.width, self.height)
+    -- * / DEBUG CODE
 end
 
 
