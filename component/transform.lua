@@ -1,4 +1,4 @@
-local transform_parent = {
+local transform_meta = {
     __tostring = function(t)
         return 'position: ' .. tostring(t.pos) .. '\nrotation: ' ..
                    tostring(t.rotation) .. '\nscale: ' .. tostring(t.scale)
@@ -11,7 +11,7 @@ function Transform(owner, x, y, r, sx, sy)
         pos = Vec2(x, y),
         rotation = r or 0,
         scale = Vec2(sx or 1, sy or 1)
-    }, transform_parent)
+    }, transform_meta)
 end
 
 return Transform

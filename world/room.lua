@@ -3,7 +3,7 @@ local World = require 'world/world'
 local Player = require 'prefabs/player'
 
 local Room = Class('Room')
-local ZOOM = 4
+local ZOOM = 4.8
 
 function Room:init()
     self.world = World()

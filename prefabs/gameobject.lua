@@ -24,12 +24,18 @@ function GameObject:has_component(cmp)
     return self._components[cmp] ~= nil
 end
 
+
 function GameObject:update(dt)
     for _, c in pairs(self._components) do
         if c.update then
             c:update(dt)
         end
     end
+end
+
+-- to be overidden
+function GameObject:_physics_process(dt)
+    -- body
 end
 
 return GameObject

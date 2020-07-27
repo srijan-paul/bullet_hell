@@ -33,6 +33,14 @@ function AnimatedSprite:draw()
            'no transform component on animation component owner')
     local t = self.owner:get_component(Transform)
     local x = t.pos.x - self.frame_width / 2
+    
+    -- for animated sprites, when the scale is negative, it means the
+    -- entity is facing left and hence we still draw the sprite from the same
+    -- offset
+    if t.scale.x < 0 then
+        x = x + self.frame_width * - 1 * t.scale.x
+    end
+    
     local y = t.pos.y - self.frame_height / 2
     self.current:draw(x, y, t.rotation, t.scale.x, t.scale.y)
 end

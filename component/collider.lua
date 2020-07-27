@@ -1,3 +1,4 @@
+local Transform = require 'component/transform'
 -- *AABB rect collider
 
 local Collider = Class('Collider')
@@ -11,8 +12,8 @@ end
 
 
 function Collider:get_pos()
-    assert(self.owner.transform, 'no transform component on collider parent')
-    return self.owner.transform.pos
+    assert(self.owner:has_component(Transform), 'no transform component on collider parent')
+    return self.owner:get_component(Transform).pos
 end
 
 function Collider.checkAABB(r1, r2)

@@ -40,20 +40,17 @@ sugar.stack = stack
 function sugar.rgb(hexcode)
     local start = 0
     if hexcode:sub(1, 1) == '#' then start = 1 end
-    local r = sugar.parseHex(hexcode:sub(start + 1, start + 2)) / 255
-    local g = sugar.parseHex(hexcode:sub(start + 3, start + 4)) / 255
-    local b = sugar.parseHex(hexcode:sub(start + 5, start + 6)) / 255
+    local r = sugar.parse_hex(hexcode:sub(start + 1, start + 2)) / 255
+    local g = sugar.parse_hex(hexcode:sub(start + 3, start + 4)) / 255
+    local b = sugar.parse_hex(hexcode:sub(start + 5, start + 6)) / 255
     return r, g, b
 end
 
 function sugar.parse_hex(hex)
     local decimal, k = 0, 1
-    local stack = stack:new()
 
-    for i = 1, #hex do stack:push(hex:sub(i, i)) end
-
-    for i = 1, #hex do
-        local char = stack:pop()
+    for i = #hex, 1, -1 do
+        local char = hex:sub(i, i)
         local ascii = string.byte(char)
 
         if (ascii >= 97 and ascii <= 102) then
@@ -91,7 +88,7 @@ function sugar.pop() love.graphics.pop() end
 function sugar.foreach(arr, func) 
     for i = 1, #arr do
         func(arr[i], i)
-    end 
+    end
 end
 
 function sugar.sum(t)
@@ -110,19 +107,25 @@ end
 function sugar.lerp(a, b, x) return a + (b - a) * x end
 
 function sugar.index_of(t, v)
-    for i = 1, #t do if t[i] == v then return i end end
+    for i = 1, #t do
+        if t[i] == v then return i end
+    end
     return -1
 end
 
-function sugar.remove(t, v)
+function sugar.remove_val(t, v)
     local index = sugar.index_of(t, v)
     table.remove(t, index)
 end
 
 function sugar.clamp(value, min, max)
-    if max and value > max then return max end
+    if value > max then return max end
     if value < min then return min end
     return value
+end
+
+function sugar.clampmax(value, max)
+    return value > max and max or value
 end
 
 function sugar.contains(t, v)

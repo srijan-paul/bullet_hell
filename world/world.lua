@@ -14,6 +14,7 @@ function World:draw()
     for i = 1, #self.drawables do
         self.drawables[i]:draw()
     end
+    love.graphics.rectangle('line', 0, 0, self.width, self.height)
 end
 
 
@@ -23,14 +24,17 @@ function World:update(dt)
         self.entities[i]:update(dt)
     end
     while self.time_elapsed >= TIME_STEP do
-        self:_physics_process(dt)
+        self:_physics_process(self.time_elapsed)
         self.time_elapsed = self.time_elapsed - TIME_STEP
     end
 end
 
 
 function World:_physics_process(dt)
-
+    for i = 1, #self.entities do 
+        local e = self.entities[i]
+        e:_physics_process(dt)
+    end
 end
 
 
