@@ -13,6 +13,10 @@ function Collider:init(entity, world, width, height, class)
 end
 
 
+function Collider:check_mask(class)
+    return self.mask[class]
+end
+
 function Collider:get_pos()
     assert(self.owner:has_component(Transform), 'no transform component on collider parent')
     -- transform is the center coordinate

@@ -1,3 +1,4 @@
+local Collider = require 'component/Collider'
 local Grid = Class('Grid')
 
 local DEFAULT_ROWS, DEFAULT_COLS = 10, 10
@@ -21,6 +22,12 @@ end
 
 function Grid:insert(collider)
     local pos = collider:get_pos()
+
+    if pos.x < 0 or pos.x > self.world.width or
+         pos.y > self.world.height or pos.y < 0 then
+            collider.owner:on_world_exit()
+    end
+
 
     local row, col = self:toRowCol(pos.x, pos.y)
     local endRow, endCol = self:toRowCol(pos.x + collider.width,
@@ -77,6 +84,42 @@ function Grid:draw()
             local centerY = y + self.cell_height / 2 - 10
             love.graphics.setColor(1, 1, 1, 1)
             love.graphics.print(#self.cells[i][j], centerX, centerY)
+        end
+    end
+end
+
+
+function Grid:process_collision(c1, c2)
+    local a, b
+
+    if c1:check_mask(c2.class) then
+        a , b = c1, c2
+    elseif c2:check_mask(c1.class) then
+        a, b = c2, c1
+    else return end
+
+    if Collider.checkAABB(a, b) then
+        a.owner:on_collide(b.owner, Collider.AABBdir(a, b))
+    end
+end
+
+
+function Grid:process_cell(i, j)
+    local cell = self.cells[i][j]
+    for x = 1, #cell do 
+        local c1 = cell[x]
+        for y = x, #cell do
+            local c2 = cell[y]
+            Grid:process_collision(c1, c2)
+        end
+    end
+end
+
+
+function Grid:process_collisions()
+    for i = 1, self.rows do
+        for j = 1, self.cols do
+            self:process_cell(i, j)
         end
     end
 end

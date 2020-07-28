@@ -22,7 +22,7 @@ function World:draw()
 
 
     -- * DEBUG CODE
-    -- self.grid:draw()
+    self.grid:draw()
 
     -- graphics.setColor(1, 0, 0, 1)
 
@@ -60,6 +60,8 @@ function World:_physics_process(dt)
     for i = 1, #self.colliders do
         self.grid:insert(self.colliders[i])
     end
+
+    self.grid:process_collisions()
 end
 
 

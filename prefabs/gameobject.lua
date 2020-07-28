@@ -40,6 +40,14 @@ function GameObject:_physics_process(dt)
 end
 
 
+function GameObject:delete()
+-- TODO
+end
+
+function GameObject:on_world_exit()
+-- TODO
+end
+
 function GameObject:get_pos()
     return self:get_component(Transform).pos
 end

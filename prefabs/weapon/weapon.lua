@@ -2,7 +2,6 @@ local cmp = require 'component/common'
 local Sprite = require 'component/weapon_sprite'
 local GameObject = require 'prefabs/gameobject'
 local Projectile = require 'prefabs/weapon/projectile'
-local ProjectileType = require 'prefabs/weapon/projectiletype'
 
 local Weapon = Class('Weapon', GameObject)
 
@@ -15,6 +14,7 @@ function Weapon:init(owner, wtype)
     self.cooldown = wtype.cooldown
     self.projectile = wtype.projectile
     self.auto = false
+    self.sound = Resource.Sound[wtype.sound]
     GameObject.init(self, self.owner.world, wpivot.x, wpivot.y)
     self:add_component(Sprite, Resource.Image[wtype.sprite_path])
 end
@@ -40,7 +40,13 @@ end
 function Weapon:fire(target)
     if not self.active then return false end
 
-    local spawn_pos = self:get_component(cmp.Transform).pos
+    local spawn_pos = self:get_component(cmp.Transform).pos + Vec2(0, 1)
+    
+    if self.sound:isPlaying() then
+        self.sound:stop()
+    end
+
+    self.sound:play()
 
     Projectile(self.owner, self.projectile, target,
                             self.world, spawn_pos.x, spawn_pos.y)
