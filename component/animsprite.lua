@@ -49,4 +49,8 @@ function AnimatedSprite:update(dt)
     self.current:update(dt)
 end
 
+function AnimatedSprite:delete()
+    self.owner.world:remove_drawable(self)
+end
+
 return AnimatedSprite

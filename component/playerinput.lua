@@ -25,7 +25,6 @@ function PlayerInput:update(dt)
     else 
         self.movedir.x = 0
     end
-
 end
 
 return PlayerInput

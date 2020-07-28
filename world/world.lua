@@ -48,17 +48,33 @@ function World:update(dt)
 end
 
 
-function World:_physics_process(dt)
+function World:bounds_check(e)
+    if not e:has_component(cmp.Collider)then return end
 
+    local collider = e:get_component(cmp.Collider)
+    local pos = collider:get_pos()
+
+    -- TODO: account for collider dimensions
+    if pos.x < 0 or pos.x > self.width or
+         pos.y > self.height or pos.y < 0 then
+            if collider.owner.on_world_exit then
+                collider.owner:on_world_exit()
+            end
+    end
+end
+
+
+function World:_physics_process(dt)
     self.grid:clear()
 
-    for i = 1, #self.entities do 
+    for i = #self.entities, 1, -1 do
         local e = self.entities[i]
-        e:_physics_process(dt)
-    end
 
-    for i = 1, #self.colliders do
-        self.grid:insert(self.colliders[i])
+        if self.entities[i]:has_component(cmp.Collider) then
+            self.grid:insert(self.entities[i]:get_component(cmp.Collider))
+        end
+        e:_physics_process(dt)
+        self:bounds_check(e)
     end
 
     self.grid:process_collisions()
@@ -68,17 +84,21 @@ end
 function World:add_drawable(d)
     -- TODO: after depth sorting, change this logic
     --  to insert in sorted array
-    self.drawables[#self.drawables + 1] = d
+    table.insert(self.drawables, d)
 end
 
-
-function World:add_collider(c)
-    self.colliders[#self.colliders + 1] = c
-end
-
-function World:add_entity(e)
+function World:add_gameobject(e)
     -- TODO: register and handle collision classes as well
-    self.entities[#self.entities + 1] = e
+    table.insert(self.entities, e)
+end
+function World:remove_drawable(d)
+    local index = sugar.index_of(self.drawables, d)
+    table.remove(self.drawables, index)
+end
+
+function World:remove_gameobject(g)
+    local index = sugar.index_of(self.entities, g)
+    table.remove(self.entities, index)
 end
 
 return World

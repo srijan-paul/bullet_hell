@@ -22,13 +22,6 @@ end
 
 function Grid:insert(collider)
     local pos = collider:get_pos()
-
-    if pos.x < 0 or pos.x > self.world.width or
-         pos.y > self.world.height or pos.y < 0 then
-            collider.owner:on_world_exit()
-    end
-
-
     local row, col = self:toRowCol(pos.x, pos.y)
     local endRow, endCol = self:toRowCol(pos.x + collider.width,
                                         pos.y + collider.height)

@@ -23,5 +23,9 @@ function Projectile:_physics_process(dt)
     self:set_pos(self:get_pos() + self.velocity * dt)
 end
 
+function Projectile:on_world_exit()
+    self:delete()
+end
+
 
 return Projectile

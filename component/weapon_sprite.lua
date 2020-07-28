@@ -22,4 +22,9 @@ function WeaponSprite:draw()
     sugar.pop()
 end
 
+
+function WeaponSprite:delete()
+    self.world:remove_drawable(self)
+end
+
 return WeaponSprite

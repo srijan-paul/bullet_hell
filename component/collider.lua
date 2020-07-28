@@ -9,7 +9,6 @@ function Collider:init(entity, world, width, height, class)
     self.height = height
     self.class = class or ''
     self.mask = {}
-    world:add_collider(self)
 end
 
 
@@ -57,6 +56,10 @@ end
 
 function Collider:update(dt)
     -- body
+end
+
+function Collider:delete()
+    
 end
 
 return Collider

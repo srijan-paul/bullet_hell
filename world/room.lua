@@ -11,6 +11,7 @@ function Room:init()
     self.world = World()
     self.player = Player(self.world, 100, 100)
     self.player.weapon = Weapon(self.player, WeaponType.HandGun)
+    self.world_tree = {}
     camera:zoom(ZOOM)
     camera:follow(self.player)
 end

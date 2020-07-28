@@ -26,4 +26,8 @@ function Sprite:draw()
     love.graphics.draw(self.image, x, y, t.rotation, t.scale.x, t.scale.y)
 end
 
+function Sprite:delete()
+    self.world:remove_drawable(self)
+end
+
 return Sprite

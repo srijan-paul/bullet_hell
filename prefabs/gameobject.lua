@@ -6,7 +6,7 @@ function GameObject:init(world, x, y, r, sx, sy)
     self.world = world
     self._components = {}
     self._components[Transform] = Transform(self, x, y, r, sx, sy)
-    world:add_entity(self)
+    world:add_gameobject(self)
 end
 
 
@@ -41,11 +41,13 @@ end
 
 
 function GameObject:delete()
--- TODO
-end
-
-function GameObject:on_world_exit()
--- TODO
+    self.world:remove_gameobject(self)
+    for k, v in pairs(self._components) do
+        if v.delete then
+            v:delete()
+        end
+        self._components[k] = nil
+    end
 end
 
 function GameObject:get_pos()
