@@ -1,11 +1,11 @@
 local shader = require 'shader'
-local Room = require 'world.room'
+local Level = require 'world/level'
 
 _G.keyboard = love.keyboard
 _G.graphics = love.graphics
 _G.mouse = love.mouse
 
-local room
+local current_level
 local CURSOR_SCALE = 5
 local CURSOR_OFFSET = -4.5 * CURSOR_SCALE
 -- replacing the cursor with the crosshair sprite
@@ -58,7 +58,7 @@ function love.load()
 
     Resource.load()
     crosshair = Resource.Image.Cursor
-    room = Room()
+    current_level = Level()
     love.mouse.setVisible(false)
 end
 
@@ -77,7 +77,7 @@ local main_canvas = love.graphics.newCanvas()
 function love.draw()
     main_canvas:renderTo(function()
         graphics.clear()
-        room:draw()
+        current_level:draw()
         draw_cursor()
     end)
     shader:send('time', love.timer.getTime())
@@ -89,12 +89,12 @@ function love.draw()
 end
 
 function love.update(dt)
-    room:update(dt)
+    current_level:update(dt)
     Timer.update(dt)
 end
 
 
 function love.mousepressed(x, y, button)
-    room:mousepressed(x, y, button)
+    current_level:mousepressed(x, y, button)
 end
 

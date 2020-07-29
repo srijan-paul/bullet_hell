@@ -14,6 +14,11 @@ _G.Direction = {
     DOWN = 'down'
 }
 
+_G.random_dir = function ()
+    local dirs = {'left', 'right', 'up', 'down'}
+    return dirs[math.random(1, 4)]
+end
+
 _G.NATIVE_WIDTH = 800
 _G.NATIVE_HEIGHT = 600
 

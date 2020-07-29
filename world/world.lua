@@ -22,7 +22,7 @@ function World:draw()
 
 
     -- * DEBUG CODE
-    self.grid:draw()
+    -- self.grid:draw()
 
     -- graphics.setColor(1, 0, 0, 1)
 
@@ -57,8 +57,11 @@ function World:bounds_check(e)
     -- TODO: account for collider dimensions
     if pos.x < 0 or pos.x > self.width or
          pos.y > self.height or pos.y < 0 then
+            pos.x = sugar.clamp(pos.x, 0, self.width)
+            pos.y = sugar.clamp(pos.y, 0, self.height)
             if collider.owner.on_world_exit then
                 collider.owner:on_world_exit()
+                return
             end
     end
 end

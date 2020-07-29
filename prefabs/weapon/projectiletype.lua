@@ -1,8 +1,8 @@
 return {
     Bullet = {
         sprite_path = 'Bullet',
-        width = 9,
-        height = 3,
+        width = 10,
+        height = 4,
         speed = 230,
         render = function ()
             local canvas = love.graphics.newCanvas(10, 4)

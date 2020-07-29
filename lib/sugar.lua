@@ -33,7 +33,9 @@ function stack:peek()
     return self._values[#self._values] 
 end
 
-sugar.stack = stack
+sugar.stack = setmetatable(stack, {__call = function ( ... )
+    return stack:new()
+end})
 
 -- sugar
 

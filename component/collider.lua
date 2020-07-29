@@ -19,7 +19,7 @@ end
 function Collider:get_pos()
     assert(self.owner:has_component(Transform), 'no transform component on collider parent')
     -- transform is the center coordinate
-    return self.owner:get_component(Transform).pos - Vec2(self.width / 2, self.height / 2)
+    return self.owner:get_component(Transform).pos
 end
 
 function Collider.checkAABB(r1, r2)
