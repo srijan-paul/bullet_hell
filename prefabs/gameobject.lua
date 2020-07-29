@@ -5,29 +5,32 @@ local Transform = require('component/transform')
 function GameObject:init(world, x, y, r, sx, sy)
     self.world = world
     self._components = {}
-    self._components[Transform] = Transform(self, x, y, r, sx, sy)
+    self._cmp_map = {}
+    self:add_component(Transform, x, y, r, sx, sy)
     world:add_gameobject(self)
 end
 
 
 function GameObject:add_component(comp, ...)
-    assert(not self[comp], 'component already exists on game object')
-    self._components[comp] = comp(self, ...)
+ -- TODO: assert component doesn't already exist
+    self._components[#self._components + 1] = comp(self, ...)
+    self._cmp_map[comp] = #self._components
 end
 
 
 function GameObject:get_component(cmp)
-    return self._components[cmp]
+    return self._components[self._cmp_map[cmp]]
 end
 
 
 function GameObject:has_component(cmp)
-    return self._components[cmp] ~= nil
+    return self._cmp_map[cmp] ~= nil
 end
 
 
 function GameObject:update(dt)
-    for _, c in pairs(self._components) do
+    for i = 1, #self._components do
+        local c = self._components[i]
         if c.update then
             c:update(dt)
         end

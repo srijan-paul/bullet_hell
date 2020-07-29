@@ -1,6 +1,6 @@
 local cmp = require 'component/common'
 local InputComponent  = require 'component/playerinput'
-local GameObject = require 'prefabs.gameobject'
+local GameObject = require 'prefabs/gameobject'
 local camera = require 'camera'
 
 
@@ -21,7 +21,7 @@ function Player:init(world, x, y)
                        {{'idle', 1, 5, 0.1, true}, {'run', 6, 10, 0.07, true},
                         {'hurt', 11, 12, 0.2, true}})
     self:add_component(InputComponent)
-    self:add_component(cmp.Collider, world, COLLIDER_WIDTH, COLLIDER_HEIGHT)
+    self:add_component(cmp.Collider, COLLIDER_WIDTH, COLLIDER_HEIGHT)
 
     self:get_component(cmp.AnimatedSprite):play('idle')
     self.face_dir = 1 -- 1 is right, -1 is left

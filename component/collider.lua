@@ -3,7 +3,7 @@ local Transform = require 'component/transform'
 
 local Collider = Class('Collider')
 
-function Collider:init(entity, world, width, height, class)
+function Collider:init(entity, width, height, class)
     self.owner = entity
     self.width = width
     self.height = height
@@ -23,8 +23,8 @@ function Collider:get_pos()
 end
 
 function Collider.checkAABB(r1, r2)
-    local p1 = r1.get_pos()
-    local p2 = r2.get_pos()
+    local p1 = r1.get_pos() - Vec2(r1.width / 2, r1.height / 2)
+    local p2 = r2.get_pos() - Vec2(r2.width / 2, r2.height / 2)
     return not ((p1.x > p2.x + r2.width) or
         (p1.x + r1.width < p2.x) or
         (p1.y + r1.height < p2.y) or

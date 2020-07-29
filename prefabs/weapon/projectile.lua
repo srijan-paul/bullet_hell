@@ -7,7 +7,7 @@ function Projectile:init(owner, ptype, target, ...)
     GameObject.init(self, ...)
     self.owner = owner
     self:add_component(cmp.Drawable, ptype.render())
-    self:add_component(cmp.Collider, self.world, ptype.width, ptype.height)
+    self:add_component(cmp.Collider, ptype.width, ptype.height)
     local dir = target - self:get_pos()
     self:get_component(cmp.Transform).rotation = dir:angle()
     self.velocity = dir:with_mag(ptype.speed)

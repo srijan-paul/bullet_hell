@@ -1,5 +1,4 @@
 local camera = require 'camera'
-local World = require 'world/world'
 local LevelGenerator = require 'world/worldgen/levelgen'
 local Player = require 'prefabs/player'
 local Weapon = require 'prefabs/weapon/weapon'

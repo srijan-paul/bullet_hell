@@ -92,6 +92,7 @@ end
 
 function World:add_gameobject(e)
     -- TODO: register and handle collision classes as well
+    e.world = self
     table.insert(self.entities, e)
 end
 function World:remove_drawable(d)
