@@ -12,8 +12,10 @@ end
 
 function stack:push(...)
     local args = {...}
-    for i = 1, #args do 
-        table.insert(self._values, args[i]) 
+    for i = 1, #args do
+        if (args[i]) then
+            table.insert(self._values, args[i])
+        end
     end
 end
 
@@ -25,12 +27,17 @@ function stack:pop()
     end
 end
 
-function stack:is_empty() 
-    return #self._values <= 0 
+function stack:is_empty()
+    return #self._values <= 0
 end
 
 function stack:peek() 
     return self._values[#self._values] 
+end
+
+
+function stack:size()
+    return #self._values
 end
 
 sugar.stack = setmetatable(stack, {__call = function ( ... )

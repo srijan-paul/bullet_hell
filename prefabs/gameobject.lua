@@ -53,6 +53,7 @@ function GameObject:delete()
     end
 end
 
+
 function GameObject:get_pos()
     return self:get_component(Transform).pos
 end

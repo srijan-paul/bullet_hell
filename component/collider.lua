@@ -16,6 +16,10 @@ function Collider:check_mask(class)
     return self.mask[class]
 end
 
+function Collider:add_mask(class)
+    self.mask[class] = true
+end
+
 function Collider:get_pos()
     assert(self.owner:has_component(Transform), 'no transform component on collider parent')
     -- transform is the center coordinate
@@ -23,8 +27,8 @@ function Collider:get_pos()
 end
 
 function Collider.checkAABB(r1, r2)
-    local p1 = r1.get_pos() - Vec2(r1.width / 2, r1.height / 2)
-    local p2 = r2.get_pos() - Vec2(r2.width / 2, r2.height / 2)
+    local p1 = r1:get_pos() - Vec2(r1.width / 2, r1.height / 2)
+    local p2 = r2:get_pos() - Vec2(r2.width / 2, r2.height / 2)
     return not ((p1.x > p2.x + r2.width) or
         (p1.x + r1.width < p2.x) or
         (p1.y + r1.height < p2.y) or
@@ -49,7 +53,7 @@ function Collider.AABBdir(a, b)
 end
 
 function Collider:draw()
-    local pos = self:get_pos()
+    local pos = self:get_pos() - Vec2(self.width / 2, self.height / 2)
     love.graphics.rectangle('line', pos.x, pos.y, self.width, self.height)
 end
 

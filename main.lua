@@ -5,6 +5,8 @@ _G.keyboard = love.keyboard
 _G.graphics = love.graphics
 _G.mouse = love.mouse
 
+math.randomseed(os.time())
+
 local current_level
 local CURSOR_SCALE = 5
 local CURSOR_OFFSET = -4.5 * CURSOR_SCALE

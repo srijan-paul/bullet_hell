@@ -84,7 +84,6 @@ end
 
 function Grid:process_collision(c1, c2)
     local a, b
-
     if c1:check_mask(c2.class) then
         a , b = c1, c2
     elseif c2:check_mask(c1.class) then
@@ -99,9 +98,9 @@ end
 
 function Grid:process_cell(i, j)
     local cell = self.cells[i][j]
-    for x = 1, #cell do 
+    for x = 1, #cell do
         local c1 = cell[x]
-        for y = x, #cell do
+        for y = x + 1, #cell do
             local c2 = cell[y]
             Grid:process_collision(c1, c2)
         end

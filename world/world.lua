@@ -1,10 +1,12 @@
 local Grid = require 'world/grid'
 local cmp = require 'component/common'
+local WeaponSprite = require 'component/weapon_sprite'
 local World = Class('World')
 
 local TIME_STEP = 0.016
 
-function World:init(width, height)
+function World:init(level, width, height)
+    self.level = level
     self.width = width or 200
     self.height = height or 200
     self.drawables = {}
@@ -22,13 +24,17 @@ function World:draw()
 
 
     -- * DEBUG CODE
-    -- self.grid:draw()
+    self.grid:draw()
 
     -- graphics.setColor(1, 0, 0, 1)
 
-    -- for i = 1, #self.colliders do
-    --     self.colliders[i]:draw()
-    -- end
+    for i = 1, #self.entities do
+        local e = self.entities[i]
+        graphics.setColor(1, 0.1, 0.1)
+        if e:has_component(cmp.Collider) then
+            e:get_component(cmp.Collider):draw()
+        end
+    end
 
     graphics.setColor(1, 1, 1, 1)
     love.graphics.rectangle('line', 0, 0, self.width, self.height)
@@ -72,7 +78,7 @@ function World:_physics_process(dt)
 
     for i = #self.entities, 1, -1 do
         local e = self.entities[i]
-
+        -- TODO refactor this out into a collider array
         if self.entities[i]:has_component(cmp.Collider) then
             self.grid:insert(self.entities[i]:get_component(cmp.Collider))
         end
@@ -95,6 +101,43 @@ function World:add_gameobject(e)
     e.world = self
     table.insert(self.entities, e)
 end
+
+
+local function get_player_entry_pos(world, dir)
+    if dir == Direction.LEFT then
+        return Vec2(25, world.height / 2)
+    end
+
+    if dir == Direction.RIGHT then
+        return Vec2(world.width - 25, world.height / 2)
+    end
+    
+    if dir == Direction.UP then
+        return Vec2(world.width / 2, 25)
+    end
+
+    if dir == Direction.DOWN then
+        return Vec2(world.width / 2, world.height - 25)
+    end
+
+end
+
+function World:player_enter(p, dir)
+    self:add_gameobject(p)
+    p:set_pos(get_player_entry_pos(self, dir))
+    self:add_drawable(p:get_component(cmp.AnimatedSprite))
+    self:add_gameobject(p.weapon)
+    self:add_drawable(p.weapon:get_component(WeaponSprite))
+end
+
+
+function World:player_leave(p)
+    self:remove_gameobject(p)
+    self:remove_drawable(p:get_component(cmp.AnimatedSprite))
+    self:remove_gameobject(p.weapon)
+    self:remove_drawable(p.weapon:get_component(WeaponSprite))
+end
+
 function World:remove_drawable(d)
     local index = sugar.index_of(self.drawables, d)
     table.remove(self.drawables, index)
