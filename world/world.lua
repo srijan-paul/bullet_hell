@@ -18,13 +18,10 @@ end
 
 function World:draw()
 
-    for i = 1, #self.drawables do
-        self.drawables[i]:draw()
-    end
-
+    for i = 1, #self.drawables do self.drawables[i]:draw() end
 
     -- * DEBUG CODE
-    --self.grid:draw()
+    -- self.grid:draw()
 
     -- graphics.setColor(1, 0, 0, 1)
 
@@ -41,11 +38,11 @@ function World:draw()
     -- * / DEBUG CODE
 end
 
-
 function World:update(dt)
     self.time_elapsed = self.time_elapsed + dt
     for i = 1, #self.entities do
         self.entities[i]:update(dt)
+        self:bounds_check(self.entities[i])
     end
     while self.time_elapsed >= TIME_STEP do
         self:_physics_process(self.time_elapsed)
@@ -53,25 +50,26 @@ function World:update(dt)
     end
 end
 
-
 function World:bounds_check(e)
-    if not e:has_component(cmp.Collider)then return end
+    if not e:has_component(cmp.Collider) then return end
 
     local collider = e:get_component(cmp.Collider)
     local pos = collider:get_pos()
 
     -- TODO: account for collider dimensions
-    if pos.x < 0 or pos.x > self.width or
-         pos.y > self.height or pos.y < 0 then
-            local p = Vec2(sugar.clamp(pos.x, 0, self.width), sugar.clamp(pos.y, 0, self.height))
-            e:set_pos(p)
-            if collider.owner.on_world_exit then
-                collider.owner:on_world_exit()
-                return
-            end
+    if pos.x < collider.width / 2 or pos.x > self.width - collider.width / 2 or
+        pos.y > self.height - collider.height/ 2 or pos.y < collider.height / 2 then
+        local p = Vec2(sugar.clamp(pos.x, collider.width / 2,
+                                   self.width - collider.width / 2),
+                       sugar.clamp(pos.y, collider.height / 2,
+                                   self.height - collider.height / 2))
+        e:set_pos(p)
+        if collider.owner.on_world_exit then
+            collider.owner:on_world_exit()
+            return
+        end
     end
 end
-
 
 function World:_physics_process(dt)
     self.grid:clear()
@@ -83,12 +81,10 @@ function World:_physics_process(dt)
             self.grid:insert(self.entities[i]:get_component(cmp.Collider))
         end
         e:_physics_process(dt)
-        self:bounds_check(e)
     end
 
     self.grid:process_collisions()
 end
-
 
 function World:add_drawable(d)
     -- TODO: after depth sorting, change this logic
@@ -102,19 +98,14 @@ function World:add_gameobject(e)
     table.insert(self.entities, e)
 end
 
-
 local function get_player_entry_pos(world, dir)
-    if dir == Direction.LEFT then
-        return Vec2(25, world.height / 2)
-    end
+    if dir == Direction.LEFT then return Vec2(25, world.height / 2) end
 
     if dir == Direction.RIGHT then
         return Vec2(world.width - 25, world.height / 2)
     end
-    
-    if dir == Direction.UP then
-        return Vec2(world.width / 2, 25)
-    end
+
+    if dir == Direction.UP then return Vec2(world.width / 2, 25) end
 
     if dir == Direction.DOWN then
         return Vec2(world.width / 2, world.height - 25)
@@ -129,7 +120,6 @@ function World:player_enter(p, dir)
     self:add_gameobject(p.weapon)
     self:add_drawable(p.weapon:get_component(WeaponSprite))
 end
-
 
 function World:player_leave(p)
     self:remove_gameobject(p)
