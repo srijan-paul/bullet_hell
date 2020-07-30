@@ -40,7 +40,7 @@ end
 
 function World:update(dt)
     self.time_elapsed = self.time_elapsed + dt
-    for i = 1, #self.entities do
+    for i = #self.entities, 1, -1 do
         self.entities[i]:update(dt)
         self:bounds_check(self.entities[i])
     end
