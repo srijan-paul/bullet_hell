@@ -1,9 +1,9 @@
 return {
     Bullet = {
         sprite_path = 'Bullet',
-        width = 10,
-        height = 4,
-        speed = 230,
+        width = 5,
+        height = 5,
+        speed = 150,
         render = function ()
             local canvas = love.graphics.newCanvas(10, 4)
             canvas:renderTo(function ()

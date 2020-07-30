@@ -3,10 +3,11 @@ local Transform = require 'component/transform'
 
 local Collider = Class('Collider')
 
-function Collider:init(entity, width, height, class)
+function Collider:init(entity, width, height, class, offset)
     self.owner = entity
     self.width = width
     self.height = height
+    self.offset = offset or Vec2.ZERO()
     self.class = class or ''
     self.mask = {}
 end
@@ -23,7 +24,8 @@ end
 function Collider:get_pos()
     assert(self.owner:has_component(Transform), 'no transform component on collider parent')
     -- transform is the center coordinate
-    return self.owner:get_component(Transform).pos
+    local t = self.owner:get_component(Transform)
+    return t.pos + self.offset:rotated(t.rotation)
 end
 
 function Collider.checkAABB(r1, r2)
@@ -53,8 +55,10 @@ function Collider.AABBdir(a, b)
 end
 
 function Collider:draw()
-    local pos = self:get_pos() - Vec2(self.width / 2, self.height / 2)
-    love.graphics.rectangle('line', pos.x, pos.y, self.width, self.height)
+   local pos = self:get_pos()
+   love.graphics.rectangle('line', pos.x - self.width / 2,
+                         pos.y - self.height / 2, self.width,
+                         self.height)
 end
 
 

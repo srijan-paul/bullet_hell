@@ -60,7 +60,7 @@ end
 
 
 function GameObject:set_pos(p)
-    self:get_component(Transform).pos = p
+    self:get_component(Transform).pos = p:clone()
 end
 
 function GameObject:get_scale()

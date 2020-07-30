@@ -40,7 +40,8 @@ end
 function Weapon:fire(target)
     if not self.active then return false end
 
-    local spawn_pos = self:get_component(cmp.Transform).pos + Vec2(0, 1)
+    local t = self:get_component(cmp.Transform)
+    local spawn_pos = t.pos + Vec2(4, 0):rotated(t.rotation)
     
     if self.sound:isPlaying() then
         self.sound:stop()

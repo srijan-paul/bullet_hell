@@ -13,8 +13,12 @@ function Sprite:draw()
     assert(self.owner:has_component(Transform),
            'no transform component on sprite component owner')
     local t = self.owner:get_component(Transform)
-    local x = t.pos.x - self.width / 2
-    local y = t.pos.y - self.height / 2
+
+    
+    local dp = Vec2(self.width / 2, self.height / 2):rotated(t.rotation)
+    local x = t.pos.x - dp.x
+    local y = t.pos.y - dp.y
+ 
 
     -- for animated sprites, when the scale is negative, it means the
     -- entity is facing left and hence we still draw the sprite from the same

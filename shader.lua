@@ -1,5 +1,4 @@
 return love.graphics.newShader ([[
-    // jangsy5 code
     uniform float crt_bend = 4.3;
     uniform float aberration_offset = 0.0022;
     uniform float scanline_count = 200.0;

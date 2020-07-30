@@ -29,6 +29,7 @@ function camera:follow(entity)
 end
 
 function camera:update(dt)
+    if not self.follow_target.pos then return end
     self.pos.x = self.follow_target.pos.x - (NATIVE_WIDTH * self.scaleX) / 2
     self.pos.y = self.follow_target.pos.y - (NATIVE_HEIGHT * self.scaleY) / 2
 end

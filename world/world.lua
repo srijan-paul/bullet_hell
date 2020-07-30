@@ -24,17 +24,17 @@ function World:draw()
 
 
     -- * DEBUG CODE
-    self.grid:draw()
+    --self.grid:draw()
 
     -- graphics.setColor(1, 0, 0, 1)
 
-    for i = 1, #self.entities do
-        local e = self.entities[i]
-        graphics.setColor(1, 0.1, 0.1)
-        if e:has_component(cmp.Collider) then
-            e:get_component(cmp.Collider):draw()
-        end
-    end
+    -- for i = 1, #self.entities do
+    --     local e = self.entities[i]
+    --     graphics.setColor(1, 0.1, 0.1)
+    --     if e:has_component(cmp.Collider) then
+    --         e:get_component(cmp.Collider):draw()
+    --     end
+    -- end
 
     graphics.setColor(1, 1, 1, 1)
     love.graphics.rectangle('line', 0, 0, self.width, self.height)
@@ -63,8 +63,8 @@ function World:bounds_check(e)
     -- TODO: account for collider dimensions
     if pos.x < 0 or pos.x > self.width or
          pos.y > self.height or pos.y < 0 then
-            pos.x = sugar.clamp(pos.x, 0, self.width)
-            pos.y = sugar.clamp(pos.y, 0, self.height)
+            local p = Vec2(sugar.clamp(pos.x, 0, self.width), sugar.clamp(pos.y, 0, self.height))
+            e:set_pos(p)
             if collider.owner.on_world_exit then
                 collider.owner:on_world_exit()
                 return

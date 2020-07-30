@@ -12,7 +12,7 @@ local function new_node(world) return {world = world, children = {}} end
 
 function LevelGenerator:init(level, roomcount)
     self.level = level
-    self.to_generate = roomcount - 1 -- since we create the root righ away
+    self.to_generate = roomcount - 1 -- since we create the root right away
     self.room_tree = new_node(World(level))
     self.current_node = self.room_tree
     self.stack = sugar.stack()

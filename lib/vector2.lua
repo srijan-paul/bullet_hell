@@ -68,9 +68,20 @@ function Vector2.from_polar(r, theta)
     return r * math.cos(theta), r * math.sin(theta)
 end
 
-function Vector2:mag() 
-    return math.sqrt(self.x * self.x + self.y * self.y) 
+function Vector2:mag()
+    return math.sqrt(self.x * self.x + self.y * self.y)
 end
+
+
+function Vector2:scale(sx, sy)
+    self.x = self.x * sx
+    self.y = self.y * (sy or sx)
+end
+
+function Vector2:scaled(sx, sy)
+    return Vec2:new(self.x * sx, self.y * (sy or sx))
+end
+
 
 
 function Vector2:normalized()
@@ -80,19 +91,33 @@ function Vector2:normalized()
 end
 
 
-function Vector2:rotated(angle)
+function Vector2:rotated(angle, origin)
     -- https://matthew-brett.github.io/teaching/rotation_2d.html for reference
-    local x2 = math.cos(angle) * self.x - math.sin(angle) * self.y
-    local y2 = math.sin(angle) * self.x + math.cos(angle) * self.y
+    local x, y = self.x, self.y
+    local cos_a = math.cos(angle)
+    local sin_a = math.sin(angle)
+
+    if origin then
+        x = x - origin.x
+        y = y - origin.y
+    end
+    local x2 = cos_a * x - sin_a * y
+    local y2 = sin_a * x + cos_a * y
     return Vector2:new(x2, y2)
 end
 
 
-function Vector2:rotate(angle)
-    local x2 = math.cos(angle) * self.x - math.sin(angle) * self.y
-    local y2 = math.sin(angle) * self.x + math.cos(angle) * self.y
-    self.x = x2
-    self.y = y2
+function Vector2:rotate(angle, origin)
+    local x, y = self.x, self.y
+    local cos_a = math.cos(angle)
+    local sin_a = math.sin(angle)
+
+    if origin then
+        x = x - origin.x
+        y = origin.y - y
+    end
+    self.x = cos_a * x - sin_a * y
+    self.y = sin_a * x + cos_a * y
 end
 
 
@@ -111,7 +136,7 @@ function Vector2:with_mag(n)
 end
 
 
-function Vector2.random_unit(n)
+function Vector2.random_unit()
     local x = math.random(-10, 10)
     local y = math.random(-10, 10)
     local vec = Vector2:new(x, y)
@@ -132,8 +157,8 @@ function Vector2:angle_to(vec)
 end
 
 
-function Vector2:clone(vec)
-    return Vector2:new(vec.x, vec.y)
+function Vector2:clone()
+    return Vector2:new(self.x, self.y)
 end
 
 
