@@ -1,4 +1,6 @@
 local Door = require 'prefabs/door'
+local GameObject = require 'prefabs/gameobject'
+local Drawable = require 'component/drawable'
 
 local dirs = {Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.DOWN}
 
@@ -33,7 +35,28 @@ local function add_doors(node)
     end
 end
 
+local function add_floor(node)
+    local world = node.world
+
+    local floor = GameObject(world, world.width / 2, world.height / 2)
+    local floor_canvas = lg.newCanvas(world.width, world.height)
+    floor_canvas:renderTo(function ()
+        lg.setColor(10 / 255, 20 / 255, 32 / 255)
+        lg.rectangle('fill', 0, 0, world.width, world.height)
+        lg.setColor(1, 1, 1, 0.4)
+        for i = 0, world.width, 16 do
+            lg.line(i, 0, i, world.height)
+        end
+
+        for i = 0, world.height, 16 do
+            lg.line(0, i,  world.width, i)
+        end
+    end)
+    floor:add_component(Drawable, floor_canvas)
+end
+
 return function(node)
+    add_floor(node)
     add_doors(node)
 end
 

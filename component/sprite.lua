@@ -19,10 +19,6 @@ function Sprite:draw()
     local x = t.pos.x - dp.x
     local y = t.pos.y - dp.y
  
-
-    -- for animated sprites, when the scale is negative, it means the
-    -- entity is facing left and hence we still draw the sprite from the same
-    -- offset
     if t.scale.x < 0 then
         x = x + self.width * - 1 * t.scale.x
     end
@@ -30,8 +26,10 @@ function Sprite:draw()
     love.graphics.draw(self.image, x, y, t.rotation, t.scale.x, t.scale.y)
 end
 
+
 function Sprite:delete()
     self.world:remove_drawable(self)
 end
+
 
 return Sprite

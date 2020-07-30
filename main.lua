@@ -5,6 +5,10 @@ _G.keyboard = love.keyboard
 _G.graphics = love.graphics
 _G.mouse = love.mouse
 
+-- always do this !
+
+_G.lg = love.graphics
+
 math.randomseed(os.time())
 
 local current_level
@@ -82,7 +86,7 @@ function love.draw()
         current_level:draw()
         draw_cursor()
     end)
-    shader:send('time', love.timer.getTime())
+    -- shader:send('time', love.timer.getTime())
     love.graphics.setShader(shader)
     graphics.draw(main_canvas, SCREEN_OFFSET_X, 0, 0, scale, scale)
     love.graphics.setShader()
