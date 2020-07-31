@@ -12,14 +12,19 @@ function Projectile:init(owner, ptype, target, speed, ...)
     local dir = target - self:get_pos()
     self:get_component(cmp.Transform).rotation = dir:angle()
     self.velocity = dir:with_mag(speed)
-    self:set_scale(1.0, 1.0)
-    Timer.tween(0.09, self:get_scale(), {x = 1.2, y = 1}, 'in-out-cubic')
+    self.damage = ptype.damage
 end
 
 function Projectile:_physics_process(dt)
     self:set_pos(self:get_pos() + self.velocity * dt)
 end
 
-function Projectile:on_world_exit() self:delete() end
+function Projectile:on_collide(target)
+    -- body
+end
+
+function Projectile:on_world_exit()
+    self:delete()
+end
 
 return Projectile

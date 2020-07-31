@@ -11,7 +11,8 @@ return {
                 graphics.rectangle('fill', 0, 0, 4, 4)
             end)
             return canvas
-        end
+        end,
+        damage = 2
     },
     Sting = {
         width = 2,
@@ -24,6 +25,7 @@ return {
                 -- graphics.rectangle('fill', 0, 0, 4, 4)
             end)
             return canvas
-        end
+        end,
+        damage = 1
     }
 }
