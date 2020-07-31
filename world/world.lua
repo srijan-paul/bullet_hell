@@ -152,6 +152,7 @@ function World:player_leave(p)
     self:remove_drawable(p:get_component(cmp.AnimatedSprite))
     self:remove_gameobject(p.weapon)
     self:remove_drawable(p.weapon:get_component(WeaponSprite))
+    self:clear_garbage()
 end
 
 
