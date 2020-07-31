@@ -65,7 +65,7 @@ end
 
 
 function Vector2.from_polar(r, theta)
-    return r * math.cos(theta), r * math.sin(theta)
+    return Vector2:new(r * math.cos(theta), r * math.sin(theta))
 end
 
 function Vector2:mag()
@@ -140,7 +140,7 @@ function Vector2.random_unit()
     local x = math.random(-10, 10)
     local y = math.random(-10, 10)
     local vec = Vector2:new(x, y)
-    vec:setMag(1)
+    vec:set_mag(1)
     return vec
 end
 

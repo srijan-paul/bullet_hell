@@ -7,6 +7,7 @@ return {
         cooldown = 0.2,
         damage = 12,
         auto = false,
-        sound = 'laser'
+        sound = 'laser',
+        speed = 150
     }
 }

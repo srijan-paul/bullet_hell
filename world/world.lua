@@ -98,6 +98,7 @@ function World:add_gameobject(e)
     table.insert(self.entities, e)
 end
 
+
 local function get_player_entry_pos(world, dir)
     if dir == Direction.LEFT then return Vec2(25, world.height / 2) end
 
@@ -113,6 +114,7 @@ local function get_player_entry_pos(world, dir)
 
 end
 
+
 function World:player_enter(p, dir)
     self:add_gameobject(p)
     p:set_pos(get_player_entry_pos(self, dir))
@@ -121,6 +123,7 @@ function World:player_enter(p, dir)
     self:add_drawable(p.weapon:get_component(WeaponSprite))
 end
 
+
 function World:player_leave(p)
     self:remove_gameobject(p)
     self:remove_drawable(p:get_component(cmp.AnimatedSprite))
@@ -128,14 +131,21 @@ function World:player_leave(p)
     self:remove_drawable(p.weapon:get_component(WeaponSprite))
 end
 
+
 function World:remove_drawable(d)
     local index = sugar.index_of(self.drawables, d)
     table.remove(self.drawables, index)
 end
 
+
 function World:remove_gameobject(g)
     local index = sugar.index_of(self.entities, g)
     table.remove(self.entities, index)
+end
+
+
+function World:query(shape, x, y, w,  h)
+    return self.grid:query(shape, x, y, w, h)
 end
 
 return World

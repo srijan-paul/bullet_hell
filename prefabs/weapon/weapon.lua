@@ -14,6 +14,7 @@ function Weapon:init(owner, wtype)
     self.cooldown = wtype.cooldown
     self.projectile = wtype.projectile
     self.auto = false
+    self.speed = wtype.speed
     self.sound = Resource.Sound[wtype.sound]
     GameObject.init(self, self.owner.world, wpivot.x, wpivot.y)
     self:add_component(Sprite, Resource.Image[wtype.sprite_path])
@@ -49,7 +50,7 @@ function Weapon:fire(target)
 
     self.sound:play()
 
-    Projectile(self.owner, self.projectile, target,
+    Projectile(self.owner, self.projectile, target, self.speed,
                             self.world, spawn_pos.x, spawn_pos.y)
 
     Timer.after(self.cooldown, function ()

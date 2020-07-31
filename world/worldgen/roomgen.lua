@@ -1,6 +1,7 @@
 local Door = require 'prefabs/door'
 local GameObject = require 'prefabs/gameobject'
 local Drawable = require 'component/drawable'
+local Stinger = require 'prefabs/enemies/stinger'
 
 local dirs = {Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.DOWN}
 
@@ -55,8 +56,14 @@ local function add_floor(node)
     floor:add_component(Drawable, floor_canvas)
 end
 
+local function add_enemies(node)
+    local world = node.world
+    Stinger(world, 120, 120)
+end
+
 return function(node)
     add_floor(node)
     add_doors(node)
+    add_enemies(node)
 end
 

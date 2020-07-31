@@ -55,7 +55,7 @@ end
 
 
 function GameObject:get_pos()
-    return self:get_component(Transform).pos
+    return self:get_component(Transform).pos:clone()
 end
 
 
@@ -69,6 +69,24 @@ end
 
 function GameObject:set_scale(sx, sy)
     self:get_component(Transform).scale = Vec2(sx, sy)
+end
+
+function GameObject:rotation()
+    return self:get_component(Transform).rotation
+end
+
+function GameObject:set_rotation(r)
+    self:get_component(Transform).rotation = r
+end
+
+function GameObject:rotate(angle)
+    local t = self:get_component(Transform)
+    t.rotation = t.rotation + angle
+end
+
+function GameObject:move(velocity)
+    local t = self:get_component(Transform)
+    t.pos = t.pos + velocity
 end
 
 return GameObject

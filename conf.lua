@@ -3,6 +3,7 @@ Class = require 'lib/middleclass/middleclass'
 Timer = require 'lib/vrld/timer'
 _G.sugar = require 'lib/sugar'
 _G.Resource = require 'resource'
+_G.util = require 'misc/util'
 
 -- Global variables (Game Contants)
 

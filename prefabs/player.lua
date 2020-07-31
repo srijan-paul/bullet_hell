@@ -24,6 +24,7 @@ function Player:init(world, x, y)
     self:add_component(cmp.Collider, COLLIDER_WIDTH, COLLIDER_HEIGHT, 'player')
 
     self:get_component(cmp.AnimatedSprite):play('idle')
+    self.id = 'player'
     self.face_dir = 1 -- 1 is right, -1 is left
     self.speed = 50
     self.state = PlayerState.IDLE
