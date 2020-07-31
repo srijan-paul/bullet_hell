@@ -44,7 +44,7 @@ local function add_floor(node)
     floor_canvas:renderTo(function ()
         lg.setColor(10 / 255, 20 / 255, 32 / 255)
         lg.rectangle('fill', 0, 0, world.width, world.height)
-        lg.setColor(1, 1, 1, 0.4)
+        lg.setColor(1, 1, 1, 0.1)
         for i = 0, world.width, 16 do
             lg.line(i, 0, i, world.height)
         end

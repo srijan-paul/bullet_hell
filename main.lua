@@ -33,7 +33,8 @@ end
 local function draw_cursor()
     local x = love.mouse.getX() + CURSOR_OFFSET
     local y = love.mouse.getY() + CURSOR_OFFSET
-    graphics.draw(crosshair, x, y, 0, CURSOR_SCALE, CURSOR_SCALE)
+    lg.setColor(1, 1, 1, 1)
+    lg.draw(crosshair, x, y, 0, CURSOR_SCALE, CURSOR_SCALE)
 end
 
 

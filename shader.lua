@@ -1,7 +1,7 @@
 return love.graphics.newShader ([[
     float crt_bend = 4.3;
     float aberration_offset = 0.0022;
-    float scanline_count = 220.0;
+    float scanline_count = 150.0;
     float scanline_speed = -4;
     uniform float time;
     // CRT screen coordinates
@@ -33,7 +33,7 @@ return love.graphics.newShader ([[
         uv = crt_pos(uv);
         vec4 color = aberration(texture, uv);
         vec4 scanlines = vec4(scanline(uv));
-        return mix(color, scanlines, 0.02);
+        return mix(color, scanlines, 0.01);
     }
 ]])
 

@@ -28,8 +28,9 @@ local State = {
 
             if stinger.accumulated_time >= stinger.patrol_time or
                 stinger:get_pos() == stinger.patrol_pos then
-                stinger.patrol_spot = Vec2.random_unit():with_mag(
-                                          PATROL_DISTANCE)
+                local angle = -math.pi + math.random() * 2 * math.pi
+                stinger.patrol_spot = Vec2.from_polar(PATROL_DISTANCE,
+                                                      stinger:rotation() + angle)
                 stinger.accumulated_time = 0
             end
             stinger:chase(stinger.patrol_spot, stinger.speed * dt)
@@ -102,18 +103,11 @@ function Stinger:chase(target_pos, speed)
     end
 end
 
+function Stinger:_physics_process(dt) self.state.update(self, dt) end
 
-function Stinger:_physics_process(dt)
-    self.state.update(self, dt)
-end
+function Stinger:set_state(state) self.state = state end
 
-function Stinger:set_state(state)
-    self.state = state
-end
-
-function Stinger:attack(target_loc)
-    self.attack_comp:attack(target_loc)
-end
+function Stinger:attack(target_loc) self.attack_comp:attack(target_loc) end
 
 function Stinger:damage(amount)
     self.health = self.health - amount
