@@ -3,15 +3,23 @@ local cmp = require 'component/common'
 local WeaponSprite = require 'component/weapon_sprite'
 local World = Class('World')
 
+local tinsert = table.insert
+local tremove = table.remove
+
 local TIME_STEP = 0.016
 
 function World:init(level, width, height)
     self.level = level
     self.width = width or 200
     self.height = height or 200
+    
     self.drawables = {}
     self.colliders = {}
     self.entities = {}
+    
+    self.drawables_to_remove = {}
+    self.entities_to_remove = {}
+    
     self.grid = Grid(self, 5, 5)
     self.time_elapsed = 0
 end
@@ -38,7 +46,22 @@ function World:draw()
     -- * / DEBUG CODE
 end
 
+
+function World:clear_garbage()
+    for i = 1, #self.entities_to_remove do
+        tremove(self.entities, self.entities_to_remove[i])
+    end
+    self.entities_to_remove = {}
+
+    for i = 1, #self.drawables_to_remove do
+        tremove(self.drawables, self.drawables_to_remove[i])
+    end
+    self.drawables_to_remove = {}
+end
+
+
 function World:update(dt)
+    self:clear_garbage()
     self.time_elapsed = self.time_elapsed + dt
     for i = #self.entities, 1, -1 do
         self.entities[i]:update(dt)
@@ -134,13 +157,13 @@ end
 
 function World:remove_drawable(d)
     local index = sugar.index_of(self.drawables, d)
-    table.remove(self.drawables, index)
+    tinsert(self.drawables_to_remove, index)
 end
 
 
 function World:remove_gameobject(g)
     local index = sugar.index_of(self.entities, g)
-    table.remove(self.entities, index)
+    tinsert(self.entities_to_remove, index)
 end
 
 

@@ -16,11 +16,11 @@ function Weapon:init(owner, wtype)
         cooldown = wtype.cooldown,
         speed = wtype.speed,
         spawn_offset = Vec2(4, 0),
-        sound = Resource.Sound[wtype.sound]
+        sound = Resource.Sound[wtype.sound],
+        mask = 'enemy'
     })
 
     self:add_component(Sprite, Resource.Image[wtype.sprite_path])
-
 end
 
 function Weapon:update(dt)

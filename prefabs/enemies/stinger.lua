@@ -69,13 +69,14 @@ function Stinger:init(world, x, y)
     GameObject.init(self, world, x, y)
     self:add_component(cmp.Collider, 10, 10, 'enemy')
     self:add_component(cmp.Sprite, Resource.Image.Stinger)
-    self:add_component(Timer, 0.2, function() stinger_ai(self) end)
-    
+    self:add_component(Timer, 0.1, function() stinger_ai(self) end)
+
     self.attack_comp = self:add_component(Attack, StingerProjectile, {
         cooldown = STINGER_ATTACK_RATE,
         accuracy = 0.5,
         spawn_offset = Vec2(4, 0),
-        speed = STINGER_PROJECTILE_SPEED
+        speed = STINGER_PROJECTILE_SPEED,
+        mask = 'player'
     })
 
     self.speed = 30
