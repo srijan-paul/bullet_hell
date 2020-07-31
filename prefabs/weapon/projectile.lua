@@ -16,8 +16,6 @@ function Projectile:init(owner, ptype, target, speed, ...)
     Timer.tween(0.09, self:get_scale(), {x = 1.2, y = 1}, 'in-out-cubic')
 end
 
-function Projectile:update(dt) GameObject.update(self, dt) end
-
 function Projectile:_physics_process(dt)
     self:set_pos(self:get_pos() + self.velocity * dt)
 end

@@ -13,8 +13,10 @@ end
 
 function GameObject:add_component(comp, ...)
  -- TODO: assert component doesn't already exist
-    self._components[#self._components + 1] = comp(self, ...)
+    local c = comp(self, ...)
+    self._components[#self._components + 1] = c
     self._cmp_map[comp] = #self._components
+    return c
 end
 
 

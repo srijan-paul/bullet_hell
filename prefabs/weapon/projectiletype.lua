@@ -16,5 +16,14 @@ return {
     Sting = {
         width = 2,
         height = 2,
+        render = function ()
+            local canvas = love.graphics.newCanvas(10, 1)
+            canvas:renderTo(function ()
+                lg.setColor(1, 0, 0.2, 1)
+                lg.rectangle('fill', 0, 0, 10, 2)
+                -- graphics.rectangle('fill', 0, 0, 4, 4)
+            end)
+            return canvas
+        end
     }
 }

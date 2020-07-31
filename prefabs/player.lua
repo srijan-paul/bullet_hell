@@ -83,7 +83,7 @@ end
 
 
 function Player:fire()
-    self.weapon:fire(camera:toWorldPos(mousePos()))
+    self.weapon:fire(camera:toWorldPos(mousePos()), 'enemy')
 end
 
 

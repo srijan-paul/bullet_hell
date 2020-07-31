@@ -1,16 +1,23 @@
 local GameObject = require 'prefabs/gameobject'
 local Timer = require('component/timer')
+local ProjectileType = require 'prefabs/weapon/projectiletype'
+local Projectile = require 'prefabs/weapon/projectile'
 local cmp = require 'component/common'
+local Attack = require 'component/attack'
 
 local Stinger = Class('Stinger', GameObject)
 local DISTANCE_THRESHOLD = 20
 local PATROL_DISTANCE = 100
+local StingerProjectile = ProjectileType.Sting
+local STINGER_ATTACK_RATE = 0.5
+local STINGER_PROJECTILE_SPEED = 150
 
 local State = {
     ATTACK = {
         update = function(stinger, dt)
             local target_pos = stinger.target:get_pos()
             stinger:chase(target_pos, stinger.speed * dt)
+            stinger:attack(target_pos)
         end,
 
         switch_state = function(stinger, state) stinger.state = state end
@@ -18,8 +25,9 @@ local State = {
     PATROL = {
         update = function(stinger, dt)
             stinger.accumulated_time = stinger.accumulated_time + dt
-            
-            if stinger.accumulated_time >= stinger.patrol_time or stinger:get_pos() == stinger.patrol_pos then
+
+            if stinger.accumulated_time >= stinger.patrol_time or
+                stinger:get_pos() == stinger.patrol_pos then
                 stinger.patrol_spot = Vec2.random_unit():with_mag(
                                           PATROL_DISTANCE)
                 stinger.accumulated_time = 0
@@ -42,8 +50,9 @@ local State = {
 
 local function stinger_ai(st)
     local t = st:get_component(cmp.Transform)
-    local nearby = st.world:query('circle', t.pos.x, t.pos.y, 30)
+    local nearby = st.world:query('circle', t.pos.x, t.pos.y, st.range)
     local player_spotted = false
+
     for i = 1, #nearby do
         local ent = nearby[i]
         if ent.id == 'player' then
@@ -52,14 +61,22 @@ local function stinger_ai(st)
             st.target = ent
         end
     end
+
     if not player_spotted then st:set_state(State.PATROL) end
 end
 
 function Stinger:init(world, x, y)
     GameObject.init(self, world, x, y)
-    self:add_component(cmp.Collider, 10, 10)
+    self:add_component(cmp.Collider, 10, 10, 'enemy')
     self:add_component(cmp.Sprite, Resource.Image.Stinger)
     self:add_component(Timer, 0.2, function() stinger_ai(self) end)
+    
+    self.attack_comp = self:add_component(Attack, StingerProjectile, {
+        cooldown = STINGER_ATTACK_RATE,
+        accuracy = 0.5,
+        spawn_offset = Vec2(4, 0),
+        speed = STINGER_PROJECTILE_SPEED
+    })
 
     self.speed = 30
     self.range = 30
@@ -84,8 +101,22 @@ function Stinger:chase(target_pos, speed)
     end
 end
 
-function Stinger:_physics_process(dt) self.state.update(self, dt) end
 
-function Stinger:set_state(state) self.state = state end
+function Stinger:_physics_process(dt)
+    self.state.update(self, dt)
+end
+
+function Stinger:set_state(state)
+    self.state = state
+end
+
+function Stinger:attack(target_loc)
+    self.attack_comp:attack(target_loc)
+end
+
+function Stinger:damage(amount)
+    self.health = self.health - amount
+    print(self.health)
+end
 
 return Stinger

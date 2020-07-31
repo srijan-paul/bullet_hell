@@ -1,23 +1,26 @@
 local cmp = require 'component/common'
 local Sprite = require 'component/weapon_sprite'
 local GameObject = require 'prefabs/gameobject'
-local Projectile = require 'prefabs/weapon/projectile'
+local AttackComponent = require 'component/attack'
 
 local Weapon = Class('Weapon', GameObject)
-
 
 function Weapon:init(owner, wtype)
     self.owner = owner
     local wpivot = self.owner:get_weapon_pivot()
-    -- active : can shoot
-    self.active = true
-    self.cooldown = wtype.cooldown
-    self.projectile = wtype.projectile
-    self.auto = false
-    self.speed = wtype.speed
-    self.sound = Resource.Sound[wtype.sound]
     GameObject.init(self, self.owner.world, wpivot.x, wpivot.y)
+
+    self.auto = wtype.auto
+
+    self.attack_comp = self:add_component(AttackComponent, wtype.projectile, {
+        cooldown = wtype.cooldown,
+        speed = wtype.speed,
+        spawn_offset = Vec2(4, 0),
+        sound = Resource.Sound[wtype.sound]
+    })
+
     self:add_component(Sprite, Resource.Image[wtype.sprite_path])
+
 end
 
 function Weapon:update(dt)
@@ -25,40 +28,18 @@ function Weapon:update(dt)
     local t = self:get_component(cmp.Transform)
     t.pos = self.owner:get_weapon_pivot()
     local scl = self.owner:get_scale()
-    if t.scale.x < 0 then
-        t.scale.x = -scl.x
-    end
+    if t.scale.x < 0 then t.scale.x = -scl.x end
 end
 
 function Weapon:face(point)
     local t = self:get_component(cmp.Transform)
     t.rotation = (point - t.pos):angle()
     t.scale.y = self.owner.face_dir
-    -- t.scale = self.owner:get_scale():clone()
 end
-
 
 function Weapon:fire(target)
-    if not self.active then return false end
-
-    local t = self:get_component(cmp.Transform)
-    local spawn_pos = t.pos + Vec2(4, 0):rotated(t.rotation)
-    
-    if self.sound:isPlaying() then
-        self.sound:stop()
-    end
-
-    self.sound:play()
-
-    Projectile(self.owner, self.projectile, target, self.speed,
-                            self.world, spawn_pos.x, spawn_pos.y)
-
-    Timer.after(self.cooldown, function ()
-        self.active = true
-    end)
-    self.active = false
-    return true
+    -- if self.attack_comp:is_on_cooldown() then return false end
+    self.attack_comp:attack(target)
 end
-
 
 return Weapon

@@ -137,8 +137,12 @@ function sugar.clampmax(value, max)
     return value > max and max or value
 end
 
+function sugar.clampmin(value, max)
+    return value < max and max or value
+end
+
 function sugar.contains(t, v)
-    for i = 1, #t do 
+    for i = 1, #t do
         if t[i] == v then return true end
     end
     return false
