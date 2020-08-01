@@ -5,6 +5,10 @@ local ROOM_WIDTH = 30
 local ROOM_HEIGHT = 20
 local PADDING = 15
 
+
+-- *there are probably more efficient ways to do this re-rendering each time the player enters a new node,
+-- *instead of walking the entire room tree again. But I'll worry about that later
+
 function Minimap:init(roomtree)
     self.current_node = roomtree
     self.width = 150
@@ -40,7 +44,6 @@ local function get_draw_coords(prev_coords, dir)
 end
 
 function Minimap:re_render()
-
     local root = self.current_node
     local stack = sugar.stack()
 
@@ -84,6 +87,27 @@ function Minimap:re_render()
                 lg.setColor(1, 0.7, 0.8, 0.5)
                 lg.rectangle('fill', draw_coords.x, draw_coords.y, ROOM_WIDTH,
                              ROOM_HEIGHT)
+            end
+
+            if node.explored then
+                if node.children[Direction.DOWN] then
+                    local x = draw_coords.x + ROOM_WIDTH / 2
+                    local y = ROOM_HEIGHT + draw_coords.y
+                    lg.line(x, y, x, y + PADDING)
+                end
+
+                -- if node.children[Direction.UP] then
+                --     local x = draw_coords.x + ROOM_WIDTH / 2
+                --     local y = draw_coords.y
+                --     lg.line(x, y, x, y - PADDING)
+                -- end
+
+                if node.children[Direction.LEFT] then
+                    local x = draw_coords.x
+                    local y = draw_coords.y + ROOM_HEIGHT / 2
+                    lg.line(x, y, x - PADDING, y)
+                end
+
             end
 
         end
