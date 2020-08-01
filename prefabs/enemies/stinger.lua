@@ -29,7 +29,7 @@ local State = {
                 stinger:get_pos() == stinger.patrol_pos then
                 local angle = -math.pi + math.random() * 2 * math.pi
                 stinger.patrol_spot = Vec2.from_polar(PATROL_DISTANCE,
-                                                      stinger:rotation() + angle)
+                                                      stinger:rotation() - angle)
                 stinger.accumulated_time = 0
             end
             stinger:chase(stinger.patrol_spot, stinger.speed * dt)

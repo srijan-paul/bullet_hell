@@ -4,6 +4,7 @@ local Player = require 'prefabs/player'
 local Weapon = require 'prefabs/weapon/weapon'
 local Minimap = require 'prefabs/minimap'
 local WeaponType = require 'prefabs/weapon/weapontypes'
+local Healthbar = require 'prefabs/healthbar'
 
 local Level = Class('Level')
 local ZOOM = 4.8
@@ -17,6 +18,7 @@ local ZOOM = 4.8
 -- depending on what door he uses.
 
 function Level:init()
+    Healthbar.init()
     self.world_tree = LevelGenerator(self, 5):generate()
     self.current_node = self.world_tree
     
@@ -27,6 +29,7 @@ function Level:init()
     self.current_node.explored = true
     self.current_world = self.current_node.world
     self.player = Player(self.current_world, 100, 100)
+    self.player.level = self
     self.player.weapon = Weapon(self.player, WeaponType.HandGun)
     self.map = Minimap(self.world_tree)
     camera:zoom(ZOOM)
@@ -59,6 +62,7 @@ function Level:draw()
     camera:set()
     self.current_world:draw()
     camera:unset()
+    Healthbar.draw(20, 30)
     self.map:draw(NATIVE_WIDTH - self.map.width - 10, 30)
 end
 

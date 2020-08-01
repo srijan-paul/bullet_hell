@@ -2,6 +2,7 @@ local cmp = require 'component/common'
 local InputComponent = require 'component/playerinput'
 local GameObject = require 'prefabs/gameobject'
 local camera = require 'camera'
+local Healthbar = require 'prefabs/healthbar'
 
 local COLLIDER_WIDTH, COLLIDER_HEIGHT = 10, 10
 
@@ -27,6 +28,7 @@ function Player:init(world, x, y)
 
     -- TODO: remove magic number
     self.health = 10
+    self.max_health = 10
     self.stats = {}
 end
 
@@ -61,12 +63,12 @@ function Player:switch_state(state, callback)
     local anim = self:get_component(cmp.AnimatedSprite)
     switch(self.state, {
         [PlayerState.HURT] = function()
-           if not self:get_component(cmp.AnimatedSprite):is_playing() then
+            if not self:get_component(cmp.AnimatedSprite):is_playing() then
                 self.state = state
                 anim:play(self.state)
-           end
+            end
         end,
-        ['default'] = function ()
+        ['default'] = function()
             self.state = state
             anim:play(self.state)
         end
@@ -93,9 +95,10 @@ function Player:fire()
 end
 
 function Player:damage(amount)
-    self.health = self.health - amount
+    self.health = sugar.clampmin(self.health - amount, 0)
     self:switch_state(PlayerState.HURT)
     -- TODO death state
+    Healthbar.update(self.health / self.max_health)
     if self.health <= 0 then self:death() end
 end
 
