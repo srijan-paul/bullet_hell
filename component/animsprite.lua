@@ -24,9 +24,21 @@ function AnimatedSprite:add_anim(key, s, e, t, l)
     self.anims[key] = Anim:new(self._spritesheet, s, e, t, l)
 end
 
-function AnimatedSprite:play(key)
-    if self.anims[key] then self.current = self.anims[key] end
+function AnimatedSprite:play(key, callback)
+    if self.anims[key] then
+        self.current = self.anims[key]
+        self.current.playing = true
+        if callback then
+            self.current.callback = callback
+        end
+    end
 end
+
+
+function AnimatedSprite:is_playing()
+    if self.current then return self.current.playing end
+end
+
 
 function AnimatedSprite:draw()
     assert(self.owner:has_component(Transform),

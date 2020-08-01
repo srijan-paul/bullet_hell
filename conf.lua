@@ -4,6 +4,7 @@ Timer = require 'lib/vrld/timer'
 _G.sugar = require 'lib/sugar'
 _G.Resource = require 'resource'
 _G.util = require 'misc/util'
+_G.switch = require 'lib/switch'
 
 -- Global variables (Game Contants)
 

@@ -3,7 +3,7 @@ local cmp = require 'component/common'
 
 local Projectile = Class('Projectile', GameObject)
 
-function Projectile:init(owner, ptype, target, speed, mask, ...)
+function Projectile:init(owner, ptype, target, speed, mask, damage, ...)
     GameObject.init(self, ...)
     self.owner = owner
     self.world = self.owner.world
@@ -15,7 +15,7 @@ function Projectile:init(owner, ptype, target, speed, mask, ...)
     local dir = target - self:get_pos()
     self:get_component(cmp.Transform).rotation = dir:angle()
     self.velocity = dir:with_mag(speed)
-    self.damage = ptype.damage
+    self.damage = damage
 end
 
 function Projectile:_physics_process(dt)
@@ -24,6 +24,7 @@ end
 
 function Projectile:on_collide(target)
     local x, y = target:get_pos():unpack()
+    target:damage(self.damage)
     if self.type.destroy_effect then
         self.type.destroy_effect(self.world, x, y)
     end

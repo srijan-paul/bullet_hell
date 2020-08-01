@@ -3,10 +3,17 @@ local GameObject = require 'prefabs/gameobject'
 
 local Effect = Class('Effect', GameObject)
 
-function Effect:init(world, x, y, etype, life_span, ...)
+function Effect:init(world, x, y, etype, config, ...)
     GameObject.init(self, world, x, y)
     self:add_component(cmp.Drawable, etype(...))
-    self.life_span = life_span
+    self.life_span = config.life_span or {1, 1}
+    
+    local start_scale = config.start_scale or {1, 1}
+    local end_scale = config.end_scale or {1, 1}
+
+    self:set_scale(start_scale[1], start_scale[2])
+    Timer.tween(self.life_span, self:get_component(cmp.Transform).scale,
+                {x = end_scale[1], y = end_scale[2]}, 'linear')
     if not self.life_span then self.update = GameObject.update end
 end
 

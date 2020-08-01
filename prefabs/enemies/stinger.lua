@@ -1,10 +1,10 @@
-local GameObject = require 'prefabs/gameobject'
+local Enemy = require 'prefabs/enemies/enemy'
 local Timer = require('component/timer')
 local ProjectileType = require 'prefabs/weapon/projectiletype'
 local cmp = require 'component/common'
 local Attack = require 'component/attack'
 
-local Stinger = Class('Stinger', GameObject)
+local Stinger = Class('Stinger', Enemy)
 local DISTANCE_THRESHOLD = 20
 local PATROL_DISTANCE = 100
 local StingerProjectile = ProjectileType.Sting
@@ -50,7 +50,7 @@ local State = {
 
 local function stinger_ai(st)
     local t = st:get_component(cmp.Transform)
-    local nearby = st.world:query('circle', t.pos.x, t.pos.y, st.range)
+    local nearby = st.world:query('circle', t.pos.x, t.pos.y, st.detect_range)
     local player_spotted = false
 
     for i = 1, #nearby do
@@ -66,7 +66,13 @@ local function stinger_ai(st)
 end
 
 function Stinger:init(world, x, y)
-    GameObject.init(self, world, x, y)
+    Enemy.init(self, world, x, y, {
+        collider_width = 10,
+        collder_height = 10,
+        detect_range = 30,
+        health = 10
+    })
+
     self:add_component(cmp.Collider, 10, 10, 'enemy')
     self:add_component(cmp.Sprite, Resource.Image.Stinger)
     self:add_component(Timer, 0.1, function() stinger_ai(self) end)
@@ -76,11 +82,11 @@ function Stinger:init(world, x, y)
         accuracy = 0.5,
         spawn_offset = Vec2(4, 0),
         speed = STINGER_PROJECTILE_SPEED,
-        mask = 'player'
+        mask = 'player',
+        damage = 2
     })
 
     self.speed = 30
-    self.range = 30
     self.angular_vel = 0.174
     self.id = 'enemy'
     self.state = State.PATROL
@@ -102,15 +108,20 @@ function Stinger:chase(target_pos, speed)
     end
 end
 
-function Stinger:_physics_process(dt) self.state.update(self, dt) end
+function Stinger:_physics_process(dt)
+    self.state.update(self, dt)
+end
 
-function Stinger:set_state(state) self.state = state end
+function Stinger:set_state(state)
+    self.state = state
+end
 
-function Stinger:attack(target_loc) self.attack_comp:attack(target_loc) end
+function Stinger:attack(target_loc)
+    self.attack_comp:attack(target_loc)
+end
 
 function Stinger:damage(amount)
     self.health = self.health - amount
-    print(self.health)
 end
 
 return Stinger
