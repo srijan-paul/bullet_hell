@@ -19,6 +19,12 @@ local ZOOM = 4.8
 function Level:init()
     self.world_tree = LevelGenerator(self, 5):generate()
     self.current_node = self.world_tree
+    
+    -- *active: the player is currently in this node
+    -- *explored: the player has visited this area before
+    
+    self.current_node.active = true
+    self.current_node.explored = true
     self.current_world = self.current_node.world
     self.player = Player(self.current_world, 100, 100)
     self.player.weapon = Weapon(self.player, WeaponType.HandGun)
@@ -31,8 +37,16 @@ end
 function Level:switch_world(dir)
     -- TODO: switch effects and shaders
     local node = self.current_node.children[dir]
+    
     assert(node, 'invalid room')
+    node.explored = true
+    node.active = true
+
+    self.current_node.active  = false
     self.current_node = node
+    self.map.current_node = self.current_node
+    self.map:re_render()
+
     self.current_world:player_leave(self.player)
     self.current_world = node.world
     self.current_world:player_enter(self.player, OppositeDirection(dir))

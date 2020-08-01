@@ -3,9 +3,9 @@ local GameObject = require 'prefabs/gameobject'
 
 local Effect = Class('Effect', GameObject)
 
-function Effect:init(world, x, y, etype, life_span)
+function Effect:init(world, x, y, etype, life_span, ...)
     GameObject.init(self, world, x, y)
-    self:add_component(cmp.Drawable, etype())
+    self:add_component(cmp.Drawable, etype(...))
     self.life_span = life_span
     if not self.life_span then self.update = GameObject.update end
 end

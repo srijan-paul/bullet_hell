@@ -71,7 +71,7 @@ end
 
 
 local function show_debug_stats()
-    graphics.setColor(1, 1, 1, 1)
+    graphics.setColor(1, 1, 1, 0.5)
     graphics.rectangle('fill', 0, 0, 200, 50)
     graphics.setColor(0, 0, 0, 1)
     graphics.print('FPS: ' .. love.timer.getFPS())
@@ -91,7 +91,7 @@ function love.draw()
     love.graphics.setShader(shader)
     graphics.draw(main_canvas, SCREEN_OFFSET_X, 0, 0, scale, scale)
     love.graphics.setShader()
-    show_debug_stats()
+    -- show_debug_stats()
     -- *DEBUG CODE
 end
 

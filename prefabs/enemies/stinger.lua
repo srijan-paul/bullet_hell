@@ -1,7 +1,6 @@
 local GameObject = require 'prefabs/gameobject'
 local Timer = require('component/timer')
 local ProjectileType = require 'prefabs/weapon/projectiletype'
-local Projectile = require 'prefabs/weapon/projectile'
 local cmp = require 'component/common'
 local Attack = require 'component/attack'
 

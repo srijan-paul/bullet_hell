@@ -1,3 +1,6 @@
+local Effect = require 'prefabs/effects/effect'
+local Effects = require 'prefabs/effects/effecttype'
+
 return {
     Bullet = {
         width = 5,
@@ -12,7 +15,10 @@ return {
             end)
             return canvas
         end,
-        damage = 2
+        damage = 2,
+        destroy_effect = function (world, x, y)
+            return Effect(world, x, y, Effects.Block, 0.05, {1, 0.2, 0.2})
+        end
     },
     Sting = {
         width = 2,

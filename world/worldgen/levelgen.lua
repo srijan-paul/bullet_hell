@@ -8,7 +8,13 @@ local World = require 'world/world'
 
 local LevelGenerator = Class('LevelGenerator')
 
-local function new_node(world) return {world = world, children = {}} end
+local function new_node(world) return {
+    world = world,
+    active = false,
+    visited = true,
+    children = {}
+}
+end
 
 function LevelGenerator:init(level, roomcount)
     self.level = level
