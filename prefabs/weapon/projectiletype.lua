@@ -37,5 +37,20 @@ return {
             return canvas
         end,
         damage = 1
+    },
+    Ball = {
+        width = 2,
+        height = 2,
+        sx = 0.6,
+        sy = 0.6,
+        render = function()
+            local canvas = love.graphics.newCanvas(12, 12)
+            canvas:renderTo(function()
+                lg.setColor(1, 1, 1, 1)
+                lg.draw(Resource.Image.Ball, 0, 0)
+            end)
+            return canvas
+        end,
+        damage = 1
     }
 }

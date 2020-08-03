@@ -5,6 +5,7 @@ local Projectile = Class('Projectile', GameObject)
 
 function Projectile:init(owner, ptype, target, speed, mask, damage, ...)
     GameObject.init(self, ...)
+    self:set_scale(ptype.sx or 1, ptype.sy or 1)
     self.owner = owner
     self.world = self.owner.world
     self.type = ptype

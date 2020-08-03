@@ -4,5 +4,6 @@
         "Vec2",
         "Class",
         "Timer"
-    ]
+    ],
+    "Lua.runtime.version": "LuaJIT"
 }

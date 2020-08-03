@@ -73,7 +73,6 @@ function Stinger:init(world, x, y)
         health = 10
     })
 
-    self:add_component(cmp.Collider, 10, 10, 'enemy')
     self:add_component(cmp.Sprite, Resource.Image.Stinger)
     self:add_component(Timer, 0.1, function() stinger_ai(self) end)
 

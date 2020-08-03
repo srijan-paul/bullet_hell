@@ -2,6 +2,7 @@ local Door = require 'prefabs/door'
 local GameObject = require 'prefabs/gameobject'
 local Drawable = require 'component/drawable'
 local Stinger = require 'prefabs/enemies/stinger'
+local Fly = require 'prefabs/enemies/fly'
 
 local dirs = {Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.DOWN}
 
@@ -58,7 +59,8 @@ end
 
 local function add_enemies(node)
     local world = node.world
-    Stinger(world, 120, 120)
+    -- Stinger(world, 120, 120)
+    Fly(world, 150, 150)
 end
 
 return function(node)
