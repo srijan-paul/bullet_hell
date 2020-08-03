@@ -28,7 +28,7 @@ function LevelGenerator:init(level, roomcount)
     -- step 1: pick a random place in the array to place the
     -- starting room
 
-    self.start_loc = Vec2(math.random(1, n), math.random(1, n))
+    self.start_loc = Vec2(math.ceil(n / 2), math.ceil(n / 2))
     self.room_grid[self.start_loc.x][self.start_loc.y] =
         new_node(World(self.level))
     self.current_loc = self.start_loc:clone()
@@ -51,18 +51,33 @@ function LevelGenerator:generate_grid()
     sugar.foreach({Vec2.LEFT(), Vec2.RIGHT(), Vec2.UP(), Vec2.DOWN()},
                   function(v)
         local index = self.current_loc + v
-        if self.room_grid[index.x] and self.room_grid[index.x][index.y] ~= nil then
+        if self.room_grid[index.x] and self.room_grid[index.x][index.y] ~= nil and
+            not self.room_grid[index.x][index.y] then
             table.insert(available_dirs, v)
         end
     end)
 
-    -- pick a random direction to move in
-    local dir = available_dirs[math.random(1, #available_dirs)]
-    -- move in that direction and place a room there
-    self.current_loc = self.current_loc + dir
-    self.room_grid[self.current_loc.x][self.current_loc.y] =
-        new_node(World(self.level))
-    self.to_generate = self.to_generate - 1
+    -- number of neighboring rooms this room will have
+    -- at least 1 neighbour, at most max(the number of avaiable spots, number of rooms to generate)
+    local neighbour_count = math.random(1, sugar.clampmax(#available_dirs,
+                                                       self.to_generate))
+
+    local room_loc
+    for _ = 1, neighbour_count do
+        -- pick a random direction to move in
+        local dir = available_dirs[math.random(1, #available_dirs)]
+        -- move in that direction and place a room there
+        room_loc = self.current_loc + dir
+        self.room_grid[room_loc.x][room_loc.y] =
+            new_node(World(self.level))
+        self.to_generate = self.to_generate - 1
+        -- can no longer have a neighbour room there.
+        table.remove(available_dirs, sugar.index_of(available_dirs, dir))
+    end
+
+    -- set the current location of the level generator
+    -- to where the last room was spawned so we move from there
+    self.current_loc = room_loc
 end
 
 local function make_connections(grid, i, j)
