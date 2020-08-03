@@ -37,6 +37,11 @@ function Projectile:delete()
     self.world:remove_drawable(self:get_component(cmp.Drawable))
 end
 
-function Projectile:on_world_exit() self:delete() end
+function Projectile:on_world_exit()
+    if self.type.destroy_effect then
+        self.type.destroy_effect(self.world, self:get_pos():unpack())
+    end
+    self:delete()
+end
 
 return Projectile

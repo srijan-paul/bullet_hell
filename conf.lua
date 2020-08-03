@@ -25,7 +25,7 @@ end
 _G.NATIVE_WIDTH = 800
 _G.NATIVE_HEIGHT = 600
 
-_G.settings = {fullscreen = true}
+_G.settings = {fullscreen = false}
 
 function love.conf(t)
     t.window.fullscreen = false

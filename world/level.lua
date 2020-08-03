@@ -7,7 +7,7 @@ local WeaponType = require 'prefabs/weapon/weapontypes'
 local Healthbar = require 'prefabs/healthbar'
 
 local Level = Class('Level')
-local ZOOM = 4.8
+local ZOOM = 4.0
 
 -- A little explanation to self about the way I'm coding this
 -- Each Level consits of many interconnected rooms that the player has to clear

@@ -21,7 +21,7 @@ return {
                 life_span = 0.1,
                 start_scale = {1, 1},
                 end_scale = {0.5, 0.5}
-            }, {1, 1, 1})
+            }, {sugar.rgb('#ffffff')})
         end
     },
     Sting = {

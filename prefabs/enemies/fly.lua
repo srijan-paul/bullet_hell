@@ -61,7 +61,11 @@ local function fly_ai(fly)
         if ent.id == 'player' then
             player_spotted = true
             fly:set_state(State.ATTACK)
-            fly.target_loc = ent:get_pos()
+            local pos = ent:get_pos()
+            fly.target_loc = pos
+            if pos.x < t.pos.x then
+                fly:set_scale(-1, 1)
+            else fly:set_scale(1, 1) end
         end
     end)
 
