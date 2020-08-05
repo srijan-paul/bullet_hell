@@ -98,6 +98,7 @@ function World:bounds_check(e)
             return
         end
     end
+
 end
 
 function World:_physics_process(dt)
@@ -170,6 +171,7 @@ end
 function World:remove_gameobject(g)
     g._delete_flag = true
 end
+
 
 
 function World:query(shape, x, y, w,  h)

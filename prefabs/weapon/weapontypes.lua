@@ -8,6 +8,7 @@ return {
         damage = 3,
         auto = false,
         sound = 'laser',
-        speed = 150
+        speed = 150,
+        knockback = 30
     }
 }

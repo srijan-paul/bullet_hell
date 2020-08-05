@@ -16,6 +16,7 @@ function Attack:init(owner, ptype, config)
     self.sound = config.sound
     self.mask = config.mask or ''
     self.damage = config.damage or 0
+    self.knockback = config.knockback or 0
 end
 
 function Attack:update(dt)
@@ -37,12 +38,20 @@ function Attack:attack(target_loc, damage)
     self:play_sound()
     local t = self.owner:get_component(Transform)
     local spawn_pos = t.pos + self.spawn_offset:rotated(t.rotation)
-
-    Projectile(self.owner, self.ptype, target_loc, self.speed, self.mask,
-               damage or self.damage, self.owner.world, spawn_pos.x, spawn_pos.y)
+    local properties = {
+        target = target_loc,
+        speed = self.speed,
+        mask = self.mask,
+        damage = damage or self.damage,
+        knockback = self.knockback
+    }
+    Projectile(self.owner, self.ptype, properties, self.owner.world,
+               spawn_pos.x, spawn_pos.y)
     self.time_remaining = self.cooldown
 end
 
-function Attack:is_on_cooldown() return self.time_remaining >= 0 end
+function Attack:is_on_cooldown()
+    return self.time_remaining >= 0
+end
 
 return Attack

@@ -28,7 +28,7 @@ local State = {
         end,
 
         switch = function(self, fly, state) fly.state = state end
-    }
+    },
 }
 
 State.HURT = {
@@ -44,7 +44,9 @@ State.HURT = {
     end,
 
     switch = function(self, fly, state)
-        if self.hurt_timer >= 0.3 then fly.state = state end
+        if self.hurt_timer >= 0.3 or state == State.DEAD then
+            fly.state = state
+        end
     end
 }
 
@@ -79,7 +81,8 @@ function Fly:init(world, x, y)
         collider_width = 10,
         collder_height = 10,
         detect_range = 50,
-        health = 10
+        health = 10,
+        corpse = Resource.Image.FlyCorpse
     })
 
     local anim = self:add_component(cmp.AnimatedSprite, Resource.Sprite.Fly, {
@@ -108,20 +111,17 @@ function Fly:_physics_process(dt)
     self:move(Vec2(0, math.sin(love.timer.getTime() * 5) / 2))
 end
 
-function Fly:set_state(state)
-    self.state:switch(self, state)
-end
+function Fly:set_state(state) self.state:switch(self, state) end
 
-function Fly:damage(amount)
+function Fly:damage(amount, ...)
     self:get_component(cmp.AnimatedSprite):play('hurt')
     self:set_state(State.HURT)
-    Enemy.damage(self, amount)
+    Enemy.damage(self, amount, ...)
 end
 
 
 function Fly:attack(target_pos)
     self.attack_comp:attack(target_pos)
 end
-
 
 return Fly

@@ -117,8 +117,8 @@ function Stinger:attack(target_loc)
     self.attack_comp:attack(target_loc)
 end
 
-function Stinger:damage(amount)
-    Enemy.damage(self, amount)
+function Stinger:damage(amount, ...)
+    Enemy.damage(self, amount, ...)
 end
 
 function Stinger:on_world_exit()

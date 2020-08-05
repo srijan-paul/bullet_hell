@@ -18,7 +18,8 @@ function Weapon:init(owner, wtype)
         spawn_offset = Vec2(4, 0),
         sound = Resource.Sound[wtype.sound],
         mask = 'enemy',
-        damage = wtype.damage
+        damage = wtype.damage,
+        knockback = wtype.knockback
     })
 
     self:add_component(Sprite, Resource.Image[wtype.sprite_path])
