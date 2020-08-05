@@ -48,15 +48,21 @@ end
 
 
 function World:clear_garbage()
-    for i = 1, #self.entities_to_remove do
-        tremove(self.entities, self.entities_to_remove[i])
+    for i = #self.drawables, 1, -1 do
+        local d = self.drawables[i]
+        if d._delete_flag then
+            tremove(self.drawables, i)
+            d._delete_flag = false
+        end
     end
-    self.entities_to_remove = {}
 
-    for i = 1, #self.drawables_to_remove do
-        tremove(self.drawables, self.drawables_to_remove[i])
+    for i = #self.entities, 1, -1 do
+        local e = self.entities[i]
+        if e._delete_flag then
+            tremove(self.entities, i)
+            e._delete_flag = false
+        end
     end
-    self.drawables_to_remove = {}
 end
 
 
@@ -157,14 +163,12 @@ end
 
 
 function World:remove_drawable(d)
-    local index = sugar.index_of(self.drawables, d)
-    tinsert(self.drawables_to_remove, index)
+    d._delete_flag = true
 end
 
 
 function World:remove_gameobject(g)
-    local index = sugar.index_of(self.entities, g)
-    tinsert(self.entities_to_remove, index)
+    g._delete_flag = true
 end
 
 

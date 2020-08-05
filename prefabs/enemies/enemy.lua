@@ -19,6 +19,7 @@ end
 -- TODO: apply stats
 function Enemy:damage(amount)
     self.current_health = self.current_health - amount
+    print(self.current_health)
     if self.current_health <= 0 then self:death() end
 end
 
