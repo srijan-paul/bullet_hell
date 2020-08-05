@@ -9,21 +9,13 @@ local dirs = {Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.DOWN}
 -- adds the travel doors (graph edges) to the room of this node
 
 local function get_door_pos(world, dir)
-    if dir == Direction.LEFT then
-        return Vec2(0, world.height / 2)
-    end
+    if dir == Direction.LEFT then return Vec2(0, world.height / 2) end
 
-    if dir == Direction.RIGHT then
-        return Vec2(world.width, world.height / 2)
-    end
-    
-    if dir == Direction.UP then
-        return Vec2(world.width / 2, 0)
-    end
+    if dir == Direction.RIGHT then return Vec2(world.width, world.height / 2) end
 
-    if dir == Direction.DOWN then
-        return Vec2(world.width / 2, world.height)
-    end
+    if dir == Direction.UP then return Vec2(world.width / 2, 0) end
+
+    if dir == Direction.DOWN then return Vec2(world.width / 2, world.height) end
 
 end
 
@@ -42,17 +34,13 @@ local function add_floor(node)
 
     local floor = GameObject(world, world.width / 2, world.height / 2)
     local floor_canvas = lg.newCanvas(world.width, world.height)
-    floor_canvas:renderTo(function ()
+    floor_canvas:renderTo(function()
         lg.setColor(10 / 255, 20 / 255, 32 / 255)
         lg.rectangle('fill', 0, 0, world.width, world.height)
         lg.setColor(1, 1, 1, 0.1)
-        for i = 0, world.width, 16 do
-            lg.line(i, 0, i, world.height)
-        end
+        for i = 0, world.width, 16 do lg.line(i, 0, i, world.height) end
 
-        for i = 0, world.height, 16 do
-            lg.line(0, i,  world.width, i)
-        end
+        for i = 0, world.height, 16 do lg.line(0, i, world.width, i) end
     end)
     floor:add_component(Drawable, floor_canvas)
 end
@@ -60,7 +48,16 @@ end
 local function add_enemies(node)
     local world = node.world
     -- Stinger(world, 120, 120)
-    Fly(world, 150, 150)
+
+    for i = 20, world.width, 100 do
+        for j = 20, world.height, 100 do
+            if math.random() > 0.4 then
+                Fly(world, i + 20, j + 20)
+            else
+                Stinger(world, i + 20, j + 20)
+            end
+        end
+    end
 end
 
 return function(node)

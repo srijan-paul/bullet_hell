@@ -21,10 +21,10 @@ function Level:init()
     Healthbar.init()
     self.world_tree = LevelGenerator(self, 5):generate()
     self.current_node = self.world_tree
-    
+
     -- *active: the player is currently in this node
     -- *explored: the player has visited this area before
-    
+
     self.current_node.active = true
     self.current_node.explored = true
     self.current_world = self.current_node.world
@@ -48,6 +48,9 @@ function Level:switch_world(dir)
     self.current_node.active  = false
     self.current_node = node
     self.map.current_node = self.current_node
+
+    -- update the map now that the player has entered a new
+    -- room
     self.map:re_render()
 
     self.current_world:player_leave(self.player)
@@ -62,6 +65,7 @@ function Level:draw()
     camera:set()
     self.current_world:draw()
     camera:unset()
+    -- draw the HUD info. healthbar , ammo and map
     Healthbar.draw(20, 30)
     self.map:draw(NATIVE_WIDTH - self.map.width - 10, 30)
 end

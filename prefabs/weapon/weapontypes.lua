@@ -4,7 +4,7 @@ return {
     HandGun = {
         sprite_path = 'Handgun',
         projectile = ProjectileType.Bullet,
-        cooldown = 0.3,
+        cooldown = 0.25,
         damage = 3,
         auto = false,
         sound = 'laser',

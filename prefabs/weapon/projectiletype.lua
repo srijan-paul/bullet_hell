@@ -21,7 +21,7 @@ return {
                 life_span = 0.1,
                 start_scale = {1, 1},
                 end_scale = {0.5, 0.5}
-            }, {sugar.rgb('#ffffff')})
+            })
         end
     },
     Sting = {
@@ -51,6 +51,12 @@ return {
             end)
             return canvas
         end,
-        damage = 1
+        damage = 1,
+        destroy_effect = function(world, x, y)
+            return Effect(world, x, y, Effects.Block, {
+                life_span = 0.1,
+                start_scale = {0.5, 0.5},
+            }, {sugar.rgb('#ffc2d8')})
+        end
     }
 }

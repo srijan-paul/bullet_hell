@@ -5,5 +5,8 @@
         "Class",
         "Timer"
     ],
-    "Lua.runtime.version": "LuaJIT"
+    "Lua.runtime.version": "LuaJIT",
+    "files.associations": {
+        "stdbool.h": "c"
+    }
 }

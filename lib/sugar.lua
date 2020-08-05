@@ -94,7 +94,7 @@ end
 
 function sugar.pop() love.graphics.pop() end
 
-function sugar.foreach(arr, func) 
+function sugar.foreach(arr, func)
     for i = 1, #arr do
         func(arr[i], i)
     end

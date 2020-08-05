@@ -43,6 +43,10 @@ local function get_draw_coords(prev_coords, dir)
     return {x = prev_coords.x, y = prev_coords.y + ROOM_HEIGHT + PADDING}
 end
 
+-- Do a depth first traversal on the room graph to
+-- re-render the whole mini map taking explored and uneplored
+-- rooms into account.
+
 function Minimap:re_render()
     local root = self.current_node
     local stack = sugar.stack()

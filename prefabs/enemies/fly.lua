@@ -6,37 +6,35 @@ local Attack = require 'component/attack'
 
 local ATTACK_RATE = 0.5
 local PROJECTILE_SPEED = 100
+local PATROL_DISTANCE = 30
+local MOVE_SPEED = 30
+local DETECT_RANGE = 10
 
 local Fly = Class('Stinger', Enemy)
 
 local State = {
     ATTACK = {
-        update = function (self, fly, dt)
+        update = function(self, fly, dt)
             if not fly.target_loc then return end
             fly:attack(fly.target_loc)
         end,
 
-        switch = function (self, fly, state)
-            fly.state = state
-        end
+        switch = function(self, fly, state) fly.state = state end
     },
 
     PATROL = {
-        update = function (self, fly, dt)
-            -- TODO
+        update = function(self, fly, dt)
+            fly:move(Vec2.from_polar(MOVE_SPEED * dt, fly.target_loc:angle()))
         end,
 
-        switch = function (self, fly, state)
-            fly.state = state
-        end
+        switch = function(self, fly, state) fly.state = state end
     }
 }
-
 
 State.HURT = {
     hurt_timer = 0,
 
-    update = function (self, fly, dt)
+    update = function(self, fly, dt)
         self.hurt_timer = self.hurt_timer + dt
         if self.hurt_timer > 0.3 then
             fly.state = State.PATROL
@@ -45,19 +43,17 @@ State.HURT = {
         end
     end,
 
-    switch = function (self, fly, state)
-        if self.hurt_timer >= 0.3 then
-            fly.state = state
-        end
+    switch = function(self, fly, state)
+        if self.hurt_timer >= 0.3 then fly.state = state end
     end
 }
 
 local function fly_ai(fly)
     local t = fly:get_component(cmp.Transform)
-    local nearby = fly.world:query('circle', t.pos.x, t.pos.y, fly.detect_range)
+    local nearby = fly.world:query('circle', t.pos.x, t.pos.y, DETECT_RANGE)
     local player_spotted = false
 
-    sugar.foreach(nearby, function (ent, i)
+    sugar.foreach(nearby, function(ent, i)
         if ent.id == 'player' then
             player_spotted = true
             fly:set_state(State.ATTACK)
@@ -65,11 +61,17 @@ local function fly_ai(fly)
             fly.target_loc = pos
             if pos.x < t.pos.x then
                 fly:set_scale(-1, 1)
-            else fly:set_scale(1, 1) end
+            else
+                fly:set_scale(1, 1)
+            end
         end
     end)
 
-    if not player_spotted then fly:set_state(State.PATROL) end
+    if not player_spotted then
+        fly.target_loc = Vec2.from_polar(PATROL_DISTANCE,
+                                         -math.random() * 2 * math.pi)
+        fly:set_state(State.PATROL)
+    end
 end
 
 function Fly:init(world, x, y)
@@ -84,9 +86,7 @@ function Fly:init(world, x, y)
         {'idle', 1, 3, 0.04, true}, {'hurt', 4, 4, 0.1, false}
     })
 
-    self:add_component(Timer, 0.2, function ()
-        fly_ai(self)
-    end)
+    self:add_component(Timer, 0.2, function() fly_ai(self) end)
 
     anim:play('idle')
 
@@ -100,7 +100,7 @@ function Fly:init(world, x, y)
     })
 
     self.state = State.PATROL
-    self.target_loc = nil
+    self.target_loc = self:get_pos()
 end
 
 function Fly:_physics_process(dt)
@@ -112,15 +112,16 @@ function Fly:set_state(state)
     self.state:switch(self, state)
 end
 
-
 function Fly:damage(amount)
     self:get_component(cmp.AnimatedSprite):play('hurt')
     self:set_state(State.HURT)
+    Enemy.damage(self, amount)
 end
 
 
 function Fly:attack(target_pos)
     self.attack_comp:attack(target_pos)
 end
+
 
 return Fly

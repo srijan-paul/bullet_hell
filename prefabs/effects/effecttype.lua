@@ -7,7 +7,7 @@ return {
             if color then
                 lg.setColor(color[1], color[2], color[3], color[4] or 1)
             else
-                lg.setColor(1, 0.1, 0.3, 1)
+                lg.setColor(1, 1, 1, 1)
             end
             lg.rectangle('fill', 1, 1, w - 1, h - 1)
         end)

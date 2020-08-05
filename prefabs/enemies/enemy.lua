@@ -8,20 +8,22 @@ function Enemy:init(world, x, y, properties)
     self:add_component(cmp.Collider, properties.collider_width or 10,
                        properties.collider_height or 10, 'enemy')
     -- range within which it can detect the player
+    self.id = 'enemy'
     self.detect_range = properties.detect_range
-    self.health = properties.health or 1
+    self.max_health = properties.health or 1
+    self.current_health = self.max_health
     self.stats = properties.stats or {}
 end
 
 
 -- TODO: apply stats
 function Enemy:damage(amount)
-    self.health = self.health - amount
-    if self.health <= 0 then self:death() end
+    self.current_health = self.current_health - amount
+    if self.current_health <= 0 then self:death() end
 end
 
 function Enemy:death()
-    --TODO
+    self:delete()
 end
 
 return Enemy

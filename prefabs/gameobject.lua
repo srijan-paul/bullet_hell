@@ -51,7 +51,6 @@ function GameObject:delete()
         if v.delete then
             v:delete()
         end
-        self._components[k] = nil
     end
 end
 

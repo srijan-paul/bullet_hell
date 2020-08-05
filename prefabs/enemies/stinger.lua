@@ -24,12 +24,10 @@ local State = {
     PATROL = {
         update = function(stinger, dt)
             stinger.accumulated_time = stinger.accumulated_time + dt
-
+            local pos = stinger:get_pos()
             if stinger.accumulated_time >= stinger.patrol_time or
-                stinger:get_pos() == stinger.patrol_pos then
-                local angle = -math.pi + math.random() * 2 * math.pi
-                stinger.patrol_spot = Vec2.from_polar(PATROL_DISTANCE,
-                                                      stinger:rotation() - angle)
+                pos == stinger.patrol_spot then
+                stinger.patrol_spot = pos + Vec2.random_unit():with_mag(PATROL_DISTANCE)
                 stinger.accumulated_time = 0
             end
             stinger:chase(stinger.patrol_spot, stinger.speed * dt)
@@ -120,7 +118,11 @@ function Stinger:attack(target_loc)
 end
 
 function Stinger:damage(amount)
-    self.health = self.health - amount
+    Enemy.damage(self, amount)
+end
+
+function Stinger:on_world_exit()
+    self.patrol_spot = -1 * self.patrol_spot
 end
 
 return Stinger

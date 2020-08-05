@@ -10,7 +10,7 @@ local TIME_STEP = 0.016
 
 function World:init(level, width, height)
     self.level = level
-    self.width = width or 200
+    self.width = width or 300
     self.height = height or 200
     
     self.drawables = {}
@@ -99,7 +99,7 @@ function World:_physics_process(dt)
 
     for i = #self.entities, 1, -1 do
         local e = self.entities[i]
-        -- TODO refactor this out into a collider array
+        -- ? refactor this out into a collider array
         if self.entities[i]:has_component(cmp.Collider) then
             self.grid:insert(self.entities[i]:get_component(cmp.Collider))
         end

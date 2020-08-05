@@ -3,6 +3,7 @@ local Sprite = Class('Sprite')
 
 function Sprite:init(owner, texture)
     self.owner = owner
+    self.world = self.owner.world
     self.image = texture
     self.width = texture:getWidth()
     self.height = texture:getHeight()
