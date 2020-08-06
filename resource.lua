@@ -13,6 +13,7 @@ function Resource.load()
     Resource.Image.HealthIcon = love.graphics.newImage('assets/image/health_icon.png')
     Resource.Image.Ball = love.graphics.newImage('assets/image/ball.png')
     Resource.Image.FlyCorpse = love.graphics.newImage('assets/image/fly_corpse.png')
+    Resource.Image.StingerCorpse = love.graphics.newImage('assets/image/stinger_corpse.png')
     -- Audio
     Resource.Sound.laser = love.audio.newSource('assets/sound/421704__bolkmar__sfx-laser-shoot-02.wav', 'static')
     Resource.Sound.laser:setVolume(0.5)

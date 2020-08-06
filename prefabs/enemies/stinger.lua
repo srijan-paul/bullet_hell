@@ -68,7 +68,8 @@ function Stinger:init(world, x, y)
         collider_width = 10,
         collder_height = 10,
         detect_range = 30,
-        health = 10
+        health = 10,
+        corpse = Resource.Image.StingerCorpse
     })
 
     self:add_component(cmp.Sprite, Resource.Image.Stinger)
@@ -117,9 +118,6 @@ function Stinger:attack(target_loc)
     self.attack_comp:attack(target_loc)
 end
 
-function Stinger:damage(amount, ...)
-    Enemy.damage(self, amount, ...)
-end
 
 function Stinger:on_world_exit()
     self.patrol_spot = -1 * self.patrol_spot

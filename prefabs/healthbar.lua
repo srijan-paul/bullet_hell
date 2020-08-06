@@ -2,8 +2,8 @@ local Healthbar = {HP_fraction = 1, hp_rect_len = 50, hp_rect_2_len = 50}
 
 local SCALE = 4
 local MAX_RECT_LEN = 50
-local hp_rect_color = {sugar.rgb('fd3322')}
-local inner_rect_color = {1, 1, 1, 1}
+local hp_rect_color = {sugar.rgb('#ED4C67')}
+local inner_rect_color = {sugar.rgb('c52f23')}
 local heath_canvas
 
 function Healthbar.init()
@@ -18,7 +18,7 @@ function Healthbar.init()
     end)
 end
 
-function Healthbar.draw(x, y, hp_fraction)
+function Healthbar.draw(x, y)
     x = x / SCALE
     y = y / SCALE
     lg.push()
@@ -45,8 +45,8 @@ function Healthbar.draw(x, y, hp_fraction)
     lg.setColor(unpack(hp_rect_color))
     lg.rectangle('fill', 13, 2, Healthbar.hp_rect_len, 6)
 
-    lg.setColor(1, 1, 1, 0.6)
-    lg.rectangle('fill', 13, 2, MAX_RECT_LEN, 2)
+    -- lg.setColor(1, 1, 1, 0.6)
+    -- lg.rectangle('fill', 13, 2, MAX_RECT_LEN, 2)
 
     lg.translate(-x, -y)
     lg.pop()

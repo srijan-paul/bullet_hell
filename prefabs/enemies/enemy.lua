@@ -20,7 +20,6 @@ function Enemy:init(world, x, y, properties)
     self.knock_velocity = Vec2(0, 0)
 end
 
-
 -- TODO: apply stats
 -- *amount (number)= damage amount
 -- *source_pos (Vec2) = location where the damage came from (to apply knockback)
@@ -28,7 +27,8 @@ end
 
 function Enemy:damage(amount, source_pos, knockback)
     self.current_health = self.current_health - amount
-    self.knock_velocity = (self:get_pos() - source_pos):with_mag(KNOCKBACK_SPEED)
+    self.knock_velocity =
+        (self:get_pos() - source_pos):with_mag(KNOCKBACK_SPEED)
     self.knock_dist = knockback
     if self.current_health <= 0 then self:death() end
 end
@@ -36,7 +36,8 @@ end
 function Enemy:death()
     local pos = self:get_pos()
     if self.corpse_sprite then
-        Corpse(self.world, pos.x, pos.y, self.corpse_sprite, self.knock_velocity, self.knock_dist)
+        Corpse(self.world, pos.x, pos.y, self:rotation(), self.corpse_sprite,
+               self.knock_velocity, self.knock_dist)
     end
     self:delete()
 end
