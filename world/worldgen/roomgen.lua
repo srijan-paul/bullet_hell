@@ -3,6 +3,9 @@ local GameObject = require 'prefabs/gameobject'
 local Drawable = require 'component/drawable'
 local Stinger = require 'prefabs/enemies/stinger'
 local Fly = require 'prefabs/enemies/fly'
+local Destructible = require 'prefabs.props.destructible'
+local DestructibleType = require 'prefabs.props.destructibles'
+
 
 local dirs = {Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.DOWN}
 
@@ -58,6 +61,7 @@ local function add_enemies(node)
             end
         end
     end
+    Destructible(world, 150, 150, DestructibleType.ExplosiveBarrel)
 end
 
 return function(node)

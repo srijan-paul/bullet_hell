@@ -14,7 +14,7 @@ function Attack:init(owner, ptype, config)
     self.speed = config.speed or 100
     self.spawn_offset = config.spawn_offset or Vec2.ZERO()
     self.sound = config.sound
-    self.mask = config.mask or ''
+    self.mask = config.mask or {''}
     self.damage = config.damage or 0
     self.knockback = config.knockback or 0
 end

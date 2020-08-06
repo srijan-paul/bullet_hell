@@ -1,5 +1,5 @@
 local shader = require 'shader'
-local Level = require 'world/level'
+local Level
 
 _G.keyboard = love.keyboard
 _G.graphics = love.graphics
@@ -42,7 +42,7 @@ local scale = 1
 local SCREEN_OFFSET_X = 0
 
 function love.load()
-
+   
     -- Record the screen dimensions
     if settings.fullscreen then
         love.window.setMode(0, 0)
@@ -65,8 +65,11 @@ function love.load()
 
     Resource.load()
     crosshair = Resource.Image.Cursor
+    --bla bla
+    Level = require 'world/level'
     current_level = Level()
     love.mouse.setVisible(false)
+
 end
 
 

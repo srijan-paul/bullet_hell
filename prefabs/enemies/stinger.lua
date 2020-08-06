@@ -80,7 +80,7 @@ function Stinger:init(world, x, y)
         accuracy = 0.5,
         spawn_offset = Vec2(4, 0),
         speed = STINGER_PROJECTILE_SPEED,
-        mask = 'player',
+        mask = {'player', 'neutral'},
         damage = 2
     })
 

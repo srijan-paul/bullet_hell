@@ -1,8 +1,9 @@
 Vec2 = require 'lib/vector2'
 Class = require 'lib/middleclass/middleclass'
 Timer = require 'lib/vrld/timer'
-_G.sugar = require 'lib/sugar'
+
 _G.Resource = require 'resource'
+_G.sugar = require 'lib/sugar'
 _G.util = require 'misc/util'
 _G.switch = require 'lib/switch'
 

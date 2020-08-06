@@ -1,0 +1,15 @@
+local cmp = require 'component/common'
+local Explosion = require 'prefabs/explosion'
+
+return {
+    ExplosiveBarrel = {
+        drawable = {cmp.Sprite, Resource.Image.Barrel},
+        size = {10, 10},
+        hp = 1,
+        on_damage = function (d, dmg)
+            local pos = d:get_pos()
+            Explosion(d.world, pos.x, pos.y)
+            d:delete()
+        end
+    }
+}

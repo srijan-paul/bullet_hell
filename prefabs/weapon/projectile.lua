@@ -12,7 +12,9 @@ function Projectile:init(owner, ptype, properties, ...)
     self:add_component(cmp.Drawable, ptype.render())
     local collider = self:add_component(cmp.Collider, ptype.width, ptype.height,
                                         'projectile', Vec2(ptype.width / 2, 0))
-    collider:add_mask(properties.mask or '')
+    for i = 1, #properties.mask do
+        collider:add_mask(properties.mask[i])
+    end
 
     local dir = properties.target - self:get_pos()
 

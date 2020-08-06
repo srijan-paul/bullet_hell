@@ -4,6 +4,7 @@ local Resource = {Sprite = {}, Image = {}, Sound = {}}
 function Resource.load()
     Resource.Sprite.Player = janim.newSpriteSheet('assets/image/player_yellow.png', 12, 1)
     Resource.Sprite.Fly = janim.newSpriteSheet('assets/image/fly.png', 5, 1)
+    Resource.Sprite.BlastRed = janim.newSpriteSheet('assets/image/explosion_red.png', 14, 1)
 
     Resource.Image.Handgun = love.graphics.newImage('assets/image/handgun.png')
     Resource.Sprite.Bullet = love.graphics.newImage('assets/image/bullet.png')
@@ -14,6 +15,7 @@ function Resource.load()
     Resource.Image.Ball = love.graphics.newImage('assets/image/ball.png')
     Resource.Image.FlyCorpse = love.graphics.newImage('assets/image/fly_corpse.png')
     Resource.Image.StingerCorpse = love.graphics.newImage('assets/image/stinger_corpse.png')
+    Resource.Image.Barrel = love.graphics.newImage('assets/image/explosive_barrel.png')
     -- Audio
     Resource.Sound.laser = love.audio.newSource('assets/sound/421704__bolkmar__sfx-laser-shoot-02.wav', 'static')
     Resource.Sound.laser:setVolume(0.5)

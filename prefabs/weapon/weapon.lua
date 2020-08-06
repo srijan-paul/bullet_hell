@@ -17,7 +17,7 @@ function Weapon:init(owner, wtype)
         speed = wtype.speed,
         spawn_offset = Vec2(4, 0),
         sound = Resource.Sound[wtype.sound],
-        mask = 'enemy',
+        mask = {'enemy', 'neutral'},
         damage = wtype.damage,
         knockback = wtype.knockback
     })
