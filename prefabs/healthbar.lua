@@ -1,9 +1,9 @@
-local Healthbar = {HP_fraction = 1, hp_rect_len = 52, hp_rect_2_len = 52}
+local Healthbar = {HP_fraction = 1, hp_rect_len = 50, hp_rect_2_len = 50}
 
 local SCALE = 4
-local MAX_RECT_LEN = 52
-local inner_rect_color = {1, 0.5, 0.5, 1}
-local hp_rect_color = {1, 1, 1, 1}
+local MAX_RECT_LEN = 50
+local hp_rect_color = {sugar.rgb('fd3322')}
+local inner_rect_color = {1, 1, 1, 1}
 local heath_canvas
 
 function Healthbar.init()
@@ -13,8 +13,7 @@ function Healthbar.init()
         -- just copy pasting the coordinates from asperite,
         -- so a few ugly magic numbers
         lg.setColor(1, 1, 1, 1)
-        lg.polygon('line', 1, 1, 1, 16, 12, 16, 12, 12, 42, 12, 42, 7, 67, 7,
-                   67, 1)
+        lg.rectangle('line', 1, 1, 67, 16)
         -- TODO: show logo
     end)
 end
@@ -24,21 +23,32 @@ function Healthbar.draw(x, y, hp_fraction)
     y = y / SCALE
     lg.push()
     lg.scale(SCALE, SCALE)
-    lg.draw(heath_canvas, x, y)
+    lg.translate(x, y)
+
     -- draw HP bar
     -- lg.setColor(250 / 255, 95 / 255, 82 / 255)
     lg.setColor(unpack(inner_rect_color))
-    lg.rectangle('fill', x + 13, y + 2, Healthbar.hp_rect_2_len, 3)
-    lg.setColor(unpack(hp_rect_color))
-    lg.rectangle('fill', x + 13, y + 2, Healthbar.hp_rect_len, 3)
+
     -- draw EXP bar
     lg.setColor(109 / 255, 152 / 255, 243 / 255)
-    lg.rectangle('fill', x + 13, y + 6, 27, 4)
+    -- lg.rectangle('fill', x + 13, y + 6, 27, 4)
 
     -- draw the icon
     lg.setColor(1, 1, 1, 1)
-    lg.draw(Resource.Image.HealthIcon, x + 2, y + 3)
+    lg.draw(Resource.Image.HealthIcon, 0, 0)
 
+    -- draw the rectangle
+    lg.rectangle('line', 12, 1, 52, 8)
+    
+    lg.setColor(unpack(inner_rect_color))
+    lg.rectangle('fill', 13, 2, Healthbar.hp_rect_2_len, 6)
+    lg.setColor(unpack(hp_rect_color))
+    lg.rectangle('fill', 13, 2, Healthbar.hp_rect_len, 6)
+
+    lg.setColor(1, 1, 1, 0.6)
+    lg.rectangle('fill', 13, 2, MAX_RECT_LEN, 2)
+
+    lg.translate(-x, -y)
     lg.pop()
 end
 

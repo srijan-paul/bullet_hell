@@ -66,7 +66,7 @@ function Level:draw()
     self.current_world:draw()
     camera:unset()
     -- draw the HUD info. healthbar , ammo and map
-    -- Healthbar.draw(20, 30)
+    Healthbar.draw(20, 30)
     self.map:draw(NATIVE_WIDTH - self.map.width - 10, 30)
 end
 
