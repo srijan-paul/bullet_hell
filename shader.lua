@@ -1,7 +1,7 @@
 return love.graphics.newShader ([[
     float crt_bend = 5.0;
     float aberration_offset = 0.0015;
-    float scanline_count = 102;
+    float scanline_count = 300;
     float scanline_speed = -4;
     uniform float time;
     // CRT screen coordinates

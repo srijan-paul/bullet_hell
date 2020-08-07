@@ -6,7 +6,6 @@ local Fly = require 'prefabs/enemies/fly'
 local Destructible = require 'prefabs.props.destructible'
 local DestructibleType = require 'prefabs.props.destructibles'
 
-
 local dirs = {Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.DOWN}
 
 -- adds the travel doors (graph edges) to the room of this node
@@ -39,11 +38,27 @@ local function add_floor(node)
     local floor_canvas = lg.newCanvas(world.width, world.height)
     floor_canvas:renderTo(function()
         lg.setColor(10 / 255, 20 / 255, 32 / 255)
-        lg.rectangle('fill', 0, 0, world.width, world.height)
+        -- lg.rectangle('fill', 0, 0, world.width, world.height)
         lg.setColor(1, 1, 1, 0.1)
-        for i = 0, world.width, 16 do lg.line(i, 0, i, world.height) end
+        local rows = math.ceil(world.width / 16)
+        local cols = math.ceil(world.height / 16)
 
-        for i = 0, world.height, 16 do lg.line(0, i, world.width, i) end
+        lg.setColor(10 / 255, 20 / 255, 32 / 255)
+
+        for r = 1, rows do
+            for c = 1, cols do
+                local x, y = (r - 1) * 16, (c - 1) * 16
+                if r % 2 == c % 2 then
+                    lg.setColor(10 / 255, 20 / 255, 32 / 255)
+                else
+                    lg.setColor(sugar.rgb('101e2f'))
+                end
+                lg.rectangle('fill', x, y, 16, 16)
+            end
+        end
+        -- for i = 0, world.width, 16 do lg.line(i, 0, i, world.height) end
+
+        -- for i = 0, world.height, 16 do lg.line(0, i, world.width, i) end
     end)
     floor:add_component(Drawable, floor_canvas)
 end

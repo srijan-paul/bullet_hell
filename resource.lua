@@ -5,7 +5,7 @@ function Resource.load()
     Resource.Sprite.Player = janim.newSpriteSheet('assets/image/player_yellow.png', 12, 1)
     Resource.Sprite.Fly = janim.newSpriteSheet('assets/image/fly.png', 5, 1)
     Resource.Sprite.BlastRed = janim.newSpriteSheet('assets/image/explosion_red.png', 14, 1)
-    
+
     Resource.Image.Bullet = love.graphics.newImage('assets/image/bullet_blue.png')
     Resource.Image.Handgun = love.graphics.newImage('assets/image/handgun.png')
     Resource.Image.Cursor = love.graphics.newImage('assets/image/cursor.png')
