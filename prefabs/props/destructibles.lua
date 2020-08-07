@@ -6,10 +6,19 @@ return {
         drawable = {cmp.Sprite, Resource.Image.Barrel},
         size = {10, 10},
         hp = 1,
-        on_damage = function (d, dmg)
+        on_damage = function(d, dmg)
             local pos = d:get_pos()
             Explosion(d.world, pos.x, pos.y)
+            Resource.Sound.Explode:play()
+            -- explosion damage
+            local nearby = d.world:query('circle', pos.x, pos.y, 15)
+            sugar.foreach(nearby, function(gameobj)
+                if type(gameobj.damage) == 'function' and gameobj ~= d then
+                    gameobj:damage(d.dmg, pos)
+                end
+            end)
             d:delete()
-        end
+        end,
+        damage = 1
     }
 }

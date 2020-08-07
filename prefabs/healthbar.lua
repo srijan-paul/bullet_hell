@@ -19,6 +19,10 @@ function Healthbar.init()
 end
 
 function Healthbar.draw(x, y)
+
+    Healthbar.hp_rect_len = sugar.clamp(Healthbar.hp_rect_len, 0, MAX_RECT_LEN)
+    Healthbar.hp_rect_2_len = sugar.clamp(Healthbar.hp_rect_2_len, 0, MAX_RECT_LEN)
+    
     x = x / SCALE
     y = y / SCALE
     lg.push()
@@ -58,7 +62,7 @@ local function tween_inner_hp_rect(new_fraction)
 end
 
 function Healthbar.update(new_fraction)
-    Timer.tween(0.1, Healthbar, {hp_rect_len = new_fraction * MAX_RECT_LEN},
+    Timer.tween(0.2, Healthbar, {hp_rect_len = new_fraction * MAX_RECT_LEN},
                 'linear', function() tween_inner_hp_rect(new_fraction) end)
 end
 

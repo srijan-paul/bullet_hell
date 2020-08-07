@@ -6,7 +6,7 @@ local Corpse = Class('Corpse', GameObject)
 function Corpse:init(world, x, y, rotation, image, velocity, dist)
     GameObject.init(self, world, x, y)
     self.velocity = velocity
-    self.distance_to_cover = dist
+    self.distance_to_cover = dist or 0
     self:set_rotation(rotation)
     self:add_component(cmp.Sprite, image)
     self:add_component(cmp.Collider, 10, 10, 'corpse')

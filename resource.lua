@@ -18,6 +18,8 @@ function Resource.load()
     Resource.Image.Barrel = love.graphics.newImage('assets/image/explosive_barrel.png')
     -- Audio
     Resource.Sound.laser = love.audio.newSource('assets/sound/421704__bolkmar__sfx-laser-shoot-02.wav', 'static')
+    -- sound credit: https://freesound.org/people/OwlStorm/sounds/404754/ [Owlstorm]
+    Resource.Sound.Explode = love.audio.newSource('assets/sound/404754__owlstorm__retro-video-game-sfx-explode.wav', 'static')
     Resource.Sound.laser:setVolume(0.5)
 end
 
