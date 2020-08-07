@@ -5,13 +5,19 @@ return {
     Bullet = {
         width = 5,
         height = 5,
+        sx = 1,
+        sy = 1.2,
         render = function()
             local canvas = love.graphics.newCanvas(10, 4)
+            -- canvas:renderTo(function()
+            --     graphics.setColor(1, 1, 1, 1)
+            --     graphics.rectangle('fill', 0, 0, 10, 4)
+            --     graphics.setColor(sugar.rgb('#18dcff'))
+            --     graphics.rectangle('fill', 0, 0, 4, 4)
+            -- end)
             canvas:renderTo(function()
-                graphics.setColor(1, 1, 1, 1)
-                graphics.rectangle('fill', 0, 0, 10, 4)
-                graphics.setColor(sugar.rgb('#18dcff'))
-                graphics.rectangle('fill', 0, 0, 4, 4)
+                lg.setColor(1, 1, 1, 1)
+                lg.draw(Resource.Image.Bullet, 0, 0)
             end)
             return canvas
         end,

@@ -19,6 +19,6 @@ return {
             end)
             d:delete()
         end,
-        damage = 1
+        damage = 10
     }
 }
