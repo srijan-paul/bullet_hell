@@ -145,7 +145,7 @@ function Vector2.random_unit()
 end
 
 function Vector2:angle(vec) 
-    if vec then 
+    if vec then
         return math.atan2(self.y, self.x) - math.atan2(vec.y, vec.x)
     end
     return math.atan2(self.y, self.x) 

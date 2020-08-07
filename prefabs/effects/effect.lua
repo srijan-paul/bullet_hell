@@ -3,9 +3,9 @@ local GameObject = require 'prefabs/gameobject'
 
 local Effect = Class('Effect', GameObject)
 
-function Effect:init(world, x, y, etype, config, ...)
+function Effect:init(world, x, y, e_canvas, config)
     GameObject.init(self, world, x, y)
-    self:add_component(cmp.Drawable, etype(...))
+    self:add_component(cmp.Drawable, e_canvas)
     self.life_span = config.life_span or {1, 1}
     
     local start_scale = config.start_scale or {1, 1}

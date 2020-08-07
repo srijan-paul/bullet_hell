@@ -3,6 +3,7 @@ local Sprite = require 'component/weapon_sprite'
 local GameObject = require 'prefabs/gameobject'
 local AttackComponent = require 'component/attack'
 
+
 local Weapon = Class('Weapon', GameObject)
 
 function Weapon:init(owner, wtype)
@@ -23,6 +24,7 @@ function Weapon:init(owner, wtype)
     })
 
     self:add_component(Sprite, Resource.Image[wtype.sprite_path])
+    self.type = wtype
 end
 
 function Weapon:update(dt)
@@ -41,6 +43,7 @@ end
 
 function Weapon:fire(target)
     -- if self.attack_comp:is_on_cooldown() then return false end
+    self.attack_comp.spawn_offset = self.type.muzzle_offset:rotated(self:rotation())
     self.attack_comp:attack(target)
 end
 

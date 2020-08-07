@@ -2,6 +2,7 @@ local GameObject = require 'prefabs/gameobject'
 local cmp = require 'component/common'
 
 local Projectile = Class('Projectile', GameObject)
+Projectile.Type = require 'prefabs/weapon/projectiletype'
 
 function Projectile:init(owner, ptype, properties, ...)
     GameObject.init(self, ...)
@@ -9,7 +10,7 @@ function Projectile:init(owner, ptype, properties, ...)
     self.type = ptype
 
     self:set_scale(ptype.sx or 1, ptype.sy or 1)
-    self:add_component(cmp.Drawable, ptype.render())
+    ptype.add_render(self)
     local collider = self:add_component(cmp.Collider, ptype.width, ptype.height,
                                         'projectile', Vec2(ptype.width / 2, 0))
     for i = 1, #properties.mask do
@@ -38,10 +39,6 @@ function Projectile:on_collide(target)
     self:delete()
 end
 
-function Projectile:delete()
-    self.world:remove_gameobject(self)
-    self.world:remove_drawable(self:get_component(cmp.Drawable))
-end
 
 function Projectile:on_world_exit()
     if self.type.destroy_effect then
