@@ -13,6 +13,7 @@ return {
         end)
         return canvas
     end,
+
     Circle = function (radius, color)
         radius = radius or 10
         local canvas = lg.newCanvas(radius * 2, radius * 2)

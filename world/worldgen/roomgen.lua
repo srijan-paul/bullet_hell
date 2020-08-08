@@ -48,8 +48,9 @@ local function add_floor(node)
         for r = 1, rows do
             for c = 1, cols do
                 local x, y = (r - 1) * 16, (c - 1) * 16
+
                 if r % 2 == c % 2 then
-                    lg.setColor(10 / 255, 20 / 255, 32 / 255)
+                    lg.setColor(sugar.rgb('0a1420'))
                 else
                     lg.setColor(sugar.rgb('101e2f'))
                 end
@@ -76,7 +77,7 @@ local function add_enemies(node)
             end
         end
     end
-    Destructible(world, 150, 150, DestructibleType.ExplosiveBarrel)
+    Destructible(DestructibleType.ExplosiveBarrel, world, 150, 150, 0, 0.8, 0.8)
 end
 
 return function(node)

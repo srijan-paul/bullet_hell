@@ -35,8 +35,11 @@ function AnimatedSprite:play(key, callback)
 end
 
 
-function AnimatedSprite:is_playing()
-    if self.current then return self.current.playing end
+function AnimatedSprite:is_playing(key)
+    if self.current then
+        if key then return self.anims[key] == self.current end
+        return self.current.playing
+    end
 end
 
 

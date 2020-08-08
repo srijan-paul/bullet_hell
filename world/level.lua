@@ -1,6 +1,6 @@
 local camera = require 'camera'
 local LevelGenerator = require 'world/worldgen/levelgen'
-local Player = require 'prefabs/player'
+local Player = require 'prefabs/player/player'
 local Weapon = require 'prefabs/weapon/weapon'
 local Minimap = require 'prefabs/minimap'
 local WeaponType = require 'prefabs/weapon/weapontypes'

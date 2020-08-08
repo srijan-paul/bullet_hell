@@ -5,8 +5,41 @@ local camera = require 'camera'
 local Healthbar = require 'prefabs/healthbar'
 
 local COLLIDER_WIDTH, COLLIDER_HEIGHT = 10, 10
+local DASH_DISTANCE = 50
+local DASH_SPEED = 300
 
--- TODO: implement state pattern if need be
+local DashState = {}
+
+DashState.MOVING = {
+    update = function(self, player, dt)
+        local movedir = player:get_component(InputComponent).movedir
+        if movedir.x == 0 and movedir.y == 0 then return end
+        local velocity = movedir:with_mag(player.speed * dt)
+        player:move(velocity)
+    end,
+
+    switch = function(player, state) player.dash_state = state end
+}
+
+DashState.DASHING = {
+    dash_dist = DASH_DISTANCE,
+
+    update = function (self, player, dt)
+      local velocity = player.dash_dir:with_mag(DASH_SPEED * dt)
+      player:move(velocity)
+      self.dash_dist = self.dash_dist - DASH_SPEED * dt
+      if self.dash_dist <= 0 then
+        self.dash_dist = DASH_DISTANCE
+        player.dash_state = DashState.MOVING
+      end
+      player.weapon:set_pos(player:get_weapon_pivot())
+    end,
+
+    switch = function (player, state)
+        
+    end
+}
+
 local PlayerState = {IDLE = 'idle', RUN = 'run', HURT = 'hurt'}
 
 local Player = Class('Player', GameObject)
@@ -22,10 +55,10 @@ function Player:init(world, x, y)
 
     self:get_component(cmp.AnimatedSprite):play('idle')
     self.id = 'player'
-    self.face_dir = 1 -- 1 is right, -1 is left
     self.speed = 50
     self.state = PlayerState.IDLE
-
+    self.dash_state = DashState.MOVING
+    self.dash_dir = Vec2(0, 0)
     -- TODO: remove magic number
     self.health = 10
     self.max_health = 10
@@ -42,13 +75,7 @@ function Player:update(dt)
     local centerX = camera:toScreenX(t.pos.x + COLLIDER_WIDTH / 2)
     -- local centerY = camera:toScreenY(t.pos.y + COLLIDER_HEIGHT / 2)
 
-    if mouseX() >= centerX then
-        t.scale.x = 1
-        self.face_dir = 1
-    else
-        t.scale.x = -1
-        self.face_dir = -1
-    end
+    t.scale.x = (mouseX() >= centerX) and 1 or -1
 
     if movedir.x ~= 0 or movedir.y ~= 0 then
         self:switch_state(PlayerState.RUN)
@@ -82,11 +109,8 @@ function Player:get_weapon_pivot()
 end
 
 function Player:_physics_process(dt)
-    local t = self:get_component(cmp.Transform)
-    local movedir = self:get_component(InputComponent).movedir
-    if movedir.x == 0 and movedir.y == 0 then return end
-    local velocity = movedir:with_mag(self.speed)
-    t.pos = t.pos + velocity * dt
+    if love.keyboard.isDown('e') then self:dash() end
+    self.dash_state:update(self, dt)
 end
 
 function Player:fire()
@@ -100,6 +124,12 @@ function Player:damage(amount)
     -- TODO death state
     Healthbar.update(self.health / self.max_health)
     if self.health <= 0 then self:death() end
+end
+
+function Player:dash()
+    self.dash_dir =
+        (camera:toWorldPos(mousePos()) - self:get_pos()):normalized()
+    self.dash_state = DashState.DASHING
 end
 
 function Player:heal()

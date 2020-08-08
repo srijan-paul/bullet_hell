@@ -30,6 +30,7 @@ end
 function Weapon:update(dt)
     GameObject.update(self, dt)
     local t = self:get_component(cmp.Transform)
+    if not self.owner then return end
     t.pos = self.owner:get_weapon_pivot()
     local scl = self.owner:get_scale()
     if t.scale.x < 0 then t.scale.x = -scl.x end
@@ -38,7 +39,7 @@ end
 function Weapon:face(point)
     local t = self:get_component(cmp.Transform)
     t.rotation = (point - t.pos):angle()
-    t.scale.y = self.owner.face_dir
+    t.scale.y = self.owner:get_scale().x
 end
 
 function Weapon:fire(target)

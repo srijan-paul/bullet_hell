@@ -6,8 +6,6 @@ return {
     Bullet = {
         width = 5,
         height = 5,
-        sx = 1,
-        sy = 1.2,
         add_render = function(proj)
             proj:add_component(cmp.Sprite, Resource.Image.Bullet)
             return proj
