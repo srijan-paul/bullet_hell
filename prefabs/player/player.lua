@@ -3,6 +3,7 @@ local InputComponent = require 'component/playerinput'
 local GameObject = require 'prefabs/gameobject'
 local camera = require 'camera'
 local Healthbar = require 'prefabs/healthbar'
+local PSystem = require 'particles/psystem'
 
 local COLLIDER_WIDTH, COLLIDER_HEIGHT = 10, 10
 local DASH_DISTANCE = 50
@@ -11,6 +12,7 @@ local DASH_SPEED = 300
 local DashState = {}
 
 DashState.MOVING = {
+
     update = function(self, player, dt)
         local movedir = player:get_component(InputComponent).movedir
         if movedir.x == 0 and movedir.y == 0 then return end
@@ -18,25 +20,40 @@ DashState.MOVING = {
         player:move(velocity)
     end,
 
-    switch = function(player, state) player.dash_state = state end
+    switch = function(self, player, state)
+        state:init(player)
+        player.move_state = state
+    end
 }
 
 DashState.DASHING = {
     dash_dist = DASH_DISTANCE,
+    dash_particles = nil,
 
-    update = function (self, player, dt)
-      local velocity = player.dash_dir:with_mag(DASH_SPEED * dt)
-      player:move(velocity)
-      self.dash_dist = self.dash_dist - DASH_SPEED * dt
-      if self.dash_dist <= 0 then
-        self.dash_dist = DASH_DISTANCE
-        player.dash_state = DashState.MOVING
-      end
-      player.weapon:set_pos(player:get_weapon_pivot())
+    init = function(self, player)
+        player.dash_particles:configure({
+            particle_velocity = player.dash_dir:with_mag(-20),
+            particle_vel_randomness = 1,
+            particle_life = 1,
+            radius = 10
+        })
     end,
 
-    switch = function (player, state)
-        
+    update = function(self, player, dt)
+        local velocity = player.dash_dir:with_mag(DASH_SPEED * dt)
+        player.dash_particles:emit()
+        player:move(velocity)
+        self.dash_dist = self.dash_dist - DASH_SPEED * dt
+        if self.dash_dist <= 0 then self:switch(player, DashState.MOVING) end
+        player.weapon:set_pos(player:get_weapon_pivot())
+    end,
+
+    switch = function(self, player, state)
+        if self.dash_dist <= 0 then
+            -- player:set_scale(1, 1)
+            self.dash_dist = DASH_DISTANCE
+            player.move_state = state
+        end
     end
 }
 
@@ -57,8 +74,14 @@ function Player:init(world, x, y)
     self.id = 'player'
     self.speed = 50
     self.state = PlayerState.IDLE
-    self.dash_state = DashState.MOVING
+    self.move_state = DashState.MOVING
     self.dash_dir = Vec2(0, 0)
+
+    self.dash_particles =
+        self.world:add_particle_system(PSystem(self:get_pos()))
+    self.dash_particles.active = false
+    self.dash_particles:attach_to(self)
+
     -- TODO: remove magic number
     self.health = 10
     self.max_health = 10
@@ -84,7 +107,7 @@ function Player:update(dt)
     end
 end
 
-function Player:switch_state(state, callback)
+function Player:switch_state(state)
     if self.state == state then return end
 
     local anim = self:get_component(cmp.AnimatedSprite)
@@ -110,7 +133,7 @@ end
 
 function Player:_physics_process(dt)
     if love.keyboard.isDown('e') then self:dash() end
-    self.dash_state:update(self, dt)
+    self.move_state:update(self, dt)
 end
 
 function Player:fire()
@@ -129,13 +152,17 @@ end
 function Player:dash()
     self.dash_dir =
         (camera:toWorldPos(mousePos()) - self:get_pos()):normalized()
-    self.dash_state = DashState.DASHING
+    self:switch_move_state(DashState.DASHING)
 end
+
+function Player:switch_move_state(state) self.move_state:switch(self, state) end
 
 function Player:heal()
-    -- body
+    -- TODO
 end
 
-function Player:death() end
+function Player:death()
+    -- TODO
+end
 
 return Player

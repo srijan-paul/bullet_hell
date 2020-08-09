@@ -6,6 +6,7 @@ _G.Resource = require 'resource'
 _G.sugar = require 'lib/sugar'
 _G.util = require 'misc/util'
 _G.switch = require 'lib/switch'
+_G.random = math.random
 
 -- Global variables (Game Contants)
 

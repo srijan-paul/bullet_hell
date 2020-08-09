@@ -76,6 +76,7 @@ local function add_enemies(node)
                 Stinger(world, i + 20, j + 20)
             end
         end
+        
     end
     Destructible(DestructibleType.ExplosiveBarrel, world, 150, 150, 0, 0.8, 0.8)
 end

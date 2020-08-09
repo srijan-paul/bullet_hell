@@ -1,6 +1,8 @@
 local Grid = require 'world/grid'
 local cmp = require 'component/common'
 local WeaponSprite = require 'component/weapon_sprite'
+local Particles = require 'particles.init'
+
 local World = Class('World')
 
 local tinsert = table.insert
@@ -12,22 +14,21 @@ function World:init(level, width, height)
     self.level = level
     self.width = width or 300
     self.height = height or 200
-    
+
+    self.particle_manager =  Particles.Manager()
     self.drawables = {}
-    self.colliders = {}
     self.entities = {}
-    
-    self.drawables_to_remove = {}
-    self.entities_to_remove = {}
-    
+
     self.grid = Grid(self, 5, 5)
     self.time_elapsed = 0
 end
 
 function World:draw()
 
-    for i = 1, #self.drawables do self.drawables[i]:draw() end
-
+    for i = 1, #self.drawables do
+        self.drawables[i]:draw()
+    end
+    self.particle_manager:draw()
     -- * DEBUG CODE
     -- self.grid:draw()
 
@@ -69,14 +70,18 @@ end
 function World:update(dt)
     self:clear_garbage()
     self.time_elapsed = self.time_elapsed + dt
+
     for i = #self.entities, 1, -1 do
         self.entities[i]:update(dt)
         self:bounds_check(self.entities[i])
     end
+
     while self.time_elapsed >= TIME_STEP do
         self:_physics_process(self.time_elapsed)
         self.time_elapsed = self.time_elapsed - TIME_STEP
     end
+
+    self.particle_manager:update(dt)
 end
 
 function World:bounds_check(e)
@@ -85,7 +90,7 @@ function World:bounds_check(e)
     local collider = e:get_component(cmp.Collider)
     local pos = collider:get_pos()
 
-    -- TODO: account for collider dimensions
+
     if pos.x < collider.width / 2 or pos.x > self.width - collider.width / 2 or
         pos.y > self.height - collider.height/ 2 or pos.y < collider.height / 2 then
         local p = Vec2(sugar.clamp(pos.x, collider.width / 2,
@@ -146,6 +151,7 @@ end
 
 
 function World:player_enter(p, dir)
+    self:add_particle_system(p.dash_particles)
     self:add_gameobject(p)
     p:set_pos(get_player_entry_pos(self, dir))
     self:add_drawable(p:get_component(cmp.AnimatedSprite))
@@ -155,6 +161,7 @@ end
 
 
 function World:player_leave(p)
+    self:remove_particle_system(p.dash_particles)
     self:remove_gameobject(p)
     self:remove_drawable(p:get_component(cmp.AnimatedSprite))
     self:remove_gameobject(p.weapon)
@@ -173,9 +180,17 @@ function World:remove_gameobject(g)
 end
 
 
-
 function World:query(shape, x, y, w,  h)
     return self.grid:query(shape, x, y, w, h)
+end
+
+function World:add_particle_system(sys)
+    self.particle_manager:add_system(sys)
+    return sys
+end
+
+function World:remove_particle_system(sys)
+    self.particle_manager:remove_system(sys)
 end
 
 return World
