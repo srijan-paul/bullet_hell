@@ -14,7 +14,7 @@ function PlayerInput:update(dt)
     elseif keyboard.isDown('s') then
         self.movedir.y = 1
         self.keypressed = true
-    else 
+    else
         self.movedir.y = 0
     end
 

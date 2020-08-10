@@ -4,6 +4,7 @@ local Level
 _G.keyboard = love.keyboard
 _G.graphics = love.graphics
 _G.mouse = love.mouse
+_G.Input = {}
 
 -- always do this !
 
@@ -69,6 +70,8 @@ function love.load()
     Level = require 'world/level'
     current_level = Level()
     love.mouse.setVisible(false)
+
+    _G.Input = require 'lib.boipushy.input'()
 
 end
 

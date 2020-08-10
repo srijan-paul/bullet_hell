@@ -1,63 +1,11 @@
 local cmp = require 'component/common'
-local InputComponent = require 'component/playerinput'
 local GameObject = require 'prefabs/gameobject'
 local camera = require 'camera'
 local Healthbar = require 'prefabs/healthbar'
 local PSystem = require 'particles/psystem'
+local State = require 'prefabs/player/playerstate'
 
 local COLLIDER_WIDTH, COLLIDER_HEIGHT = 10, 10
-local DASH_DISTANCE = 50
-local DASH_SPEED = 300
-
-local DashState = {}
-
-DashState.MOVING = {
-
-    update = function(self, player, dt)
-        local movedir = player:get_component(InputComponent).movedir
-        if movedir.x == 0 and movedir.y == 0 then return end
-        local velocity = movedir:with_mag(player.speed * dt)
-        player:move(velocity)
-    end,
-
-    switch = function(self, player, state)
-        state:init(player)
-        player.move_state = state
-    end
-}
-
-DashState.DASHING = {
-    dash_dist = DASH_DISTANCE,
-    dash_particles = nil,
-
-    init = function(self, player)
-        player.dash_particles:configure({
-            particle_velocity = player.dash_dir:with_mag(-20),
-            particle_vel_randomness = 1,
-            particle_life = 1,
-            radius = 10
-        })
-    end,
-
-    update = function(self, player, dt)
-        local velocity = player.dash_dir:with_mag(DASH_SPEED * dt)
-        player.dash_particles:emit()
-        player:move(velocity)
-        self.dash_dist = self.dash_dist - DASH_SPEED * dt
-        if self.dash_dist <= 0 then self:switch(player, DashState.MOVING) end
-        player.weapon:set_pos(player:get_weapon_pivot())
-    end,
-
-    switch = function(self, player, state)
-        if self.dash_dist <= 0 then
-            -- player:set_scale(1, 1)
-            self.dash_dist = DASH_DISTANCE
-            player.move_state = state
-        end
-    end
-}
-
-local PlayerState = {IDLE = 'idle', RUN = 'run', HURT = 'hurt'}
 
 local Player = Class('Player', GameObject)
 
@@ -67,14 +15,12 @@ function Player:init(world, x, y)
         {'idle', 1, 5, 0.1, true}, {'run', 6, 10, 0.07, true},
         {'hurt', 11, 12, 0.2, false}
     }, 'player')
-    self:add_component(InputComponent)
     self:add_component(cmp.Collider, COLLIDER_WIDTH, COLLIDER_HEIGHT, 'player')
 
     self:get_component(cmp.AnimatedSprite):play('idle')
     self.id = 'player'
     self.speed = 50
-    self.state = PlayerState.IDLE
-    self.move_state = DashState.MOVING
+    self.state = State.IDLE
     self.dash_dir = Vec2(0, 0)
 
     self.dash_particles =
@@ -91,7 +37,6 @@ end
 function Player:update(dt)
     GameObject.update(self, dt)
     self.weapon:face(camera:toWorldPos(mousePos()))
-    local movedir = self:get_component(InputComponent).movedir
 
     local t = self:get_component(cmp.Transform)
 
@@ -99,30 +44,16 @@ function Player:update(dt)
     -- local centerY = camera:toScreenY(t.pos.y + COLLIDER_HEIGHT / 2)
 
     t.scale.x = (mouseX() >= centerX) and 1 or -1
-
-    if movedir.x ~= 0 or movedir.y ~= 0 then
-        self:switch_state(PlayerState.RUN)
-    else
-        self:switch_state(PlayerState.IDLE)
-    end
 end
 
 function Player:switch_state(state)
     if self.state == state then return end
+    self.state:switch(self, state)
+end
 
-    local anim = self:get_component(cmp.AnimatedSprite)
-    switch(self.state, {
-        [PlayerState.HURT] = function()
-            if not self:get_component(cmp.AnimatedSprite):is_playing() then
-                self.state = state
-                anim:play(self.state)
-            end
-        end,
-        ['default'] = function()
-            self.state = state
-            anim:play(self.state)
-        end
-    })
+function Player:set_state(state)
+    state:init(self)
+    self.state = state
 end
 
 function Player:get_weapon_pivot()
@@ -133,7 +64,7 @@ end
 
 function Player:_physics_process(dt)
     if love.keyboard.isDown('e') then self:dash() end
-    self.move_state:update(self, dt)
+    self.state:update(self, dt)
 end
 
 function Player:fire()
@@ -143,7 +74,7 @@ end
 
 function Player:damage(amount)
     self.health = sugar.clampmin(self.health - amount, 0)
-    self:switch_state(PlayerState.HURT)
+    self:get_component(cmp.AnimatedSprite):play('hurt')
     -- TODO death state
     Healthbar.update(self.health / self.max_health)
     if self.health <= 0 then self:death() end
@@ -152,10 +83,9 @@ end
 function Player:dash()
     self.dash_dir =
         (camera:toWorldPos(mousePos()) - self:get_pos()):normalized()
-    self:switch_move_state(DashState.DASHING)
+    self:switch_state(State.DASHING)
 end
 
-function Player:switch_move_state(state) self.move_state:switch(self, state) end
 
 function Player:heal()
     -- TODO
@@ -163,6 +93,12 @@ end
 
 function Player:death()
     -- TODO
+end
+
+function Player:play_anim(anim)
+    local anim_cmp = self:get_component(cmp.AnimatedSprite)
+    if anim_cmp:is_playing('hurt') then return end
+    anim_cmp:play(anim)
 end
 
 return Player

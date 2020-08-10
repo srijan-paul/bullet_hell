@@ -9,7 +9,7 @@ end
 
 function Particle:draw()
     lg.setColor(1, 1, 0, self.alpha)
-    lg.rectangle('fill', self.pos.x, self.pos.y, 2, 2)
+    lg.circle('fill', self.pos.x, self.pos.y, 1)
 end
 
 function Particle:update(dt)

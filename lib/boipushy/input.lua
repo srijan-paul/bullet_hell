@@ -289,4 +289,8 @@ function Input:gamepadaxis(joystick, axis, newvalue)
     self.state[button_to_axis[axis]] = newvalue
 end
 
+function Input:keydown(k)
+    return love.keyboard.isDown(k) and 1 or 0
+end
+
 return setmetatable({}, {__call = function(_, ...) return Input.new(...) end})
