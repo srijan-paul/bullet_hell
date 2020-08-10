@@ -1,4 +1,4 @@
-local cmp = require 'component/common'
+local Animation = require 'prefabs/player/playeranimstate'
 
 local State = {}
 local DASH_DISTANCE = 60
@@ -12,7 +12,7 @@ end
 
 State.MOVING = {
     init = function(self, player)
-        player:play_anim('run')
+        player:switch_anim(Animation.MOVE)
     end,
 
     update = function(self, player, dt)
@@ -32,7 +32,6 @@ State.MOVING = {
 
 State.DASHING = {
     dash_dist = DASH_DISTANCE,
-    dash_particles = nil,
 
     init = function(self, player)
         player.dash_particles:configure({
@@ -63,7 +62,7 @@ State.DASHING = {
 
 State.IDLE = {
     init = function(self, player)
-        player:play_anim('idle')
+        player:switch_anim(Animation.IDLE)
     end,
 
     update = function(self, player, dt)

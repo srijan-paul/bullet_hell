@@ -4,6 +4,7 @@ local camera = require 'camera'
 local Healthbar = require 'prefabs/healthbar'
 local PSystem = require 'particles/psystem'
 local State = require 'prefabs/player/playerstate'
+local AnimationState = require 'prefabs/player/playeranimstate'
 
 local COLLIDER_WIDTH, COLLIDER_HEIGHT = 10, 10
 
@@ -17,10 +18,13 @@ function Player:init(world, x, y)
     }, 'player')
     self:add_component(cmp.Collider, COLLIDER_WIDTH, COLLIDER_HEIGHT, 'player')
 
-    self:get_component(cmp.AnimatedSprite):play('idle')
     self.id = 'player'
     self.speed = 50
+
+    -- state: IDLE, MOVING, DASHING
+    -- AnimationState: hurt, idle, run
     self.state = State.IDLE
+    AnimationState.IDLE:enter(self)
     self.dash_dir = Vec2(0, 0)
 
     self.dash_particles =
@@ -65,6 +69,7 @@ end
 function Player:_physics_process(dt)
     if love.keyboard.isDown('e') then self:dash() end
     self.state:update(self, dt)
+    self.animation:update(self, dt)
 end
 
 function Player:fire()
@@ -74,7 +79,7 @@ end
 
 function Player:damage(amount)
     self.health = sugar.clampmin(self.health - amount, 0)
-    self:get_component(cmp.AnimatedSprite):play('hurt')
+    self.animation:switch(self, AnimationState.HURT)
     -- TODO death state
     Healthbar.update(self.health / self.max_health)
     if self.health <= 0 then self:death() end
@@ -87,18 +92,12 @@ function Player:dash()
 end
 
 
-function Player:heal()
-    -- TODO
-end
-
 function Player:death()
     -- TODO
 end
 
-function Player:play_anim(anim)
-    local anim_cmp = self:get_component(cmp.AnimatedSprite)
-    if anim_cmp:is_playing('hurt') then return end
-    anim_cmp:play(anim)
+function Player:switch_anim(key)
+    self.animation:switch(self, key)
 end
 
 return Player

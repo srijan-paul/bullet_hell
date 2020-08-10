@@ -1,4 +1,8 @@
-local State = {}
+local State = {
+    __tostring = function(state)
+        return '<State: ' .. state.name .. ' >'
+    end
+}
 
 function State:init(name, switchfn)
     local new_state = {}
@@ -15,6 +19,10 @@ end
 
 function State:switch(ent, dt)
     -- body
+end
+
+function State:clone(name)
+    return State:init(name or self.name, self.switch)
 end
 
 return
