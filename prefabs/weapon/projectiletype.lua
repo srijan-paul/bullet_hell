@@ -17,7 +17,8 @@ return {
                 start_scale = {1, 1},
                 end_scale = {0.5, 0.5}
             })
-        end
+        end,
+        tile_hit_sound = Resource.Sound.BulletTileHit
     },
     Sting = {
         width = 2,
@@ -32,7 +33,8 @@ return {
             proj:add_component(cmp.Sprite, canvas)
             return proj
         end,
-        damage = 1
+        damage = 1,
+        tile_hit_sound = Resource.Sound.BulletTileHit
     },
     Ball = {
         width = 2,
@@ -52,6 +54,7 @@ return {
         destroy_effect = function(world, x, y)
             return Effect(world, x, y, Effects.Block({sugar.rgb('#ffc2d8')}),
                           {life_span = 0.1, start_scale = {0.5, 0.5}})
-        end
+        end,
+        tile_hit_sound = Resource.Sound.BulletTileHit
     }
 }

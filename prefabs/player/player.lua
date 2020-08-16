@@ -15,7 +15,7 @@ function Player:init(world, x, y)
     self:add_component(cmp.AnimatedSprite, Resource.Sprite.Player, {
         {'idle', 1, 5, 0.1, true}, {'run', 6, 10, 0.07, true},
         {'hurt', 11, 12, 0.2, false}
-    }, 'player')
+    })
     self:add_component(cmp.Collider, COLLIDER_WIDTH, COLLIDER_HEIGHT, 'player')
 
     self.id = 'player'
@@ -80,6 +80,7 @@ end
 function Player:damage(amount)
     self.health = sugar.clampmin(self.health - amount, 0)
     self.animation:switch(self, AnimationState.HURT)
+    Resource.Sound.PlayerHurt:play()
     -- TODO death state
     Healthbar.update(self.health / self.max_health)
     if self.health <= 0 then self:death() end

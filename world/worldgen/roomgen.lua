@@ -50,9 +50,9 @@ local function add_floor(node)
                 local x, y = (r - 1) * 16, (c - 1) * 16
 
                 if r % 2 == c % 2 then
-                    lg.setColor(sugar.rgb('0a1420'))
-                else
                     lg.setColor(sugar.rgb('101e2f'))
+                else
+                    lg.setColor(sugar.rgb('081418'))
                 end
                 lg.rectangle('fill', x, y, 16, 16)
             end

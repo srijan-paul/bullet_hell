@@ -67,12 +67,13 @@ function love.load()
     Resource.load()
     crosshair = Resource.Image.Cursor
     --bla bla
-    Level = require 'world/level'
+    Level = require(DEBUG_MODE and 'scene_editor/editor' or 'world/level')
     current_level = Level()
-    love.mouse.setVisible(false)
+    if not DEBUG_MODE then
+    love.mouse.setVisible(false) end
 
     _G.Input = require 'lib.boipushy.input'()
-
+    -- Resource.Sound.Track1:play()
 end
 
 
@@ -91,7 +92,8 @@ function love.draw()
     main_canvas:renderTo(function()
         graphics.clear()
         current_level:draw()
-        draw_cursor()
+        if not DEBUG_MODE then
+        draw_cursor() end
     end)
     shader:send('time', love.timer.getTime())
     love.graphics.setShader(shader)

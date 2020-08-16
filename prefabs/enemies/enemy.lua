@@ -26,6 +26,7 @@ end
 -- *knockback (number) = magnitude of knockback (distance)
 
 function Enemy:damage(amount, source_pos, knockback)
+    Resource.Sound.EnemyHurt:play()
     self.current_health = self.current_health - amount
     self.knock_velocity =
         (self:get_pos() - source_pos):with_mag(KNOCKBACK_SPEED)

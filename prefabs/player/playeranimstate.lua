@@ -23,6 +23,9 @@ local function anim_state(name)
     }
 end
 
+-- where do run , idle and hurt come from ?
+-- because I know the player has these animations. Yeah it's pretty
+-- unclear at first glance but well... I'll prolly refactor it later anyway
 local Move, Idle = anim_state('run'), anim_state('idle')
 local Hurt = anim_state('hurt')
 

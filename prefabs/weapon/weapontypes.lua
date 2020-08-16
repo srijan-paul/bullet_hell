@@ -10,6 +10,6 @@ return {
         sound = 'laser',
         speed = 200,
         knockback = 30,
-        muzzle_offset = Vec2(5, 3)
+        muzzle_offset = Vec2(5, 3),
     }
 }

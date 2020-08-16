@@ -41,6 +41,7 @@ end
 
 
 function Projectile:on_world_exit()
+    self.type.tile_hit_sound:play()
     if self.type.destroy_effect then
         self.type.destroy_effect(self.world, self:get_pos():unpack())
     end

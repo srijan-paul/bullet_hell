@@ -3,10 +3,12 @@
         "love",
         "Vec2",
         "Class",
-        "Timer"
+        "Timer",
+        "Input"
     ],
     "Lua.runtime.version": "LuaJIT",
     "files.associations": {
         "stdbool.h": "c"
-    }
+    },
+    "restructuredtext.confPath": ""
 }

@@ -23,6 +23,11 @@ function PSystem:set_velocity(v)
     self.emitter.velocity = v:clone()
 end
 
+function PSystem:get_velocity()
+   return self.emitter.velocity:clone()
+end
+
+
 function PSystem:set_angular_speed(dtheta)
     self.emitter.angular_speed = dtheta
 end
@@ -59,6 +64,7 @@ function PSystem:update(dt)
             table.remove(self.particles, i)
         end
     end
+
 end
 
 function PSystem:emit()

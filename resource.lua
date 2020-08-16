@@ -19,8 +19,18 @@ function Resource.load()
     -- Audio
     Resource.Sound.laser = love.audio.newSource('assets/sound/421704__bolkmar__sfx-laser-shoot-02.wav', 'static')
     -- sound credit: https://freesound.org/people/OwlStorm/sounds/404754/ [Owlstorm]
-    Resource.Sound.Explode = love.audio.newSource('assets/sound/404754__owlstorm__retro-video-game-sfx-explode.wav', 'static')
-    Resource.Sound.laser:setVolume(0.5)
+    Resource.Sound.Explode = love.audio.newSource('assets/sound/explosion_2.wav', 'static')
+    -- Resource.Sound.laser:setVolume(0.5)
+    Resource.Sound.PlayerHurt = love.audio.newSource('assets/sound/player_hurt.wav', 'static')
+    -- Resource.Sound.PlayerHurt:setVolume(0.5)
+    Resource.Sound.EnemyHurt = love.audio.newSource('assets/sound/enemy_hurt.wav', 'static')
+    -- Resource.Sound.EnemyHurt:setVolume(0.5)
+    Resource.Sound.BulletTileHit = love.audio.newSource('assets/sound/bullet_hit_wall.wav', 'static')
+    -- Resource.Sound.BulletTileHit:setVolume(0.5)
+    Resource.Sound.FlyAttack = love.audio.newSource('assets/sound/385049__mortisblack__attack.ogg', 'static')
+    Resource.Sound.FlyAttack:setVolume(0.5)
+    Resource.Sound.Track1 = love.audio.newSource('assets/sound/spaceship.wav', 'stream')
+    Resource.Sound.Track1:setLooping(true)
 end
 
 return Resource

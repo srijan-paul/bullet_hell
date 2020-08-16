@@ -12,8 +12,8 @@ local TIME_STEP = 0.016
 
 function World:init(level, width, height)
     self.level = level
-    self.width = width or 300
-    self.height = height or 200
+    self.width = width or 160
+    self.height = height or 160
 
     self.particle_manager =  Particles.Manager()
     self.drawables = {}

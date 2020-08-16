@@ -17,6 +17,8 @@ _G.RandomDir = function()
     return dirs[math.random(1, 4)]
 end
 
+_G.DEBUG_MODE = true
+
 _G.OppositeDirection = function(dir)
     if dir == Direction.LEFT then return Direction.RIGHT end
     if dir == Direction.RIGHT then return Direction.LEFT end
