@@ -1,7 +1,19 @@
-local imgbtn = require 'scene_editor.gui.image_button'
+local imgbtn = require 'scene_editor.gui.button'
 local btncontainer = Class('ButtonContainer')
 
-local default_opts = {rows = 1, cols = 1, button_width = 32, button_height = 32}
+local default_opts = {
+    rows = 1,
+    cols = 1,
+    xpadding = 1,
+    ypadding = 1
+}
+
+local  BTN_DEFAULTS  = {
+    width = 32,
+    height = 32,
+    image = Resource.UI.BtnPlaceHolder,
+    type = 'image'
+}
 
 function btncontainer:init(x, y, properties)
     self.x, self.y = x, y
@@ -10,18 +22,19 @@ function btncontainer:init(x, y, properties)
         self[k] = properties[k] and properties[k] or default_opts[k]
     end
 
-    self.buttons = {}
+    self.btn_props = properties.button or BTN_DEFAULTS
+
     local tx, ty = self.x, self.y
+    self.buttons = {}
     for i = 1, self.rows do
         self.buttons[i] = {}
         for j = 1, self.cols do
-            self.buttons[i][j] = imgbtn(tx, ty, self.button_width,
-                                        self.button_height)
+            self.buttons[i][j] = imgbtn(tx, ty, self.btn_props)
             self.buttons[i][j].container = self
-            tx = tx + self.button_width
+            tx = tx + self.btn_props.width + self.xpadding
         end
         tx = self.x
-        ty = ty + self.button_height
+        ty = ty + self.btn_props.height + self.ypadding
     end
 
     self.event_listeners = {}

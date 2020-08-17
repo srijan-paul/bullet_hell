@@ -1,5 +1,5 @@
 local janim = require 'lib/janim'
-local Resource = {Sprite = {}, Image = {}, Sound = {}}
+local Resource = {Sprite = {}, Image = {}, Sound = {}, UI = {}}
 
 function Resource.load()
     Resource.Sprite.Player = janim.newSpriteSheet('assets/image/player_yellow.png', 12, 1)
@@ -31,6 +31,9 @@ function Resource.load()
     Resource.Sound.FlyAttack:setVolume(0.5)
     Resource.Sound.Track1 = love.audio.newSource('assets/sound/spaceship.wav', 'stream')
     Resource.Sound.Track1:setLooping(true)
+
+    -- UI
+    Resource.UI.BtnPlaceHolder = love.graphics.newImage('assets/image/placeholder_btn.png')
 end
 
 return Resource
