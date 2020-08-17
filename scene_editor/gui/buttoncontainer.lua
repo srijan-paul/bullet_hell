@@ -1,5 +1,5 @@
 local imgbtn = require 'scene_editor.gui.button'
-local btncontainer = Class('ButtonContainer')
+local ButtonContainer = Class('ButtonContainer')
 
 local default_opts = {
     rows = 1,
@@ -15,7 +15,7 @@ local  BTN_DEFAULTS  = {
     type = 'image'
 }
 
-function btncontainer:init(x, y, properties)
+function ButtonContainer:init(x, y, properties)
     self.x, self.y = x, y
 
     for k, _ in pairs(default_opts) do
@@ -41,13 +41,13 @@ function btncontainer:init(x, y, properties)
 
 end
 
-function btncontainer:draw()
+function ButtonContainer:draw()
     for r = 1, #self.buttons do
         for c = 1, #self.buttons[r] do self.buttons[r][c]:draw() end
     end
 end
 
-function btncontainer:add_button(row, col, clickfn)
+function ButtonContainer:add_button(row, col, clickfn)
     if (row < 1 or row > self.rows) or (col < 1 or col > self.cols) then
         return
     end
@@ -59,7 +59,7 @@ function btncontainer:add_button(row, col, clickfn)
     btn.container = self
 end
 
-function btncontainer:check_click(mx, my)
+function ButtonContainer:check_click(mx, my)
     for i = 1, #self.buttons do
         for j = 1, #self.buttons[i] do
             self.buttons[i][j]:check_click(mx, my)
@@ -67,8 +67,8 @@ function btncontainer:check_click(mx, my)
     end
 end
 
-function btncontainer:catch(event, ...)
+function ButtonContainer:catch(event, ...)
     if self.event_listeners[event] then self.event_listeners[event](...) end
 end
 
-return btncontainer
+return ButtonContainer
