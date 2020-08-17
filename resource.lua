@@ -34,6 +34,9 @@ function Resource.load()
 
     -- UI
     Resource.UI.BtnPlaceHolder = love.graphics.newImage('assets/image/placeholder_btn.png')
+
+    -- TileMap
+    Resource.Image.TileMap = love.graphics.newImage('assets/image/tilesheet.png')
 end
 
 return Resource

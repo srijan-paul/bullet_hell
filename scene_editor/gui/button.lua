@@ -15,7 +15,7 @@ local button_draw = {
     end,
 
     quad = function(btn)
-        lg.draw(btn.quad, btn.image, btn.x, btn.y)
+        lg.draw(btn.image, btn.quad, btn.x, btn.y, 0, btn.scale[1], btn.scale[2])
     end,
 
     image = function(btn)
@@ -27,15 +27,21 @@ local button_draw = {
     end
 }
 
+local DEFAULTS = {
+    width = 32,
+    height = 32,
+    scale = {1, 1}
+}
 
 function Button:init(x, y, properties)
     self.x, self.y = x, y
-    self.w, self.h = properties.width, properties.height
+    self.w, self.h = DEFAULTS.width, DEFAULTS.height
     self.image = properties.image
     self.clickfn = properties.onclick
     self.container = properties.container
     self.quad = properties.quad
     self.type = properties.type or 'none'
+    self.scale = properties.scale or DEFAULTS.scale
 end
 
 function Button:draw()
@@ -44,9 +50,8 @@ end
 
 function Button:check_click(mx, my)
     -- convert mouse coords since camera is zoomed in
-    local cx, cy = camera:toWorldX(mx), camera:toWorldY(my)
-    if (cx > self.x and cx < self.x + self.w) and
-        (cy > self.y and cy < self.y + self.h) then
+    if (mx > self.x and mx < self.x + self.w) and
+        (my > self.y and my < self.y + self.h) then
         if self.clickfn then self:clickfn() end
         return true
     end

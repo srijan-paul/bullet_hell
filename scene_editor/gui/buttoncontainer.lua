@@ -4,8 +4,7 @@ local ButtonContainer = Class('ButtonContainer')
 local default_opts = {
     rows = 1,
     cols = 1,
-    xpadding = 1,
-    ypadding = 1
+    padding = {1, 1}
 }
 
 local  BTN_DEFAULTS  = {
@@ -31,39 +30,53 @@ function ButtonContainer:init(x, y, properties)
         for j = 1, self.cols do
             self.buttons[i][j] = imgbtn(tx, ty, self.btn_props)
             self.buttons[i][j].container = self
-            tx = tx + self.btn_props.width + self.xpadding
+            tx = tx + self.btn_props.width + self.padding[1]
         end
         tx = self.x
-        ty = ty + self.btn_props.height + self.ypadding
+        ty = ty + self.btn_props.height + self.padding[2]
     end
 
     self.event_listeners = {}
-
 end
 
+-- ? possible optimization
 function ButtonContainer:draw()
     for r = 1, #self.buttons do
-        for c = 1, #self.buttons[r] do self.buttons[r][c]:draw() end
+        for c = 1, #self.buttons[r]do
+            self.buttons[r][c]:draw()
+            local b = self.buttons[r][c]
+            lg.rectangle('line', b.x, b.y, b.w, b.h)
+        end
     end
 end
 
-function ButtonContainer:add_button(row, col, clickfn)
+function ButtonContainer:add_button(row, col, props)
     if (row < 1 or row > self.rows) or (col < 1 or col > self.cols) then
         return
     end
-    local x = self.x + (row - 1) * self.button_width
-    local y = self.x + (row - 1) * self.button_height
-    local btn = imgbtn(x, y, self.button_width, self.button_height)
+    local x = self.x + (row - 1) * self.btn_props.width
+    local y = self.x + (col - 1) * self.btn_props.height
+    props.width = self.btn_props.width
+    props.height = self.btn_props.height
+    local btn = imgbtn(x, y, props)
     self.buttons[row][col] = btn
-    if clickfn then btn:onclick(clickfn) end
     btn.container = self
 end
 
+
+-- ? possible optimization
 function ButtonContainer:check_click(mx, my)
     for i = 1, #self.buttons do
         for j = 1, #self.buttons[i] do
             self.buttons[i][j]:check_click(mx, my)
         end
+    end
+end
+
+
+function ButtonContainer:onclick(r, c, fn)
+    if self.buttons[r][c] then
+        self.buttons[r][c]:onclick(fn)
     end
 end
 

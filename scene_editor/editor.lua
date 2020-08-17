@@ -16,8 +16,9 @@ end
 function SceneEditor:draw()
     camera:set()
     -- draw the map
-    camera:unset()
     TileMenu:draw()
+
+    camera:unset()
 end
 
 function SceneEditor:mousepressed(...)
