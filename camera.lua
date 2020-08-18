@@ -48,6 +48,10 @@ function camera:zoom(z)
     self.scaleY = 1 / z
 end
 
+function camera:get_zoom()
+    return 1 / self.scaleX
+end
+
 function camera:scale(sx, sy)
     self.scaleX = self.scaleX * sx
     self.scaleY = self.scaleY * sy
@@ -69,6 +73,10 @@ end
 
 function camera:toScreenPos(vec)
     return Vec2(self:toScreenX(vec.x), self:toScreenY(vec.y))
+end
+
+function camera:move(vel)
+    self.pos = self.pos + vel
 end
 
 return camera

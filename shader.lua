@@ -1,5 +1,5 @@
 return love.graphics.newShader ([[
-float crt_bend = 5.0;
+float crt_bend = 7.0;
 float aberration_offset = 0.0015;
 float scanline_count = 300;
 float scanline_speed = -4;

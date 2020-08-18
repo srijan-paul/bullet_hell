@@ -1,41 +1,39 @@
 local BtnContainer = require 'scene_editor.gui.buttoncontainer'
+local Tile = require 'world.tilemap.tiles'
+
+
 local TileMenu = {}
 
-local TILEMAP_ROWS, TILEMAP_COLS = 4, 4
-local TILE_SIZE = 16
-
-local TileMap = Resource.Image.TileMap
-local TileQuads = {}
-
-for i = 1, TILEMAP_ROWS do
-    TileQuads[i] = {}
-    for j = 1, TILEMAP_COLS do
-        local x, y = (i - 1) * TILE_SIZE, (j - 1) * TILE_SIZE
-        TileQuads[i][j] = lg.newQuad(x, y, TILE_SIZE, TILE_SIZE,
-                                     TileMap:getDimensions())
-    end
-end
-
-function TileMenu:init(x, y)
+function TileMenu:init(editor, x, y)
     self.btn_grid = BtnContainer(x, y, {
-        rows = 4,
-        cols = 4,
+        rows = Tile.MAP_ROWS,
+        cols = Tile.MAP_COLS,
         padding = {2, 4}
     })
+
+    self.editor = editor
+
     for i = 1, self.btn_grid.rows do
         for j = 1, self.btn_grid.cols do
             self.btn_grid:add_button(i, j, {
                 type = 'quad',
-                quad = TileQuads[i][j],
-                image = TileMap,
-                scale = {2, 2}
+                quad = Tile.Quads[i][j],
+                image = Tile.Map,
+                scale = {2, 2},
+                onclick = function (b)
+                    self.editor:notify('tile-clicked', Tile.Quads[i][j])
+                end
             })
         end
     end
-    self.quads = TileQuads
+
+    self.quads = Tile.Quads
 end
 
-function TileMenu:draw() self.btn_grid:draw() end
+function TileMenu:draw()
+    lg.setColor(1, 1, 1, 1)
+    self.btn_grid:draw()
+end
 
 function TileMenu:mousepressed(x, y, btn)
     if btn ~= 1 then return end
