@@ -31,7 +31,7 @@ function TileMap:composite()
 end
 
 function TileMap:draw()
-    -- lg.draw(self.canvas, 0, 0)
+    lg.draw(self.canvas, 0, 0)
 end
 
 function TileMap:toRowCol(_x, _y)

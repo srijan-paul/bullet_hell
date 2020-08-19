@@ -163,5 +163,12 @@ function sugar.is_alnum(char)
     return sugar.is_alpha(char) or sugar.is_digit(char)
 end
 
+function sugar.enum(names)
+    local t = {}
+    for i = 1, #names do
+        t[names[i]] = i
+    end
+    return t
+end
 
 return sugar

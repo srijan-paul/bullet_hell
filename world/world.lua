@@ -42,7 +42,7 @@ function World:draw()
     --     end
     -- end
 
-    graphics.setColor(1, 1, 1, 1)
+    lg.setColor(1, 1, 1, 1)
     love.graphics.rectangle('line', 0, 0, self.width, self.height)
     -- * / DEBUG CODE
 end

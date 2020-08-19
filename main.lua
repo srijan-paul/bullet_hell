@@ -2,7 +2,6 @@ local shader = require 'shader'
 local Level
 
 _G.keyboard = love.keyboard
-_G.graphics = love.graphics
 _G.mouse = love.mouse
 _G.Input = {}
 
@@ -73,15 +72,16 @@ function love.load()
     love.mouse.setVisible(false) end
 
     _G.Input = require 'lib.boipushy.input'()
+    
     -- Resource.Sound.Track1:play()
 end
 
 
 local function show_debug_stats()
-    graphics.setColor(1, 1, 1, 0.5)
-    graphics.rectangle('fill', 0, 0, 200, 50)
-    graphics.setColor(0, 0, 0, 1)
-    graphics.print('FPS: ' .. love.timer.getFPS())
+    lg.setColor(1, 1, 1, 0.5)
+    lg.rectangle('fill', 0, 0, 200, 50)
+    lg.setColor(0, 0, 0, 1)
+    lg.print('FPS: ' .. love.timer.getFPS())
 end
 
 -- main canvas for shader effect
@@ -90,14 +90,14 @@ local main_canvas = love.graphics.newCanvas()
 
 function love.draw()
     main_canvas:renderTo(function()
-        graphics.clear()
+        lg.clear()
         current_level:draw()
         if not DEBUG_MODE then
         draw_cursor() end
     end)
     shader:send('time', love.timer.getTime())
     love.graphics.setShader(shader)
-    graphics.draw(main_canvas, SCREEN_OFFSET_X, 0, 0, scale, scale)
+    lg.draw(main_canvas, SCREEN_OFFSET_X, 0, 0, scale, scale)
     love.graphics.setShader()
     -- show_debug_stats()
     -- *DEBUG CODE
@@ -113,3 +113,10 @@ function love.mousepressed(x, y, button)
     current_level:mousepressed(x, y, button)
 end
 
+function love.wheelmoved(x, y)
+    current_level:wheelmoved(x, y)
+end
+
+function love.keypressed(...)
+    current_level:keypressed(...)
+end

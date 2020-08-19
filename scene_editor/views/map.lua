@@ -5,6 +5,7 @@ local RoomView = {}
 
 local DEFAULTS = {rows = 10, cols = 10, screen_pos = Vec2(10, 10)}
 
+
 function RoomView:init(editor, rows, cols, sp)
     self.rows = rows or DEFAULTS.rows
     self.cols = cols or DEFAULTS.cols
@@ -44,8 +45,9 @@ end
 function RoomView:draw()
     for i = 1, self.rows do
         for j = 1, self.cols do
-            local x, y = (i - 1) * Tile.SIZE, (j - 1) * Tile.SIZE
-            Tile.Draw(self.tiles[i][j], self.pos.x + x, self.pos.y + y)
+            local x = self.pos.x + (i - 1) * Tile.SIZE
+            local y = (j - 1) * Tile.SIZE + self.pos.y
+            Tile.Draw(self.tiles[i][j], x, y)
         end
     end
 
@@ -55,7 +57,7 @@ function RoomView:draw()
         local row, col = get_mouse_row_col()
         local x, y = self.pos.x + (row - 1) * Tile.SIZE,
                      self.pos.y + (col - 1) * Tile.SIZE
-        lg.draw(Tile.Map, self.current_tile, x, y)
+        lg.draw(Tile.Map, Tile.GetQuad(self.current_tile), x, y)
     end
 
     lg.setColor(1, 1, 1, 0.5)
@@ -71,9 +73,9 @@ function RoomView:update(dt)
                                  (my < self.pos.y + self.cols * Tile.SIZE))
 end
 
-function RoomView:add_tile(r, c, quad)
+function RoomView:add_tile(r, c, t_type)
     if r < 1 or r > self.rows or c < 0 or c > self.cols then return end
-    self.tiles[r][c] = Tile.Create(quad)
+    self.tiles[r][c] = Tile.Create(t_type)
 end
 
 function RoomView:mousepressed(x, y, btn)
@@ -81,6 +83,10 @@ function RoomView:mousepressed(x, y, btn)
         local r, c = get_mouse_row_col()
         self:add_tile(r, c, self.current_tile)
     end
+end
+
+function RoomView:get_data()
+    return self.tiles
 end
 
 return RoomView

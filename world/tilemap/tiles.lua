@@ -3,62 +3,73 @@ local Tile = {
     Quads = {},
     SIZE = 16,
     MAP_ROWS = 5,
-    MAP_COLS = 5
+    MAP_COLS = 5,
+    -- These tables are used when exporting and importing
+    -- tile maps, Ids Maps tile Ids to the quads and
+    -- Q_Ids maps quads back to the Ids.
+    Id_Q = {}
 }
+
 local TILE_SIZE = 16
 
-function Tile.init( ... )
+function Tile.init(...)
+
     for i = 1, Tile.MAP_ROWS do
         Tile.Quads[i] = {}
         for j = 1, Tile.MAP_COLS do
             local x, y = (i - 1) * TILE_SIZE, (j - 1) * TILE_SIZE
-            Tile.Quads[i][j] = lg.newQuad(x, y, TILE_SIZE, TILE_SIZE,
-                                          Tile.Map:getDimensions())
+            Tile.Quads[i][j] = love.graphics.newQuad(x, y, TILE_SIZE, TILE_SIZE,
+                                                     Tile.Map:getDimensions())
         end
     end
-    
-    Tile.Type = {
-        WALL_TL = Tile.Quads[1][1],
-        WALL_T = Tile.Quads[1][2],
-        WALL_TR = Tile.Quads[1][3],
-        WALL_L = Tile.Quads[2][1],
-        WALL = Tile.Quads[2][2],
-        WALL_R = Tile.Quads[2][3],
-        WALL_BL = Tile.Quads[3][1],
-        WALL_B = Tile.Quads[3][2],
-        WALL_BR = Tile.Quads[3][3],
-        WALL_V = Tile.Quads[2][4],
-        WALL_VT = Tile.Quads[1][4],
-        WALL_VB = Tile.Quads[3][4],
-        WALL_HL = Tile.Quads[4][1],
-        WALL_HR = Tile.Quads[4][2],
-        WALL_H1 = Tile.Quads[4][3],
-        WALL_H2 = Tile.Quads[4][4],
-        FLOOR1 = Tile.Quads[5][1]
+
+    -- Tile names are just enums, the order of the enums is actually important because
+    -- an enum name is used to index into the Tile quads array and pick that particular quad
+    -- when creating a quad, only the enum needs to be known
+
+    Tile.Type = sugar.enum {
+        'WALL_TL', 'WALL_T', 'WALL_TR', 'WALL_L', 'WALL', 'WALL_R', 'WALL_BL',
+        'WALL_B', 'WALL_BR', 'WALL_V', 'WALL_VT', 'WALL_VB', 'WALL_HL',
+        'WALL_HR', 'WALL_H1', 'WALL_H2', 'FLOOR1', 'FLOOR2', 'FLOOR3', 'FLOOR4',
+        'FLOOR5', 'FLOOR6', 'FLOOR7', 'FLOOR8', 'FLOOR9'
     }
 
-    Tile.inited = true
-end
+    -- maps a Tile's ID to it's Quad
 
-if not Tile.inited then
-    Tile.init()
-end
-
-
-function Tile.Draw (t, x, y)
-    lg.draw(Tile.Map, t.quad, x, y)
-end
-
-function Tile.Create(quad, collidable)
-    return {
-        quad = quad,
-        collides = collidable
+    Tile.Id_Q = {
+        Tile.Quads[1][1], Tile.Quads[1][2], Tile.Quads[1][3], Tile.Quads[2][1],
+        Tile.Quads[2][2], Tile.Quads[2][3], Tile.Quads[3][1], Tile.Quads[3][2],
+        Tile.Quads[3][3], Tile.Quads[2][4], Tile.Quads[1][4], Tile.Quads[3][4],
+        Tile.Quads[4][1], Tile.Quads[4][2], Tile.Quads[4][3], Tile.Quads[4][4],
+        Tile.Quads[5][1], Tile.Quads[5][2], Tile.Quads[5][3], Tile.Quads[5][4],
+        Tile.Quads[5][5], Tile.Quads[4][5], Tile.Quads[3][5], Tile.Quads[2][5],
+        Tile.Quads[1][5]
     }
+
+    Tile.Collides = {
+        true, true, true, true, true, true, true, true, true, true, true, true,
+        true, true, true, true, false, false, false, false, false, false, false,
+        false, false
+    }
+
 end
 
+Tile.init()
 
-return setmetatable(Tile, {
-    __call = function(quad, collidable)
-        return {quad = quad, colldes = collidable}
-    end
-})
+function Tile.Draw(t, x, y)
+    lg.draw(Tile.Map, Tile.Id_Q[t.quad_index], x, y)
+end
+
+function Tile.GetQuad(type)
+    return Tile.Id_Q[type]
+end
+
+function Tile.GetID(tile)
+    return tile.quad_index
+end
+
+function Tile.Create(type)
+    return {quad_index = type, collides = Tile.Collides[type]}
+end
+
+return Tile

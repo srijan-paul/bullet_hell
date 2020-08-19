@@ -61,7 +61,7 @@ end
 
 
 function Level:draw()
-    graphics.setColor(1, 1, 1, 1)
+    lg.setColor(1, 1, 1, 1)
     camera:set()
     self.current_world:draw()
     camera:unset()
@@ -81,6 +81,15 @@ function Level:mousepressed(x, y, btn)
     if btn == 1 then
         self.player:fire()
     end
+end
+
+function Level:wheelmoved(x, y)
+ -- bad code makes it obligatory to have this function :|
+end
+
+
+function Level:keypressed(arg1, arg2, arg3)
+    --body (? lol)
 end
 
 return Level

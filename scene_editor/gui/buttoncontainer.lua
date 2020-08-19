@@ -27,13 +27,6 @@ function ButtonContainer:init(x, y, properties)
     self.buttons = {}
     for i = 1, self.rows do
         self.buttons[i] = {}
-        for j = 1, self.cols do
-            self.buttons[i][j] = imgbtn(tx, ty, self.btn_props)
-            self.buttons[i][j].container = self
-            tx = tx + self.btn_props.width + self.padding[1]
-        end
-        tx = self.x
-        ty = ty + self.btn_props.height + self.padding[2]
     end
 
     self.event_listeners = {}
@@ -68,9 +61,12 @@ end
 function ButtonContainer:check_click(mx, my)
     for i = 1, #self.buttons do
         for j = 1, #self.buttons[i] do
-            self.buttons[i][j]:check_click(mx, my)
+            if self.buttons[i][j]:check_click(mx, my) then
+                return true
+            end
         end
     end
+    return false
 end
 
 

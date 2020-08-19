@@ -1,7 +1,6 @@
 local BtnContainer = require 'scene_editor.gui.buttoncontainer'
 local Tile = require 'world.tilemap.tiles'
 
-
 local TileMenu = {}
 
 function TileMenu:init(editor, x, y)
@@ -13,6 +12,7 @@ function TileMenu:init(editor, x, y)
 
     self.editor = editor
 
+
     for i = 1, self.btn_grid.rows do
         for j = 1, self.btn_grid.cols do
             self.btn_grid:add_button(i, j, {
@@ -20,10 +20,12 @@ function TileMenu:init(editor, x, y)
                 quad = Tile.Quads[i][j],
                 image = Tile.Map,
                 scale = {2, 2},
-                onclick = function (b)
-                    self.editor:notify('tile-clicked', Tile.Quads[i][j])
+                onclick = function(b)
+                    local t = sugar.index_of(Tile.Id_Q, Tile.Quads[i][j])
+                    self.editor:notify('tile-clicked', t)
                 end
             })
+
         end
     end
 
@@ -37,7 +39,7 @@ end
 
 function TileMenu:mousepressed(x, y, btn)
     if btn ~= 1 then return end
-    self.btn_grid:check_click(x, y)
+    return self.btn_grid:check_click(x, y)
 end
 
 return TileMenu

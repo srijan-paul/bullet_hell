@@ -1,18 +1,20 @@
 local TileMenu = require 'scene_editor.menus.tileeditor'
 local MapView = require 'scene_editor.views.map'
 local camera = require 'camera'
+local Tile = require 'world.tilemap.tiles'
+local Exporter = require 'scene_editor.util.exporter'
 
 local SceneEditor = Class('SceneEditor')
 
 function SceneEditor:init(args)
-    love.graphics.setBackgroundColor(0.4, 0.88, 1.0)
+    lg.setBackgroundColor(0.4, 0.88, 1.0)
     TileMenu:init(self, 10, 10)
     MapView:init(self)
     lg.setBackgroundColor(0, 0, 0, 0)
     camera:zoom(4)
     self.callbacks = {}
-    self:on('tile-clicked', function (tile)
-        MapView.current_tile = tile
+    self:on('tile-clicked', function (tile_index)
+        MapView.current_tile = tile_index
     end)
     lg.setBackgroundColor(sugar.rgb('#778ca3'))
 end
@@ -41,8 +43,9 @@ function SceneEditor:draw()
 end
 
 function SceneEditor:mousepressed(...)
-    TileMenu:mousepressed(...)
-    MapView:mousepressed(...)
+    if not TileMenu:mousepressed(...) then
+        MapView:mousepressed(...)
+    end
 end
 
 function SceneEditor:on(ev, fn)
@@ -54,6 +57,22 @@ function SceneEditor:notify(event, ...)
     if self.callbacks[event] then
         self.callbacks[event](...)
     end
+end
+
+function SceneEditor:wheelmoved(x, y)
+    camera:zoom(camera:get_zoom() + sugar.sign(y) * 0.1)
+end
+
+function SceneEditor:keypressed(k)
+    if k == 'e' and keyboard.isDown('lctrl') then
+        self:export_data()
+    end
+end
+
+function SceneEditor:export_data()
+    local leveldata = {}
+    leveldata.tilemap = MapView:get_data()
+    Exporter:export(leveldata)
 end
 
 
