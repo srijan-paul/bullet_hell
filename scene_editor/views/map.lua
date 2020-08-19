@@ -37,16 +37,16 @@ end
 
 local function get_mouse_row_col()
     local mx, my = camera:toWorldPos(mousePos()):unpack()
-    local col = math.floor(my / Tile.SIZE)
-    local row = math.floor(mx / Tile.SIZE)
+    local col = math.floor(mx / Tile.SIZE)
+    local row = math.floor(my / Tile.SIZE)
     return row, col
 end
 
 function RoomView:draw()
     for i = 1, self.rows do
         for j = 1, self.cols do
-            local x = self.pos.x + (i - 1) * Tile.SIZE
-            local y = (j - 1) * Tile.SIZE + self.pos.y
+            local x = self.pos.x + (j - 1) * Tile.SIZE
+            local y = (i - 1) * Tile.SIZE + self.pos.y
             Tile.Draw(self.tiles[i][j], x, y)
         end
     end
@@ -55,8 +55,8 @@ function RoomView:draw()
         lg.setColor(1, 1, 1, 0.5)
 
         local row, col = get_mouse_row_col()
-        local x, y = self.pos.x + (row - 1) * Tile.SIZE,
-                     self.pos.y + (col - 1) * Tile.SIZE
+        local x, y = self.pos.x + (col - 1) * Tile.SIZE,
+                     self.pos.y + (row - 1) * Tile.SIZE
         lg.draw(Tile.Map, Tile.GetQuad(self.current_tile), x, y)
     end
 
