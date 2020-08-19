@@ -1,13 +1,9 @@
 local imgbtn = require 'scene_editor.gui.button'
 local ButtonContainer = Class('ButtonContainer')
 
-local default_opts = {
-    rows = 1,
-    cols = 1,
-    padding = {1, 1}
-}
+local default_opts = {rows = 1, cols = 1, padding = {1, 1}}
 
-local  BTN_DEFAULTS  = {
+local BTN_DEFAULTS = {
     width = 32,
     height = 32,
     image = Resource.UI.BtnPlaceHolder,
@@ -25,9 +21,7 @@ function ButtonContainer:init(x, y, properties)
 
     local tx, ty = self.x, self.y
     self.buttons = {}
-    for i = 1, self.rows do
-        self.buttons[i] = {}
-    end
+    for i = 1, self.rows do self.buttons[i] = {} end
 
     self.event_listeners = {}
 end
@@ -35,7 +29,7 @@ end
 -- ? possible optimization
 function ButtonContainer:draw()
     for r = 1, #self.buttons do
-        for c = 1, #self.buttons[r]do
+        for c = 1, #self.buttons[r] do
             self.buttons[r][c]:draw()
             local b = self.buttons[r][c]
             lg.rectangle('line', b.x, b.y, b.w, b.h)
@@ -56,7 +50,6 @@ function ButtonContainer:add_button(row, col, props)
     btn.container = self
 end
 
-
 -- ? possible optimization
 function ButtonContainer:check_click(mx, my)
     for i = 1, #self.buttons do
@@ -69,11 +62,8 @@ function ButtonContainer:check_click(mx, my)
     return false
 end
 
-
 function ButtonContainer:onclick(r, c, fn)
-    if self.buttons[r][c] then
-        self.buttons[r][c]:onclick(fn)
-    end
+    if self.buttons[r][c] then self.buttons[r][c]:onclick(fn) end
 end
 
 function ButtonContainer:catch(event, ...)
