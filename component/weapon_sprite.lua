@@ -18,7 +18,7 @@ function WeaponSprite:draw()
     end
 
     sugar.push_translate_rotate(x, y, t.rotation)
-    graphics.draw(self.image, x, y, 0, t.scale.x, t.scale.y)
+    lg.draw(self.image, x, y, 0, t.scale.x, t.scale.y)
     sugar.pop()
 end
 
