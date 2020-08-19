@@ -25,7 +25,6 @@ function exporter:encode_tiles(tiles)
         encoded[i] = {}
         for j = 1, #tiles[i] do
             encoded[i][j] = Tile.GetID(tiles[i][j])
-            print(encoded[i][j])
         end
     end
     return encoded
