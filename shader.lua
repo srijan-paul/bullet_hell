@@ -1,4 +1,4 @@
-return love.graphics.newShader ([[
+return love.graphics.newShader([[
 float crt_bend = 7.0;
 float aberration_offset = 0.0015;
 float scanline_count = 300;
@@ -36,5 +36,4 @@ vec4 effect(vec4 _ , Image texture, vec2 uv, vec2 pc) {
     return mix(color, scanlines, 0.01);
 }
 ]])
-
 

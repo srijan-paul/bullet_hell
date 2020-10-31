@@ -12,27 +12,29 @@ local STINGER_ATTACK_RATE = 0.5
 local STINGER_PROJECTILE_SPEED = 150
 
 local State = {
-    ATTACK = {
-        update = function(stinger, dt)
-            local target_pos = stinger.target:get_pos()
-            stinger:chase(target_pos, stinger.speed * dt)
-            stinger:attack(target_pos)
-        end,
+  ATTACK = {
+    update = function(stinger, dt)
+      local target_pos = stinger.target:get_pos()
+      stinger:chase(target_pos, stinger.speed * dt)
+      stinger:attack(target_pos)
+    end,
 
-        switch_state = function(stinger, state) stinger.state = state end
-    },
-    PATROL = {
-        update = function(stinger, dt)
-            stinger.accumulated_time = stinger.accumulated_time + dt
-            local pos = stinger:get_pos()
-            if stinger.accumulated_time >= stinger.patrol_time or
-                pos == stinger.patrol_spot then
-                stinger.patrol_spot = pos + Vec2.random_unit():with_mag(PATROL_DISTANCE)
-                stinger.accumulated_time = 0
-            end
-            stinger:chase(stinger.patrol_spot, stinger.speed * dt)
-        end
-    }
+    switch_state = function(stinger, state)
+      stinger.state = state
+    end
+  },
+  PATROL = {
+    update = function(stinger, dt)
+      stinger.accumulated_time = stinger.accumulated_time + dt
+      local pos = stinger:get_pos()
+      if stinger.accumulated_time >= stinger.patrol_time or pos ==
+        stinger.patrol_spot then
+        stinger.patrol_spot = pos + Vec2.random_unit():with_mag(PATROL_DISTANCE)
+        stinger.accumulated_time = 0
+      end
+      stinger:chase(stinger.patrol_spot, stinger.speed * dt)
+    end
+  }
 }
 
 --[[
@@ -47,80 +49,81 @@ local State = {
 ]]
 
 local function stinger_ai(st)
-    local t = st:get_component(cmp.Transform)
-    local nearby = st.world:query('circle', t.pos.x, t.pos.y, st.detect_range)
-    local player_spotted = false
+  local t = st:get_component(cmp.Transform)
+  local nearby = st.world:query('circle', t.pos.x, t.pos.y, st.detect_range)
+  local player_spotted = false
 
-    for i = 1, #nearby do
-        local ent = nearby[i]
-        if ent.id == 'player' then
-            player_spotted = true
-            st:set_state(State.ATTACK)
-            st.target = ent
-        end
+  for i = 1, #nearby do
+    local ent = nearby[i]
+    if ent.id == 'player' then
+      player_spotted = true
+      st:set_state(State.ATTACK)
+      st.target = ent
     end
+  end
 
-    if not player_spotted then st:set_state(State.PATROL) end
+  if not player_spotted then st:set_state(State.PATROL) end
 end
 
 function Stinger:init(world, x, y)
-    Enemy.init(self, world, x, y, {
-        collider_width = 10,
-        collder_height = 10,
-        detect_range = 30,
-        health = 10,
-        corpse = Resource.Image.StingerCorpse
-    })
+  Enemy.init(self, world, x, y, {
+    collider_width = 10,
+    collder_height = 10,
+    detect_range = 30,
+    health = 10,
+    corpse = Resource.Image.StingerCorpse
+  })
 
-    self:add_component(cmp.Sprite, Resource.Image.Stinger)
-    self:add_component(Timer, 0.1, function() stinger_ai(self) end)
+  self:add_component(cmp.Sprite, Resource.Image.Stinger)
+  self:add_component(Timer, 0.1, function()
+    stinger_ai(self)
+  end)
 
-    self.attack_comp = self:add_component(Attack, StingerProjectile, {
-        cooldown = STINGER_ATTACK_RATE,
-        accuracy = 0.5,
-        spawn_offset = Vec2(4, 0),
-        speed = STINGER_PROJECTILE_SPEED,
-        mask = {'player', 'neutral'},
-        damage = 2
-    })
+  self.attack_comp = self:add_component(Attack, StingerProjectile, {
+    cooldown = STINGER_ATTACK_RATE,
+    accuracy = 0.5,
+    spawn_offset = Vec2(4, 0),
+    speed = STINGER_PROJECTILE_SPEED,
+    mask = {'player', 'neutral'},
+    damage = 2
+  })
 
-    self.speed = 30
-    self.angular_vel = 0.174
-    self.id = 'enemy'
-    self.state = State.PATROL
-    self.target = nil
-    -- time accumulated since the last time the stinger picked a random point to roam to
-    self.accumulated_time = 0
-    self.patrol_spot = self:get_pos()
-    self.patrol_time = 2
+  self.speed = 30
+  self.angular_vel = 0.174
+  self.id = 'enemy'
+  self.state = State.PATROL
+  self.target = nil
+  -- time accumulated since the last time the stinger picked a random point to roam to
+  self.accumulated_time = 0
+  self.patrol_spot = self:get_pos()
+  self.patrol_time = 2
 end
 
 function Stinger:chase(target_pos, speed)
-    local stinger_pos = self:get_pos()
-    local vel = util.steer(stinger_pos, target_pos, Vec2(0, 0), speed)
+  local stinger_pos = self:get_pos()
+  local vel = util.steer(stinger_pos, target_pos, Vec2(0, 0), speed)
 
-    if (target_pos - stinger_pos):mag() > DISTANCE_THRESHOLD then
-        self:move(vel)
-        -- angle difference between PI and 2 * PI (2*PI is the same as 0 degrees, technically)
-        self:set_rotation(vel:angle())
-    end
+  if (target_pos - stinger_pos):mag() > DISTANCE_THRESHOLD then
+    self:move(vel)
+    -- angle difference between PI and 2 * PI (2*PI is the same as 0 degrees, technically)
+    self:set_rotation(vel:angle())
+  end
 end
 
 function Stinger:_physics_process(dt)
-    self.state.update(self, dt)
+  self.state.update(self, dt)
 end
 
 function Stinger:set_state(state)
-    self.state = state
+  self.state = state
 end
 
 function Stinger:attack(target_loc)
-    self.attack_comp:attack(target_loc)
+  self.attack_comp:attack(target_loc)
 end
 
-
 function Stinger:on_world_exit()
-    self.patrol_spot = -1 * self.patrol_spot
+  self.patrol_spot = -1 * self.patrol_spot
 end
 
 return Stinger
