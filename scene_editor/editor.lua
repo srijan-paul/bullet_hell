@@ -1,7 +1,7 @@
 local TileMenu = require 'scene_editor.menus.tileeditor'
 local MapView = require 'scene_editor.views.map'
 local camera = require 'camera'
-local Exporter = require 'scene_editor.util.exporter'
+local fs = require 'scene_editor.util.fs'
 
 local SceneEditor = Class('SceneEditor')
 
@@ -71,7 +71,7 @@ end
 function SceneEditor:export_data()
     local leveldata = {}
     leveldata.tilemap = MapView:get_data()
-    Exporter:export(leveldata)
+    fs:export(leveldata)
 end
 
 

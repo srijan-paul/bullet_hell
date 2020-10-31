@@ -1,24 +1,28 @@
 local json = require 'lib.rxi.json'
 local Tile = require 'world.tilemap.tiles'
 
-local exporter = {}
+local fs = {}
+
+local config_file = io.open('scene_editor/config.json', 'r')
+fs.config = json.decode(config_file:read("*a"))
+config_file:close()
 
 
-function exporter:serialize(level)
+function fs:serialize(level)
     local ser = {}
     ser.tilemap = self:encode_tiles(level.tilemap)
     return json.encode(ser)
 end
 
 
-function exporter:deserialize(level_data)
+function fs:deserialize(level_data)
     local level = json.decode(level_data)
     level.tilemap  = self:decode_tiles(level.tilemap)
     return level
 end
 
 
-function exporter:encode_tiles(tiles)
+function fs:encode_tiles(tiles)
     local encoded = {}
 
     for i = 1, #tiles do
@@ -31,19 +35,19 @@ function exporter:encode_tiles(tiles)
 end
 
 
-function exporter:decode_tiles(tiledata)
+function fs:decode_tiles(tiledata)
     local tiles = {}
     for i = 1, #tiledata do
         tiles[i] = {}
         for j = 1, #tiledata[i] do
-            tiles[i][j] = Tile.Create(Tile.Q_ids(tiledata[i][j]))
+            tiles[i][j] = Tile.Create(tiledata[i][j])
         end
     end
     return tiles
 end
 
 
-function exporter:export(leveldata)
+function fs:export(leveldata)
     local data = self:serialize(leveldata)
     local file = io.open('./rooms/a.json', 'w+')
     file:write(data)
@@ -51,4 +55,4 @@ function exporter:export(leveldata)
 end
 
 
-return exporter
+return fs

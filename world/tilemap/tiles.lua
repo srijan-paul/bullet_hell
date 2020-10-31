@@ -4,9 +4,9 @@ local Tile = {
     SIZE = 16,
     MAP_ROWS = 5,
     MAP_COLS = 5,
-    -- These tables are used when exporting and importing
-    -- tile maps, Ids Maps tile Ids to the quads and
-    -- Q_Ids maps quads back to the Ids.
+    -- Id_Q maps a Tile's Type ID (WALL, FLOOR... enums) to
+    -- the actual Quad that the tile is supposed to use when drawing
+    -- a Tile only stores it's type data and not the actual quad
     Id_Q = {}
 }
 
@@ -46,6 +46,8 @@ function Tile.init(...)
         Tile.Quads[1][5]
     }
 
+    -- each boolean here corresponds to an enum value.
+
     Tile.Collides = {
         true, true, true, true, true, true, true, true, true, true, true, true,
         true, true, true, true, false, false, false, false, false, false, false,
@@ -69,7 +71,10 @@ function Tile.GetID(tile)
 end
 
 function Tile.Create(type)
-    return {quad_index = type, collides = Tile.Collides[type]}
+    return {
+        quad_index = type,
+        collides = Tile.Collides[type]
+    }
 end
 
 return Tile

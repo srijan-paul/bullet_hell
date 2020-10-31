@@ -60,7 +60,7 @@ function LevelGenerator:generate_grid()
     -- number of neighboring rooms this room will have
     -- at least 1 neighbour, at most max(the number of avaiable spots, number of rooms to generate)
     local neighbour_count = math.random(1, sugar.clampmax(#available_dirs,
-                                                       self.to_generate))
+                                                          self.to_generate))
 
     local room_loc
     for _ = 1, neighbour_count do
@@ -68,8 +68,7 @@ function LevelGenerator:generate_grid()
         local dir = available_dirs[math.random(1, #available_dirs)]
         -- move in that direction and place a room there
         room_loc = self.current_loc + dir
-        self.room_grid[room_loc.x][room_loc.y] =
-            new_node(World(self.level))
+        self.room_grid[room_loc.x][room_loc.y] = new_node(World(self.level))
         self.to_generate = self.to_generate - 1
         -- can no longer have a neighbour room there.
         table.remove(available_dirs, sugar.index_of(available_dirs, dir))

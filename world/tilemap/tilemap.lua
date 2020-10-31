@@ -3,7 +3,7 @@ local Tile = require 'world/tilemap/tiles'
 local TILE_SIZE = 16
 local TileMap = Class('TileMap')
 
-function TileMap:init(world, rows, cols)
+function TileMap:init(world, rows, cols, tiledata)
     self.tiles = {}
     self.world = world
     self.rows = rows
@@ -11,7 +11,7 @@ function TileMap:init(world, rows, cols)
     for i = 1, rows do
         self.tiles[i] = {}
         for j = 1, cols do
-            self.tiles[i][j] = Tile.Create(Tile.Type.WALL, false)
+            self.tiles[i][j] = Tile.Create(Tile.Type.FLOOR1)
         end
     end
     self:composite()
@@ -52,7 +52,9 @@ function TileMap:toRowCol(_x, _y)
     return row, col
 end
 
-function TileMap:toXY(r, c) return (c - 1) * TILE_SIZE, (r - 1) * TILE_SIZE end
+function TileMap:toXY(r, c)
+    return (c - 1) * TILE_SIZE, (r - 1) * TILE_SIZE
+end
 
 function TileMap:_physics_process(dt) end
 

@@ -4,6 +4,9 @@ local Transform = require('component/transform')
 function GameObject:init(world, x, y, r, sx, sy)
     self.world = world
     self._components = {}
+    -- (component_class -> number) map.
+    -- Maps a component type to an index into the
+    -- _components array.
     self._cmp_map = {}
     self:add_component(Transform, x, y, r, sx, sy)
     world:add_gameobject(self)
@@ -21,7 +24,9 @@ function GameObject:get_component(cmp)
     return self._components[self._cmp_map[cmp]]
 end
 
-function GameObject:has_component(cmp) return self._cmp_map[cmp] ~= nil end
+function GameObject:has_component(cmp)
+    return self._cmp_map[cmp] ~= nil
+end
 
 function GameObject:update(dt)
     for i = 1, #self._components do
@@ -44,29 +49,42 @@ function GameObject:remove_component(...)
     end
 end
 
--- to be overidden
+-- This method is overriden by the deriving 
+-- class that implements an entity.
 function GameObject:_physics_process(dt)
     -- body
 end
 
 function GameObject:delete()
     self.world:remove_gameobject(self)
-    for k, v in pairs(self._components) do if v.delete then v:delete() end end
+    for _, comp in pairs(self._components) do
+        if comp.delete then comp:delete() end
+    end
 end
 
-function GameObject:get_pos() return self:get_component(Transform).pos:clone() end
+function GameObject:get_pos()
+    return self:get_component(Transform).pos:clone()
+end
 
-function GameObject:set_pos(p) self:get_component(Transform).pos = p:clone() end
+function GameObject:set_pos(p)
+    self:get_component(Transform).pos = p:clone()
+end
 
-function GameObject:get_scale() return self:get_component(Transform).scale:clone() end
+function GameObject:get_scale() 
+    return self:get_component(Transform).scale:clone() 
+end
 
 function GameObject:set_scale(sx, sy)
     self:get_component(Transform).scale = Vec2(sx, sy)
 end
 
-function GameObject:rotation() return self:get_component(Transform).rotation end
+function GameObject:rotation()
+    return self:get_component(Transform).rotation
+end
 
-function GameObject:set_rotation(r) self:get_component(Transform).rotation = r end
+function GameObject:set_rotation(r)
+    self:get_component(Transform).rotation = r
+end
 
 function GameObject:rotate(angle)
     local t = self:get_component(Transform)

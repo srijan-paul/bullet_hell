@@ -47,7 +47,9 @@ function World:draw()
     -- * / DEBUG CODE
 end
 
-
+-- remove all 'dead' gameobjects/entities
+-- from the entities array. Does the same for all 
+-- drawables.
 function World:clear_garbage()
     for i = #self.drawables, 1, -1 do
         local d = self.drawables[i]
@@ -84,6 +86,9 @@ function World:update(dt)
     self.particle_manager:update(dt)
 end
 
+-- check if an entity's collider is outside the level's rectangle bounds.
+-- If so, then clamp the entity's position and call the 
+-- 'on_world_exit' callback.
 function World:bounds_check(e)
     if not e:has_component(cmp.Collider) then return end
 
@@ -130,7 +135,7 @@ end
 function World:add_gameobject(e)
     -- TODO: register and handle collision classes as well
     e.world = self
-    table.insert(self.entities, e)
+    tinsert(self.entities, e)
 end
 
 

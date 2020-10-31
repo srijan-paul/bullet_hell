@@ -1,5 +1,4 @@
 local Projectile = require 'prefabs/weapon/projectile'
--- local ProjectileType = require 'prefabs/weapon/projectiletype'
 local Transform = require 'component/transform'
 
 local Attack = Class('Attack')

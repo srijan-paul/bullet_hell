@@ -7,8 +7,19 @@ function Collider:init(entity, width, height, class, offset)
     self.owner = entity
     self.width = width
     self.height = height
+    -- the offset of this collider from the
+    -- parent entitiy's center. Not
+    -- all colliders necessarily need to be
+    -- centered on the parent entity's transform
+
+    -- For example, bullets only have a small square collider
+    -- near the top.
     self.offset = offset or Vec2.ZERO()
+    -- the collision class this component
+    -- belongs to.
     self.class = class or ''
+    -- the set of collision classes
+    -- that this collider collides with.
     self.mask = {}
 end
 
@@ -29,6 +40,8 @@ function Collider:get_pos()
 end
 
 function Collider.checkAABB(r1, r2)
+    -- get the top-right corner coordinates
+    -- from the transform's center coordinates.
     local p1 = r1:get_pos() - Vec2(r1.width / 2, r1.height / 2)
     local p2 = r2:get_pos() - Vec2(r2.width / 2, r2.height / 2)
     return not ((p1.x > p2.x + r2.width) or
@@ -66,8 +79,5 @@ function Collider:update(dt)
     -- body
 end
 
-function Collider:delete()
-    
-end
 
 return Collider
