@@ -61,18 +61,18 @@ State.DASHING = {
 }
 
 State.IDLE = {
-  init = function(self, player)
+  init = function(_ --[[self]] , player)
     player:switch_anim(Animation.IDLE)
   end,
 
-  update = function(self, player, dt)
+  update = function(_ --[[self]] , player, dt)
     local movedir = get_move_dir()
     if movedir.x ~= 0 or movedir.y ~= 0 then
       player:switch_state(State.MOVING)
     end
   end,
 
-  switch = function(self, player, state)
+  switch = function(_ --[[self]] , player, state)
     player:set_state(state)
   end
 }

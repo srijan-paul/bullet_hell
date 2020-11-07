@@ -73,9 +73,9 @@ end
 
 function Grid:process_collision(c1, c2)
   local a, b
-  if c1:check_mask(c2.class) then
+  if c1:collides_with(c2.class) then
     a, b = c1, c2
-  elseif c2:check_mask(c1.class) then
+  elseif c2:collides_with(c1.class) then
     a, b = c2, c1
   else
     return

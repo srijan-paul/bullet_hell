@@ -43,8 +43,8 @@ function TileMap:draw()
 end
 
 function TileMap:draw_walls(arg1, arg2, arg3)
-		
-endt
+
+end
 
 function TileMap:to_row_col(_x, _y)
   local col = math.floor(_x / Tile.SIZE) + 1

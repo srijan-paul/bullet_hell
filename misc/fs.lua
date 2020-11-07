@@ -40,9 +40,15 @@ end
 
 function fs:export(leveldata)
   local data = self:serialize(leveldata)
-  local file = io.open('./rooms/a.json', 'w+')
+  local file = io.open('./rooms/1.json', 'w+')
   file:write(data)
   file:close()
+end
+
+function fs:import_level(filename)
+  local file = io.open(filename, 'r')
+  local json_string = file:read("*a")
+  return self:deserialize(json_string)
 end
 
 return fs

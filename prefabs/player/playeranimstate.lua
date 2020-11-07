@@ -18,7 +18,8 @@ local function anim_state(name)
   return {
     key = name,
     enter = enter_anim,
-    update = function(self, player, dt)
+    update = function(_, player, dt)
+      --[[override]]
     end,
     switch = switch_anim
   }

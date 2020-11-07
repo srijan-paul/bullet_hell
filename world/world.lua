@@ -2,6 +2,7 @@ local Grid = require 'world/grid'
 local cmp = require 'component/common'
 local WeaponSprite = require 'component/weapon_sprite'
 local Particles = require 'particles.init'
+local Tilemap = require 'world.tilemap.tilemap'
 
 local World = Class('World')
 
@@ -20,25 +21,27 @@ function World:init(level, width, height)
   self.entities = {}
 
   self.grid = Grid(self, 5, 5)
+
   self.time_elapsed = 0
 end
 
 function World:draw()
+  self.tilemap:draw()
 
   for i = 1, #self.drawables do self.drawables[i]:draw() end
   self.particle_manager:draw()
   -- * DEBUG CODE
   -- self.grid:draw()
 
-  -- graphics.setColor(1, 0, 0, 1)
+  lg.setColor(1, 0, 0, 1)
 
-  -- for i = 1, #self.entities do
-  --     local e = self.entities[i]
-  --     graphics.setColor(1, 0.1, 0.1)
-  --     if e:has_component(cmp.Collider) then
-  --         e:get_component(cmp.Collider):draw()
-  --     end
-  -- end
+  for i = 1, #self.entities do
+    local e = self.entities[i]
+    lg.setColor(1, 0.1, 0.1)
+    if e:has_component(cmp.Collider) then
+      e:get_component(cmp.Collider):draw()
+    end
+  end
 
   lg.setColor(1, 1, 1, 1)
   love.graphics.rectangle('line', 0, 0, self.width, self.height)
@@ -112,7 +115,7 @@ function World:_physics_process(dt)
 
   for i = #self.entities, 1, -1 do
     local e = self.entities[i]
-    -- ? refactor this out into a collider array
+    -- ? refactor this out into a collider array ??
     if self.entities[i]:has_component(cmp.Collider) then
       self.grid:insert(self.entities[i]:get_component(cmp.Collider))
     end
@@ -120,6 +123,7 @@ function World:_physics_process(dt)
   end
 
   self.grid:process_collisions()
+  self.tilemap:_physics_process(dt)
 end
 
 function World:add_drawable(d)

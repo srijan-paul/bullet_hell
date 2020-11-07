@@ -1,7 +1,7 @@
 local TileMenu = require 'scene_editor.menus.tileeditor'
 local MapView = require 'scene_editor.views.map'
 local camera = require 'camera'
-local fs = require 'scene_editor.util.fs'
+local fs = require 'misc.fs'
 
 local SceneEditor = Class('SceneEditor')
 

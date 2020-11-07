@@ -7,6 +7,7 @@ local State = require 'prefabs/player/playerstate'
 local AnimationState = require 'prefabs/player/playeranimstate'
 
 local COLLIDER_WIDTH, COLLIDER_HEIGHT = 10, 10
+local MAX_HP = 10
 
 local Player = Class('Player', GameObject)
 
@@ -17,6 +18,7 @@ function Player:init(world, x, y)
     {'hurt', 11, 12, 0.2, false}
   })
   self:add_component(cmp.Collider, COLLIDER_WIDTH, COLLIDER_HEIGHT, 'player')
+    :add_masks('tile')
 
   self.id = 'player'
   self.speed = 50
@@ -32,8 +34,8 @@ function Player:init(world, x, y)
   self.dash_particles:attach_to(self)
 
   -- TODO: remove magic number
-  self.health = 10
-  self.max_health = 10
+  self.health = MAX_HP
+  self.max_health = MAX_HP
   self.stats = {}
 end
 
@@ -59,6 +61,9 @@ function Player:set_state(state)
   self.state = state
 end
 
+-- the weapon pivot is the center of the weapon.
+-- this is calculated based on the player's current
+-- face direction etc.
 function Player:get_weapon_pivot()
   local t = self:get_component(cmp.Transform)
   if t.scale.x == -1 then return t.pos - Vec2(1, -3) end
@@ -73,7 +78,6 @@ end
 
 function Player:fire()
   self.weapon:fire(camera:toWorldPos(mousePos()), 'enemy')
-  -- ?
 end
 
 function Player:damage(amount)

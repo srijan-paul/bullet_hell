@@ -23,12 +23,17 @@ function Collider:init(entity, width, height, class, offset)
   self.mask = {}
 end
 
-function Collider:check_mask(class)
+function Collider:collides_with(class)
   return self.mask[class]
 end
 
 function Collider:add_mask(class)
   self.mask[class] = true
+end
+
+function Collider:add_masks(...)
+  local args = {...}
+  for i = 1, #args do self.mask[args[i]] = true end
 end
 
 function Collider:get_pos()
