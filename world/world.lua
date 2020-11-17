@@ -2,7 +2,6 @@ local Grid = require 'world/grid'
 local cmp = require 'component/common'
 local WeaponSprite = require 'component/weapon_sprite'
 local Particles = require 'particles.init'
-local Tilemap = require 'world.tilemap.tilemap'
 
 local World = Class('World')
 
@@ -33,18 +32,18 @@ function World:draw()
   -- * DEBUG CODE
   -- self.grid:draw()
 
-  lg.setColor(1, 0, 0, 1)
+  -- lg.setColor(1, 0, 0, 1)
 
-  for i = 1, #self.entities do
-    local e = self.entities[i]
-    lg.setColor(1, 0.1, 0.1)
-    if e:has_component(cmp.Collider) then
-      e:get_component(cmp.Collider):draw()
-    end
-  end
+  -- for i = 1, #self.entities do
+  --   local e = self.entities[i]
+  --   lg.setColor(1, 0.1, 0.1)
+  --   if e:has_component(cmp.Collider) then
+  --     e:get_component(cmp.Collider):draw()
+  --   end
+  -- end
 
-  lg.setColor(1, 1, 1, 1)
-  love.graphics.rectangle('line', 0, 0, self.width, self.height)
+  -- lg.setColor(1, 1, 1, 1)
+  -- love.graphics.rectangle('line', 0, 0, self.width, self.height)
   -- * / DEBUG CODE
 end
 

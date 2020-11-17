@@ -22,6 +22,9 @@ function Projectile:init(owner, ptype, properties, ...)
   self.velocity = dir:with_mag(properties.speed or 0)
   self.damage = properties.damage or 0
   self.knockback = properties.knockback or 0
+
+  if ptype.on_tile_collide then self.on_tile_collide = ptype.on_tile_collide end
+
 end
 
 function Projectile:_physics_process(dt)
@@ -34,6 +37,10 @@ function Projectile:on_collide(target)
 
   if self.type.destroy_effect then self.type.destroy_effect(self.world, x, y) end
   self:delete()
+end
+
+function Projectile:on_tile_collide()
+  self:on_world_exit()
 end
 
 function Projectile:on_world_exit()

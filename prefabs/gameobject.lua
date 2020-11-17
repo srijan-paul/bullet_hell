@@ -8,7 +8,7 @@ function GameObject:init(world, x, y, r, sx, sy)
   -- Maps a component type to an index into the
   -- _components array.
   self._cmp_map = {}
-  self:add_component(Transform, x, y, r, sx, sy)
+  self.transform = self:add_component(Transform, x, y, r, sx, sy)
   world:add_gameobject(self)
 end
 
@@ -66,8 +66,24 @@ function GameObject:get_pos()
   return self:get_component(Transform).pos:clone()
 end
 
+function GameObject:getx()
+  return self.transform.pos.x
+end
+
+function GameObject:setx()
+  return self.transform.pos.y
+end
+
 function GameObject:set_pos(p)
-  self:get_component(Transform).pos = p:clone()
+  self.transform.pos = p:clone()
+end
+
+function GameObject:setx(x)
+  self.transform.pos.x = x
+end
+
+function GameObject:sety(y)
+  self.transform.pos.y = y
 end
 
 function GameObject:get_scale()
@@ -94,6 +110,14 @@ end
 function GameObject:move(velocity)
   local t = self:get_component(Transform)
   t.pos = t.pos + velocity
+end
+
+function GameObject:on_collide(other, dir)
+  -- override
+end
+
+function GameObject:on_tile_collide(tile_pos)
+  -- override
 end
 
 return GameObject
