@@ -7,8 +7,8 @@ and the collision resolution and physics systems in `world/`.
 
 The game is currently a work in progress, but it' still in a playable state.
 
-Here is a small sample on imgur:
-![View Video](https://i.imgur.com/yi0Mrpc.mp4)
+Here is a small sample:
+![Demo](https://github.com/srijan-paul/srijan-paul/blob/main/bullet_hell.gif)
 
 
 
