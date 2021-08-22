@@ -1,7 +1,8 @@
 # Bullet Hell
 A bullet hell game written in Lua, using the LÖVE game framework.
 
-I'm using LOVE2D for rendering, and everything else has been done more or less from scratch.
+I'm using LOVE2D for rendering, and everything else has been done more or less from scratch, including
+the art.
 You can find Entity management system under `prefabs/`, the particle system under `particles/`, 
 and the collision resolution and physics systems in `world/`.
 
