@@ -9,7 +9,7 @@ function Corpse:init(world, x, y, rotation, image, velocity, dist)
   self.distance_to_cover = dist or 0
   self:set_rotation(rotation)
   self:add_component(cmp.Sprite, image)
-  self:add_component(cmp.Collider, 10, 10, 'corpse')
+  self:add_component(cmp.Collider, 10, 10, 'corpse'):add_masks('tile')
 end
 
 function Corpse:_physics_process(dt)

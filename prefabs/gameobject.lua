@@ -70,7 +70,7 @@ function GameObject:getx()
   return self.transform.pos.x
 end
 
-function GameObject:setx()
+function GameObject:gety()
   return self.transform.pos.y
 end
 

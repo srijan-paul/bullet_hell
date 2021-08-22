@@ -10,6 +10,7 @@ function Enemy:init(world, x, y, properties)
   GameObject.init(self, world, x, y)
   self:add_component(cmp.Collider, properties.collider_width or 10,
                      properties.collider_height or 10, 'enemy')
+    :add_masks('tile')
   -- range within which it can detect the player
   self.id = 'enemy'
   self.detect_range = properties.detect_range

@@ -91,7 +91,7 @@ end
 return function(node)
   -- add_floor(node)
   add_doors(node)
-  -- add_enemies(node)
+  add_enemies(node)
   add_walls(node)
 end
 
