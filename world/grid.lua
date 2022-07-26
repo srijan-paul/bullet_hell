@@ -1,4 +1,4 @@
-local Collider = require 'component/Collider'
+local Collider = require 'component/collider'
 local Grid = Class('Grid')
 
 local DEFAULT_ROWS, DEFAULT_COLS = 10, 10
